@@ -1,0 +1,111 @@
+body {
+  margin: 0;
+
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.margin-top-msg {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.font-receipt {
+  font-family: sans-serif;
+}
+
+.font-receipt-small {
+  font-size: 22px;
+}
+
+.font-receipt-small-2 {
+  font-size: 17px;
+}
+
+.font-receipt-small-F {
+  font-size: 23px;
+}
+
+.font-receipt-medium {
+  font-size: 22px;
+}
+
+.font-receipt-big {
+  font-size: 28px;
+}
+
+.font-receipt-small-slogan {
+  font-size: 15px;
+}
+
+.font-receipt-small-invoice {
+  font-size: 19px;
+}
+
+.font-receipt-small-2-invoice {
+  font-size: 15px;
+}
+
+.font-receipt-small-F-invoice {
+  font-size: 21px;
+}
+
+.font-receipt-medium-invoice {
+  font-size: 19px;
+}
+
+.font-receipt-big-invoice {
+  font-size: 23px;
+}
+
+table a {
+  color: #17a2b8 !important;
+}
+
+div[disabled] {
+  pointer-events: none;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.button-local {
+  background-color: #4682B4 !important;
+  border-color: #4682B4 !important;
+  color: white !important;
+}
+
+.color-local {
+  color: #6082B6 !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.border-none {
+  border: none !important;
+}
+
+.list-header {
+  padding: 4px 8px !important;
+}
+
+.trash-size {
+  font-size: 19px !important;
+}
+
+.list-group-item.active {
+  background-color: #e8f4f8 !important;
+}
