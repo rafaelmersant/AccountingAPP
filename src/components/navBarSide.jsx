@@ -37,7 +37,7 @@ const NavBarSide = ({ user }) => {
 
               <NavLink
                 className="list-group-item list-group-item-action border-none"
-                to="/quotations"
+                to="/obreros"
               >
                 <span className="fa fa-users mr-2 color-local" />
                 Obreros
@@ -54,7 +54,7 @@ const NavBarSide = ({ user }) => {
           )}
 
 
-        {user &&
+        {/* {user &&
           (user.role === "Admin" ||
             user.role === "Owner") && (
             <React.Fragment>
@@ -66,7 +66,7 @@ const NavBarSide = ({ user }) => {
                 Dashboard Tesorería
               </NavLink>
             </React.Fragment>
-          )}
+          )} */}
       </div>
     </div>
   

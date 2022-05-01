@@ -4,79 +4,74 @@ import Pagination from "react-js-pagination";
 import SearchBox from "./common/searchBox";
 import NewButton from "./common/newButton";
 import Loading from "./common/loading";
-import { getCustomers, deleteCustomer } from "../services/customerService";
-import { getCustomerInInvoice } from "../services/invoiceServices";
-import { getCurrentUser } from "../services/authService";
-import CustomersTable from "./tables/customersTable";
+import { getPeople, deletePerson } from "../services/personService";
+import PeopleTable from "./tables/peopleTable";
 
-class Customers extends Component {
+class People extends Component {
   state = {
     loading: true,
-    customers: [],
+    people: [],
     currentPage: 1,
     pageSize: 15,
     searchQuery: "",
-    totalCustomers: 0,
-    sortColumn: { path: "creationDate", order: "desc" },
+    totalPeople: 0,
+    sortColumn: { path: "created_date", order: "desc" },
   };
 
   async componentDidMount() {
-    this.populateCustomers();
+    this.populatePeople();
   }
 
-  async populateCustomers(_sortColumn, _currentPage, _searchQuery = "") {
-    const companyId = getCurrentUser().companyId;
+  async populatePeople(_sortColumn, _currentPage, _searchQuery = "") {
     const { currentPage, sortColumn, searchQuery } = { ...this.state };
 
     _sortColumn = _sortColumn ? _sortColumn : sortColumn;
     _currentPage = _currentPage ? _currentPage : currentPage;
     _searchQuery = _searchQuery ? _searchQuery : searchQuery;
 
-    const { data: customers } = await getCustomers(
-      companyId,
+    const { data: people } = await getPeople(
       _sortColumn,
       _currentPage,
       _searchQuery
     );
 
     this.setState({
-      customers: customers.results,
-      totalCustomers: customers.count,
+      people: people.results,
+      totalPeople: people.count,
       loading: false,
       sortColumn: _sortColumn,
       currentPage: _currentPage,
     });
   }
 
-  handleDelete = async (customer) => {
-    const { data: found } = await getCustomerInInvoice(
-      getCurrentUser().companyId,
-      customer.id
-    );
+  handleDelete = async (person) => {
+    // const { data: found } = await getCustomerInInvoice(
+    //   person.id
+    // );
 
-    if (found.count) {
-      toast.error("No puede eliminar un cliente que tiene factura creada.");
-      return false;
-    }
+    // if (found.count) {
+    //   toast.error("No puede eliminar un cliente que tiene factura creada.");
+    //   return false;
+    // }
 
     const answer = window.confirm(
-      "Esta seguro de eliminar este cliente? \nNo podrá deshacer esta acción"
+      "Esta seguro de eliminar este obrero? \nNo podrá deshacer esta acción"
     );
     if (answer) {
-      const originalCustomers = this.state.customers;
-      const customers = this.state.customers.filter(
-        (m) => m.id !== customer.id
-      );
-      this.setState({ customers });
+      const originalPeople = this.state.people;
+      const people = this.state.people.filter((m) => m.id !== person.id);
+      this.setState({ people });
 
       try {
-        await deleteCustomer(customer.id);
-        toast.success(`El Cliente ${customer.firstName} ${customer.lastName} fue eliminado!`);
+        await deletePerson(person.id);
+        toast.success(
+          `El obrero ${person.first_name} ${person.last_name} fue eliminado!`
+        );
       } catch (ex) {
         if (ex.response && ex.response.status === 404)
-          toast.error("Este cliente ya fue eliminado");
+          toast.error("Este obrero ya fue eliminado");
 
-        this.setState({ customers: originalCustomers });
+        this.setState({ people: originalPeople });
       }
     }
   };
@@ -84,33 +79,36 @@ class Customers extends Component {
   handlePageChange = async (page) => {
     this.setState({ currentPage: page });
 
-    await this.populateCustomers(null, page);
+    await this.populatePeople(null, page);
   };
 
   handleSearch = async (query) => {
     this.setState({ searchQuery: query, currentPage: 1 });
-    await this.populateCustomers(null, null, query);
+    await this.populatePeople(null, null, query);
   };
 
   handleSort = async (sortColumn) => {
     this.setState({ sortColumn });
 
-    await this.populateCustomers(sortColumn);
+    await this.populatePeople(sortColumn);
   };
 
   render() {
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
     const { user } = this.props;
 
-    const { totalCustomers, customers } = { ...this.state };
-    const total = customers ? customers.length : 0;
+    const { totalPeople, people } = { ...this.state };
+    const total = people ? people.length : 0;
 
     return (
       <div className="container-fluid">
         <div className="row">
           <div className="col">
-            <h5 className="pull-left text-info mt-2">Listado de Clientes</h5>
-            <NewButton label="Nuevo Cliente" to="/customer/new" />
+            <h5 className="pull-left text-info mt-2">Listado de Obreros</h5>
+
+            <div className="mb-4">
+              <NewButton label="Nuevo Obrero" to="/obrero/new" />
+            </div>
 
             <SearchBox
               value={searchQuery}
@@ -125,8 +123,8 @@ class Customers extends Component {
             )}
 
             {!this.state.loading && (
-              <CustomersTable
-                customers={customers}
+              <PeopleTable
+                people={people}
                 user={user}
                 sortColumn={sortColumn}
                 onDelete={this.handleDelete}
@@ -134,13 +132,13 @@ class Customers extends Component {
               />
             )}
 
-            {!this.state.loading && customers.length > 0 && (
+            {!this.state.loading && people.length > 0 && (
               <div className="row">
                 <div>
                   <Pagination
                     activePage={currentPage}
                     itemsCountPerPage={pageSize}
-                    totalItemsCount={totalCustomers}
+                    totalItemsCount={totalPeople}
                     pageRangeDisplayed={5}
                     onChange={this.handlePageChange.bind(this)}
                     itemClass="page-item"
@@ -149,7 +147,7 @@ class Customers extends Component {
                 </div>
                 <p className="text-muted ml-3 mt-2">
                   <em>
-                    Mostrando {total} clientes de {totalCustomers}
+                    Mostrando {total} obreros de {totalPeople}
                   </em>
                 </p>
               </div>
@@ -161,4 +159,4 @@ class Customers extends Component {
   }
 }
 
-export default Customers;
+export default People;

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Table from "../common/table";
 import auth from "../../services/authService";
 
-class ChurchsTable extends Component {
+class ChurchesTable extends Component {
   columns = [
     {
       path: "id",
@@ -17,7 +17,9 @@ class ChurchsTable extends Component {
     {
       path: "global_title",
       label: "Titulo Conciliar",
-      content: (church) => <span>{`${church.global_title}`}</span>,
+      content: (church) => (
+        <Link to={`/iglesia/${church.id}`}>{church.global_title}</Link>
+      ),
     },
     {
       path: "local_title",
@@ -62,12 +64,12 @@ class ChurchsTable extends Component {
   }
 
   render() {
-    const { churchs, sortColumn, onSort } = this.props;
+    const { churches, sortColumn, onSort } = this.props;
 
     return (
       <Table
         columns={this.columns}
-        data={churchs}
+        data={churches}
         sortColumn={sortColumn}
         onSort={onSort}
       />
@@ -75,4 +77,4 @@ class ChurchsTable extends Component {
   }
 }
 
-export default ChurchsTable;
+export default ChurchesTable;

@@ -37,7 +37,7 @@ class ChurchForm extends Form {
       const { data: church } = await getChurch(churchId);
 
       this.setState({
-        data: this.mapToViewModel(church),
+        data: this.mapToViewModel(church.results),
         action: "Editar iglesia",
       });
     } catch (ex) {

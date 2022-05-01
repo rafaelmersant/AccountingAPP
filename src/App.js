@@ -5,17 +5,9 @@ import NotFound from "./components/notFound";
 import LoginForm from "./components/forms/loginForm";
 import Logout from "./components/logout";
 
-// Products and Categories
-import Products from "./components/products";
-import ProductForm from "./components/forms/productForm";
-
 // Administration and settings
 import Users from "./components/users";
 import UserForm from "./components/forms/userForm";
-
-// Entities
-import Customers from "./components/customers";
-import CustomerForm from "./components/forms/customerForm";
 
 import ProtectedRoute from "./components/common/protectedRoute";
 import auth from "./services/authService";
@@ -28,8 +20,11 @@ import NavBarTop from "./components/navBarTop";
 import HomePage from "./components/homepage";
 import ConceptForm from "./components/forms/conceptForm";
 import Concepts from "./components/concepts";
-import Churchs from "./components/churchs";
+import Churchs from "./components/churches";
 import ChurchForm from "./components/forms/churchForm";
+import People from "./components/people";
+import PersonForm from "./components/forms/personForm";
+import Entries from "./components/entries";
 
 class App extends Component {
   state = {
@@ -76,13 +71,15 @@ class App extends Component {
                   <ProtectedRoute path="/iglesias" component={Churchs} />
                   <ProtectedRoute path="/iglesia/:id" component={ChurchForm} />
 
-                  <ProtectedRoute path="/customers" component={Customers} />
+                  <ProtectedRoute path="/registros" component={Entries} />
+                  <ProtectedRoute path="/iglesia/:id" component={ChurchForm} />
+
+                  <ProtectedRoute path="/obreros" component={People} />
                   <ProtectedRoute
-                    path="/customer/:id"
-                    component={CustomerForm}
+                    path="/obrero/:id"
+                    component={PersonForm}
                   />
-                  <ProtectedRoute path="/products" component={Products} />
-                  <ProtectedRoute path="/product/:id" component={ProductForm} />
+                  
                   <ProtectedRoute path="/users" component={Users} />
                   <ProtectedRoute path="/user/:id" component={UserForm} />
                   <ProtectedRoute path="/home" component={HomePage} />

@@ -5,12 +5,12 @@ import { paginate } from "../utils/paginate";
 import Pagination from "./common/pagination";
 import SearchBox from "./common/searchBox";
 import NewButton from "./common/newButton";
-import ChurchsTable from "./tables/churchsTable";
-import { getChurchs, deleteChurch } from "../services/churchService";
+import ChurchesTable from "./tables/churchesTable";
+import { getChurches, deleteChurch } from "../services/churchService";
 
-class Churchs extends Component {
+class Churches extends Component {
   state = {
-    churchs: [],
+    churches: [],
     currentPage: 1,
     pageSize: 10,
     searchQuery: "",
@@ -18,9 +18,9 @@ class Churchs extends Component {
   };
 
   async componentDidMount() {
-    const { data: churchs } = await getChurchs();
+    const { data: churches } = await getChurches();
 
-    this.setState({ churchs });
+    this.setState({ churches: churches.results });
   }
 
   handleDelete = async (church) => {
@@ -28,9 +28,9 @@ class Churchs extends Component {
       "Esta seguro de eliminar esta iglesia? \nNo podrá deshacer esta acción"
     );
     if (answer) {
-      const originalChurchs = this.state.churchs;
-      const churchs = this.state.churchs.filter((m) => m.id !== church.id);
-      this.setState({ churchs });
+      const originalChurches = this.state.churches;
+      const churches = this.state.churches.filter((m) => m.id !== church.id);
+      this.setState({ churches });
 
       try {
         await deleteChurch(church.id);
@@ -38,7 +38,7 @@ class Churchs extends Component {
         if (ex.response && ex.response.status === 404)
           toast.error("Esta iglesia ya fue eliminada");
 
-        this.setState({ churchs: originalChurchs });
+        this.setState({ churches: originalChurches });
       }
     }
   };
@@ -61,27 +61,27 @@ class Churchs extends Component {
       currentPage,
       sortColumn,
       searchQuery,
-      churchs: allChurchs,
+      churches: allChurches,
     } = this.state;
 
-    let filtered = allChurchs;
+    let filtered = allChurches;
     if (searchQuery)
-      filtered = allChurchs.filter((m) =>
+      filtered = allChurches.filter((m) =>
         m.global_title.toLowerCase().startsWith(searchQuery.toLocaleLowerCase())
       );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
-    const churchs = paginate(sorted, currentPage, pageSize);
+    const churches = paginate(sorted, currentPage, pageSize);
 
-    return { totalCount: filtered.length, churchs };
+    return { totalCount: filtered.length, churches };
   };
 
   render() {
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
     const { user } = this.props;
 
-    const { totalCount, churchs } = this.getPagedData();
+    const { totalCount, churches } = this.getPagedData();
 
     return (
       <div className="container-fluid">
@@ -96,8 +96,8 @@ class Churchs extends Component {
               onChange={this.handleSearch}
               placeholder="Buscar..."
             />
-            <ChurchsTable
-              churchs={churchs}
+            <ChurchesTable
+              churches={churches}
               user={user}
               sortColumn={sortColumn}
               onDelete={this.handleDelete}
@@ -122,4 +122,4 @@ class Churchs extends Component {
   }
 }
 
-export default Churchs;
+export default Churches;

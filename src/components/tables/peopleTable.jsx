@@ -3,35 +3,45 @@ import { Link } from "react-router-dom";
 import Table from "../common/table";
 import auth from "../../services/authService";
 
-class CustomersTable extends Component {
+class PeopleTable extends Component {
   columns = [
     { path: "id", label: "Codigo" },
     {
-      path: "firstName",
+      path: "first_name",
       label: "Nombre",
-      content: (customer) => (
-        <Link to={`/customer/${customer.id}`}> {customer.firstName} </Link>
+      content: (person) => (
+        <Link to={`/obrero/${person.id}`}> {person.first_name} </Link>
       ),
     },
     {
-      path: "lastName",
-      label: "Apellido",
-      content: (customer) => (
-        <Link to={`/customer/${customer.id}`}> {customer.lastName} </Link>
+      path: "last_name",
+      label: "Apellidos",
+      content: (person) => (
+        <Link to={`/obrero/${person.id}`}> {person.last_name} </Link>
       ),
     },
-    { path: "email", label: "Email" },
-    { path: "phoneNumber", label: "Teléfono" },
-    { path: "address", label: "Dirección" },
-    { path: "creationDate", label: "Creado (m/d/a)" },
+    { path: "identification", label: "Cédula" },
+    {
+      path: "church_id",
+      label: "Iglesia",
+      content: (person) => {
+        return (
+          <span>
+            {person.church &&
+              `${person.church.global_title}`}
+          </span>
+        );
+      },
+    },
+    { path: "created_date", label: "Creado (m/d/a)" },
   ];
 
   deleteColumn = {
     key: "delete",
-    content: (customer) => (
+    content: (person) => (
       <div className="text-center">
         <span
-          onClick={() => this.props.onDelete(customer)}
+          onClick={() => this.props.onDelete(person)}
           className="fa fa-trash text-danger cursor-pointer trash-size"
         ></span>
       </div>
@@ -48,12 +58,12 @@ class CustomersTable extends Component {
   }
 
   render() {
-    const { customers, sortColumn, onSort } = this.props;
+    const { people, sortColumn, onSort } = this.props;
 
     return (
       <Table
         columns={this.columns}
-        data={customers}
+        data={people}
         sortColumn={sortColumn}
         onSort={onSort}
       />
@@ -61,4 +71,4 @@ class CustomersTable extends Component {
   }
 }
 
-export default CustomersTable;
+export default PeopleTable;
