@@ -1,89 +1,109 @@
-import React, { Component } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Input from "./input";
 import { getPeopleByName } from "../../services/personService";
+import _ from "lodash";
+import { debounce } from "throttle-debounce";
 
-class SearchPerson extends Component {
-  state = {
-    people: [],
-    erros: {},
-    searchPersonInput: "",
+const SearchPerson = (props) => {
+  const [people, setPeople] = useState([]);
+  const [personName, setPersonName] = useState(props.value);
+
+  useEffect(() => {
+    if (props.value) setPersonName(props.value);
+
+    if (props.hide && props.clearSearchPerson) {
+      setPersonName("");
+      handleSearchPerson("");
+    }
+  }, [personName, props]);
+
+  const debounced = useCallback(
+    debounce(400, (nextValue) => {
+      handleSearchPerson(nextValue);
+    }),
+    []
+  );
+
+  const handleSelectPerson = (person) => {
+    setPersonName(person.first_name + " " + person.last_name);
+    props.onSelect(person);
   };
 
-  handleChange = async ({ currentTarget: input }) => {
-    this.setState({ searchPersonInput: input.value });
+  const handleSearchPerson = async (value) => {
+    if (value.length >= 0) {
+      const personNameQuery = value.toUpperCase().split(" ").join("%20");
 
-    let { data: people } = await getPeopleByName(input.value);
+      let { data: _people } = await getPeopleByName(personNameQuery);
 
-    people = people.results;
+      _people = _people.results;
 
-    if (input.value === "") people = [];
+      if (value === "" || value.length < 1) _people = [];
 
-    if (input.value.length > 0 && people.length === 0)
-      people = [
-        {
-          id: 0,
-          first_name: "No hay registros con este nombre, desea crearlo?",
-        },
-      ];
+      if (value.length > 0 && _people.length === 0) {
+        _people = [
+          {
+            id: 0,
+            first_name: "No hay registros con este nombre, desea crearlo?",
+          },
+        ];
+      }
 
-    this.setState({ people });
+      setPeople(_people);
+    } else {
+      setPeople([]);
+    }
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.hide && this.props === nextProps) return false;
-    else return true;
-  }
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setPersonName(value);
 
-  componentDidUpdate() {
-    if (this.props.hide) this.setState({ searchPersonInput: this.props.value });
-  }
+    debounced(value);
+  };
 
-  render() {
-    const { onSelect, onFocus, onBlur, hide, label = "" } = this.props;
-    const { people } = this.state;
+  const { onFocus, onBlur, hide, label = "" } = props;
 
-    return (
-      <div>
-        <Input
-          type="text"
-          id="searchPersonId"
-          name="query"
-          className="form-control form-control-sm"
-          placeholder="Buscar por nombre..."
-          autoComplete="Off"
-          onChange={this.handleChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          value={this.state.searchPersonInput}
-          label={label}
-        />
+  return (
+    <div>
+      <Input
+        type="text"
+        id="searchPersonId"
+        name="query"
+        className="form-control form-control-sm"
+        placeholder="Buscar obrero..."
+        autoComplete="Off"
+        onChange={(e) => handleChange(e)}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        value={personName}
+        label={label}
+      />
 
-        {people && !hide && (
-          <div
-            className="list-group col-11 shadow-lg bg-white position-absolute p-0"
-            style={{ marginTop: "-15px", zIndex: "999", maxWidth: "500px" }}
-          >
-            {people.map((person) => (
-              <button
-                key={person.id}
-                onClick={() => onSelect(person)}
-                className="list-group-item list-group-item-action w-100"
-              >
-                <span className="d-block">
-                  {person.first_name} {person.last_name}
-                </span>
-                <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
-                  {person.church && (
-                    <em>{"Iglesia: " + person.church.global_title}</em>
-                  )}
-                </span>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  }
-}
+      {people.length > 0 && !hide && (
+        <div
+          className="list-group col-12 shadow bg-white position-absolute p-0"
+          style={{ marginTop: "-15px", zIndex: "999", maxWidth: "600px" }}
+        >
+          {people.map((person) => (
+            <button
+              key={person.id}
+              onClick={() => handleSelectPerson(person)}
+              className="list-group-item list-group-item-action w-100 py-2"
+            >
+              <span className="d-block">
+                {person.first_name} {person.last_name}
+              </span>
+              <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
+                {person.church && (
+                  <em>{"Iglesia: " + person.church.global_title}</em>
+                )}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default SearchPerson;

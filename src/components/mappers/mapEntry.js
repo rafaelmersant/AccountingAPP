@@ -23,7 +23,7 @@ export function mapToViewEntryDetail(entryDetail) {
   for (const item of entryDetail) {
     details.push({
       id: item.id,
-      entry_id: item.entry_id,
+      entry_id: item.entry.id,
       concept_id: item.concept.id,
       concept: item.concept.description,
       reference: item.reference,

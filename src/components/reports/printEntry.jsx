@@ -49,12 +49,12 @@ class PrintEntry extends Component {
 
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                Bartasar de los reyes • Sto. Dgo. D.N.
+                B No 3, V Duarte, Santo Domingo
               </span>
             </div>
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                809-555-5555
+                809-594-3222
               </span>
             </div>
             <div className="text-center">
@@ -190,7 +190,7 @@ class PrintEntry extends Component {
             </tbody>
           </table>
         )}
-        <div>
+        <div className="mt-4">
           <span className="font-receipt font-receipt-small-F-invoice">
             No. Transacción:{" "}
           </span>
@@ -200,7 +200,10 @@ class PrintEntry extends Component {
         </div>
         <div>
           <span className="font-receipt font-receipt-small-F-invoice">
-            Le antendió: {entryHeader && entryHeader.created_by && entryHeader.created_by.name}
+            Le antendió:{" "}
+            {entryHeader &&
+              entryHeader.created_by &&
+              entryHeader.created_by.name}
           </span>
         </div>
       </div>

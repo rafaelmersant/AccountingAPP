@@ -1,96 +1,112 @@
-import React, { Component } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Input from "./input";
 import { getChurchesByName } from "../../services/churchService";
+import _ from "lodash";
+import { debounce } from "throttle-debounce";
 
-class SearchChurch extends Component {
-  state = {
-    churches: [],
-    erros: {},
-    searchChurchInput: "",
+const SearchChurch = (props) => {
+  const [churches, setChurches] = useState([]);
+  const [churchName, setChurchName] = useState(props.value);
+
+  useEffect(() => {
+    if (props.value) setChurchName(props.value);
+
+    if (props.hide && props.clearSearchChurch) {
+      setChurchName("");
+      handleSearchChurch("");
+    }
+  }, [churchName, props]);
+
+  const debounced = useCallback(
+    debounce(400, (nextValue) => {
+      handleSearchChurch(nextValue);
+    }),
+    []
+  );
+
+  const handleSelectChurch = (church) => {
+    setChurchName(church.globa_title);
+    props.onSelect(church);
   };
 
-  handleChange = async ({ currentTarget: input }) => {
-    this.setState({ searchChurchInput: input.value });
+  const handleSearchChurch = async (value) => {
+    if (value.length >= 0) {
+      const churchNameQuery = value.toUpperCase().split(" ").join("%20");
 
-    let { data: churches } = await getChurchesByName(input.value);
+      let { data: _churches } = await getChurchesByName(churchNameQuery);
 
-    churches = churches.results;
+      _churches = _churches.results;
 
-    if (input.value === "") churches = [];
+      if (value === "" || value.length < 1) _churches = [];
 
-    if (input.value.length > 0 && churches.length === 0)
-      churches = [
-        {
-          id: 0,
-          global_title: "No existe esta iglesia, desea crearla?",
-        },
-      ];
+      if (value.length > 0 && _churches.length === 0) {
+        _churches = [
+          {
+            id: 0,
+            global_title: "No existe esta iglesia, desea crearla?",
+          },
+        ];
+      }
 
-    this.setState({ churches });
+      setChurches(_churches);
+    } else {
+      setChurches([]);
+    }
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.hide && this.props === nextProps) return false;
-    else return true;
-  }
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setChurchName(value);
 
-  componentDidUpdate() {
-    if (this.props.hide) this.setState({ searchChurchInput: this.props.value });
-  }
+    debounced(value);
+  };
 
-  render() {
-    const { onSelect, onFocus, onBlur, hide, label = "" } = this.props;
-    const { churches } = this.state;
+  const { onFocus, onBlur, hide, label = "" } = props;
 
-    return (
-      <div>
-        <Input
-          type="text"
-          id="searchChurchId"
-          name="query"
-          className="form-control form-control-sm"
-          placeholder="Buscar iglesia..."
-          autoComplete="Off"
-          onChange={this.handleChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          value={this.state.searchChurchInput}
-          label={label}
-        />
+  return (
+    <div>
+      <Input
+        type="text"
+        id="searchChurchId"
+        name="query"
+        className="form-control form-control-sm"
+        placeholder="Buscar iglesia..."
+        autoComplete="Off"
+        onChange={(e) => handleChange(e)}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        value={churchName}
+        label={label}
+      />
 
-        {churches && !hide && (
-          <div
-            className="list-group col-11 shadow-lg bg-white position-absolute p-0"
-            style={{ marginTop: "-15px", zIndex: "999", maxWidth: "500px" }}
-          >
-            {churches.map((church) => (
-              <button
-                key={church.id}
-                onClick={() => onSelect(church)}
-                className="list-group-item list-group-item-action w-100"
-              >
-                <span className="d-block">{church.global_title}</span>
-                <span
-                  className="text-info mb-0"
-                  style={{ fontSize: ".9em" }}
-                >
-                  {church.shepherd && (
-                    <em>
-                      {"Pastor(a): " +
-                        church.shepherd.first_name +
-                        " " +
-                        church.shepherd.last_name}
-                    </em>
-                  )}
-                </span>
-
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  }
-}
+      {churches.length > 0 && !hide && (
+        <div
+          className="list-group col-12 shadow bg-white position-absolute p-0"
+          style={{ marginTop: "-15px", zIndex: "999", maxWidth: "600px" }}
+        >
+          {churches.map((church) => (
+            <button
+              key={church.id}
+              onClick={() => handleSelectChurch(church)}
+              className="list-group-item list-group-item-action w-100 py-2"
+            >
+              <span className="d-block">{church.global_title}</span>
+              <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
+                {church.shepherd && (
+                  <em>
+                    {"Pastor(a): " +
+                      church.shepherd.first_name +
+                      " " +
+                      church.shepherd.last_name}
+                  </em>
+                )}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default SearchChurch;

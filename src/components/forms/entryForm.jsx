@@ -56,7 +56,7 @@ class EntryForm extends Form {
       period_month: new Date().getMonth() + 1,
       total_amount: 0,
       created_by: getCurrentUser().id,
-      created_date: new Date().toISOString()
+      created_date: new Date().toISOString(),
     },
     loading: true,
     disabledSave: false,
@@ -67,13 +67,13 @@ class EntryForm extends Form {
     detailsToDelete: [],
     line: {
       id: 0,
-      header_id: 0,
+      entry_id: 0,
       concept_id: 0,
       concept: "",
       amount: 0,
       reference: "",
       type: "",
-      created_date: new Date().toISOString()
+      created_date: new Date().toISOString(),
     },
     type: [
       { id: "E", name: "Entrada" },
@@ -105,7 +105,7 @@ class EntryForm extends Form {
     period_month: Joi.optional(),
     total_amount: Joi.optional(),
     created_by: Joi.number(),
-    created_date: Joi.string()
+    created_date: Joi.string(),
   };
 
   async populateConcepts() {
@@ -122,7 +122,7 @@ class EntryForm extends Form {
     line.reference = "";
     line.type = "";
     line.created_date = new Date().toISOString();
-    
+
     this.setState({ line });
   }
 
@@ -142,37 +142,37 @@ class EntryForm extends Form {
   updateTotals = () => {
     const data = { ...this.state.data };
     data.total_amount = 0;
-    
+
     this.state.details.forEach((item) => {
       data.total_amount += Math.round(parseFloat(item.amount) * 100) / 100;
     });
 
     data.total_amount = Math.round(data.total_amount * 100) / 100;
-    
+
     this.setState({ data });
   };
 
   async populateEntry() {
     try {
-      const header_id = this.props.match.params.id;
-      if (header_id === "new")  {
-        this.setState({ loading: false})
+      const entry_id = this.props.match.params.id;
+      if (entry_id === "new") {
+        this.setState({ loading: false });
         return;
       }
 
-      const { data: entryHeader } = await getEntryHeader(
-        header_id
-      );
-            
-      const { data: entryDetail } = await getEntryDetail(
-        entryHeader.id
-      );
+      const { data: entryHeader } = await getEntryHeader(entry_id);
+
+      const { data: entryDetail } = await getEntryDetail(entryHeader.id);
 
       const entryHeaderMapped = mapToViewEntryHeader(entryHeader);
-      console.log('header:::::', entryHeaderMapped)  
-      const searchChurchText = entryHeader.church ? `${entryHeader.church.global_title}` : "";
-      const searchPersonText = entryHeader.person ? `${entryHeader.person.first_name} ${entryHeader.person.last_name}` : "";
       
+      const searchChurchText = entryHeader.church
+        ? `${entryHeader.church.global_title}`
+        : "";
+      const searchPersonText = entryHeader.person
+        ? `${entryHeader.person.first_name} ${entryHeader.person.last_name}`
+        : "";
+
       this.setState({
         data: entryHeaderMapped,
         details: mapToViewEntryDetail(entryDetail),
@@ -185,7 +185,7 @@ class EntryForm extends Form {
         action: "Detalle de registro No. ",
         serializedEntryHeader: entryHeader,
         serializedEntryDetail: entryDetail,
-        loading: false
+        loading: false,
       });
 
       this.forceUpdate();
@@ -248,7 +248,7 @@ class EntryForm extends Form {
     }
 
     this.updateLine(concept);
-    
+
     this.setState({
       hideSearchConcept: true,
       clearSearchConcept: false,
@@ -296,7 +296,7 @@ class EntryForm extends Form {
       e.preventDefault();
     };
     handler(window.event);
-    
+
     if (person.id === 0) {
       this.raisePersonModal.click();
       return false;
@@ -417,7 +417,6 @@ class EntryForm extends Form {
     try {
       await this.populateConcepts();
       await this.populateEntry(false);
-
     } catch (ex) {
       try {
         Sentry.captureException(ex);
@@ -501,7 +500,19 @@ class EntryForm extends Form {
   };
 
   handleCleanConcept = async () => {
-    this.setState({currentConcept: {}, searchConceptText: ""});
+    this.setState({ currentConcept: {}, searchConceptText: "" });
+  };
+
+  handleCleanChurch = async () => {
+    const { data } = { ...this.state };
+    data.church_id = 0;
+    this.setState({ data, searchChurchText: "" });
+  };
+
+  handleCleanPerson = async () => {
+    const { data } = { ...this.state };
+    data.person_id = 0;
+    this.setState({ data, searchPersonText: "" });
   };
 
   render() {
@@ -514,8 +525,8 @@ class EntryForm extends Form {
           <h4 className="bg-dark text-light pl-2 pr-2 list-header">
             {this.state.action}
             {this.state.data.id > 0 &&
-              !this.state.action.includes("Nuevo")
-              && this.state.data.id}
+              !this.state.action.includes("Nuevo") &&
+              this.state.data.id}
           </h4>
           <div
             className="col-12 pb-3 bg-light"
@@ -528,10 +539,32 @@ class EntryForm extends Form {
                     onSelect={this.handleSelectChurch}
                     onFocus={() => this.handleFocusChurch(false)}
                     onBlur={() => this.handleFocusChurch(true)}
+                    clearSearchChurch={this.state.clearSearchChurch}
                     hide={this.state.hideSearchChurch}
                     value={this.state.searchChurchText}
                     label="Iglesia"
                   />
+                </div>
+                <div>
+                {this.state.data.church_id > 0 && (
+                    <div
+                      style={{
+                        marginTop: "36px",
+                      }}
+                    >
+                      <span
+                        className="fa fa-trash text-danger"
+                        style={{
+                          fontSize: "24px",
+                          position: "absolute",
+                          marginLeft: "-39px",
+                          cursor: "pointer",
+                        }}
+                        title="Limpiar filtro de iglesia"
+                        onClick={this.handleCleanChurch}
+                      ></span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-2">
@@ -560,20 +593,36 @@ class EntryForm extends Form {
                     onSelect={this.handleSelectPerson}
                     onFocus={() => this.handleFocusPerson(false)}
                     onBlur={() => this.handleFocusPerson(true)}
+                    clearSearchPerson={this.state.clearSearchPerson}
                     hide={this.state.hideSearchPerson}
                     value={this.state.searchPersonText}
                     label="Obrero"
                   />
                 </div>
+                <div>
+                {this.state.data.person_id > 0 && (
+                    <div
+                      style={{
+                        marginTop: "36px",
+                      }}
+                    >
+                      <span
+                        className="fa fa-trash text-danger"
+                        style={{
+                          fontSize: "24px",
+                          position: "absolute",
+                          marginLeft: "-39px",
+                          cursor: "pointer",
+                        }}
+                        title="Limpiar filtro de obrero"
+                        onClick={this.handleCleanPerson}
+                      ></span>
+                    </div>
+                  )}
+                </div>
 
                 <div className="col-4">
-                {this.renderInput(
-                    "note",
-                    "Nota",
-                    "text",
-                    "",
-                    "Opcional"
-                  )}
+                  {this.renderInput("note", "Nota", "text", "", "Opcional")}
                 </div>
               </div>
 
@@ -589,7 +638,7 @@ class EntryForm extends Form {
                     label="Concepto"
                   />
                 </div>
-                {Object.keys(this.state.currentConcept).length > 0  && (
+                {Object.keys(this.state.currentConcept).length > 0 && (
                   <div
                     style={{
                       marginTop: "36px",
@@ -654,18 +703,20 @@ class EntryForm extends Form {
               </div>
 
               {this.state.loading && (
-              <div className="d-flex justify-content-center">
-                <Loading />
-              </div>
+                <div className="d-flex justify-content-center">
+                  <Loading />
+                </div>
               )}
-              
-              {!this.state.loading && (<EntryDetailTable
-                entryHeader={this.state.data}
-                details={this.state.details}
-                user={user}
-                onDelete={this.handleDeleteDetail}
-                onEdit={this.handleEditDetail}
-              />)}
+
+              {!this.state.loading && (
+                <EntryDetailTable
+                  entryHeader={this.state.data}
+                  details={this.state.details}
+                  user={user}
+                  onDelete={this.handleDeleteDetail}
+                  onEdit={this.handleEditDetail}
+                />
+              )}
 
               {this.isEntryEditable() && this.renderButton("Guardar")}
             </form>
@@ -737,7 +788,6 @@ class EntryForm extends Form {
             />
           </div>
         </div>
-
       </React.Fragment>
     );
   }
