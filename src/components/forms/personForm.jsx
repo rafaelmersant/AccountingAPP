@@ -88,8 +88,8 @@ class PersonForm extends Form {
     }
 
     const { data } = { ...this.state };
-    data.first_name = data.first_name.toUpperCase();
-    data.last_name = data.last_name.toUpperCase();
+    // data.first_name = data.first_name.toUpperCase();
+    // data.last_name = data.last_name.toUpperCase();
 
     const { data: person } = await savePerson(data);
 
@@ -98,7 +98,7 @@ class PersonForm extends Form {
   };
 
   render() {
-    const { user, popUp } = this.props;
+    const { popUp } = this.props;
 
     return (
       <div className="container-fluid">

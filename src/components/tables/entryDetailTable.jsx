@@ -1,16 +1,30 @@
 import React, { Component } from "react";
 import TableBody from "../common/tableBody";
-//import auth from "../../services/authService";
 import { formatNumber } from "../../utils/custom";
 
-class InvoiceDetailTable extends Component {
+class EntryDetailTable extends Component {
   columns = [
-    { path: "quantity", label: "Cant." },
-    { path: "product", label: "Producto" },
-    { path: "price", label: "Precio" },
-    { path: "itbis", label: "ITBIS Total" },
-    { path: "discount", label: "Desc. Total" },
-    { path: "total", label: "Importe" }
+    { path: "concept", label: "Concepto" },
+    {
+      path: "type",
+      label: "Tipo",
+      content: (item) => (
+        <span>
+          {`${item.type.replace("S", "Salida").replace("E", "Entrada")}`}
+        </span>
+      ),
+    },
+    { path: "reference", label: "Referencia" },
+    {
+      path: "amount",
+      label: "Monto",
+      align: "text-right",
+      content: (item) => (
+        <div className="text-right">
+          <span>{formatNumber(item.amount)}</span>
+        </div>
+      ),
+    },
   ];
 
   deleteColumn = {
@@ -42,10 +56,10 @@ class InvoiceDetailTable extends Component {
   }
 
   render() {
-    const { details, invoiceHeader } = this.props;
+    const { details, entryHeader } = this.props;
 
-    if (invoiceHeader.paid && invoiceHeader.id)
-      this.columns = this.columns.filter(c => c.path !== "delete");
+    // if (entryHeader.id)
+    //   this.columns = this.columns.filter(c => c.path !== "delete");
 
     return (
       <React.Fragment>
@@ -66,10 +80,9 @@ class InvoiceDetailTable extends Component {
                 <th>Total</th>
                 <th></th>
                 <th></th>
-                <th>{formatNumber(invoiceHeader.itbis)}</th>
-                <th>{formatNumber(invoiceHeader.discount)}</th>
-                <th>{formatNumber(invoiceHeader.subtotal - invoiceHeader.discount)}</th>
-                {(!invoiceHeader.paid || !invoiceHeader.id) && <th></th>}
+                <th className="text-right">{formatNumber(entryHeader.total_amount)}</th>
+                <th></th>
+                {/* {(!entryHeader.id) && <th></th>} */}
               </tr>
             </tfoot>
           )}
@@ -79,4 +92,4 @@ class InvoiceDetailTable extends Component {
   }
 }
 
-export default InvoiceDetailTable;
+export default EntryDetailTable;

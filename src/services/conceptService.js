@@ -15,6 +15,15 @@ export function getConcept(conceptId) {
   return http.get(`${apiEndpoint}/?id=${conceptId}`);
 }
 
+export function getConceptsByName(searchText) {
+  if (searchText)
+    return http.get(
+      `${apiEndpoint}/?search=${searchText}`
+    );
+
+  return http.get(`${apiEndpoint}/`);
+}
+
 export function saveConcept(concept) {
   if (concept.id) {
     const body = { ...concept };

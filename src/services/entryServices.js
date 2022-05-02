@@ -8,7 +8,7 @@ function entryHeaderUrl(id) {
 }
 
 function entryDetailUrl(entryId, id) {
-  return `${entryHeaderUrl(entryId)}/items/${id}/`;
+  return `${entryHeaderUrl(entryId)}items/${id}/`;
 }
 
 function entryItemsUrl(id) {
@@ -47,6 +47,12 @@ export function getEntryDetail(entryId) {
 }
 
 export function saveEntryHeader(entry) {
+  delete entry.church;
+  delete entry.person;
+
+  if (!entry.church_id) delete entry.church_id;
+  if (!entry.person_id) delete entry.person_id;
+
   if (entry.id) {
     const body = { ...entry };
     delete body.id;
@@ -56,14 +62,14 @@ export function saveEntryHeader(entry) {
   return http.post(`${apiEndpointHeader}/`, entry);
 }
 
-export function saveEntryDetail(item, entryId) {
+export function saveEntryDetail(item) {
   if (item.id) {
     const body = { ...item };
     delete body.id;
-    return http.put(entryDetailUrl(entryId, item.id), body);
+    return http.put(entryDetailUrl(item.entry_id, item.id), body);
   }
 
-  return http.post(entryItemsUrl(entryId), item);
+  return http.post(entryItemsUrl(item.entry_id), item);
 }
 
 export function deleteEntryHeader(id) {

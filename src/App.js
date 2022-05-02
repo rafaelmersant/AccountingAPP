@@ -25,6 +25,7 @@ import ChurchForm from "./components/forms/churchForm";
 import People from "./components/people";
 import PersonForm from "./components/forms/personForm";
 import Entries from "./components/entries";
+import EntryForm from "./components/forms/entryForm";
 
 class App extends Component {
   state = {
@@ -72,7 +73,7 @@ class App extends Component {
                   <ProtectedRoute path="/iglesia/:id" component={ChurchForm} />
 
                   <ProtectedRoute path="/registros" component={Entries} />
-                  <ProtectedRoute path="/iglesia/:id" component={ChurchForm} />
+                  <ProtectedRoute path="/registro/:id" component={EntryForm} />
 
                   <ProtectedRoute path="/obreros" component={People} />
                   <ProtectedRoute

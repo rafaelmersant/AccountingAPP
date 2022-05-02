@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import CustomerForm from "../forms/customerForm";
+import ConceptForm from "../forms/conceptForm";
 
-class CustomerModal extends Component {
+class ConceptModal extends Component {
   handleClosePopUp = e => {
-    this.props.setNewCustomer(e);
+    this.props.setNewConcept(e);
     this.closeButton.click();
   };
 
@@ -11,10 +11,10 @@ class CustomerModal extends Component {
     return (
       <div
         className="modal fade col-12"
-        id="customerModal"
+        id="conceptModal"
         tabIndex="-1"
         role="dialog"
-        aria-labelledby="customerModalLabel"
+        aria-labelledby="conceptModalLabel"
         aria-hidden="true"
         data-backdrop="static"
         data-keyboard="false"
@@ -22,8 +22,8 @@ class CustomerModal extends Component {
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="customerModalLabel">
-                Agregar nuevo cliente
+              <h5 className="modal-title" id="conceptModalLabel">
+                Agregar nuevo concepto
               </h5>
               <button
                 ref={button => (this.closeButton = button)}
@@ -36,7 +36,7 @@ class CustomerModal extends Component {
               </button>
             </div>
 
-            <CustomerForm popUp={true} closeMe={this.handleClosePopUp} />
+            <ConceptForm popUp={true} closeMe={this.handleClosePopUp} />
           </div>
         </div>
       </div>
@@ -44,4 +44,4 @@ class CustomerModal extends Component {
   }
 }
 
-export default CustomerModal;
+export default ConceptModal;

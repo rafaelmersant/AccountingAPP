@@ -20,7 +20,7 @@ class Concepts extends Component {
   async componentDidMount() {
     const { data: concepts } = await getConcepts();
 
-    this.setState({ concepts });
+    this.setState({ concepts: concepts.results });
   }
 
   handleDelete = async (concept) => {

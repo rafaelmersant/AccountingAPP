@@ -22,7 +22,7 @@ class SearchPerson extends Component {
       people = [
         {
           id: 0,
-          global_title: "No hay registros con este nombre",
+          first_name: "No hay registros con este nombre, desea crearlo?",
         },
       ];
 

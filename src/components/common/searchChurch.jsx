@@ -22,7 +22,7 @@ class SearchChurch extends Component {
       churches = [
         {
           id: 0,
-          global_title: "No existe esta iglesia",
+          global_title: "No existe esta iglesia, desea crearla?",
         },
       ];
 

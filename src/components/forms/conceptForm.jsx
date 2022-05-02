@@ -37,7 +37,7 @@ class ConceptForm extends Form {
       const { data: concept } = await getConcept(conceptId);
 
       this.setState({
-        data: this.mapToViewModel(concept),
+        data: this.mapToViewModel(concept.results),
         action: "Editar Concepto",
       });
     } catch (ex) {
@@ -63,9 +63,12 @@ class ConceptForm extends Form {
   }
 
   doSubmit = async () => {
-    await saveConcept(this.state.data);
+    const { data } = { ...this.state };
+    // data.description = data.description.toUpperCase();
+    const { data: concept } = await saveConcept(this.state.data);
 
-    this.props.history.push("/conceptos");
+    if (!this.props.popUp) this.props.history.push("/conceptos");
+    else this.props.closeMe(concept);
   };
 
   render() {
@@ -75,12 +78,12 @@ class ConceptForm extends Form {
         <div className="col-12 pb-3 bg-light">
           <form onSubmit={this.handleSubmit}>
             <div className="row">
-            <div className="col-2">
+            <div className="col-2 col-sm-6 col-md-3">
                 {this.renderSelect("type", "Tipo", this.state.types)}
               </div>
             </div>
             <div className="row">
-              <div className="col-7">
+              <div className="col-7 col-sm-12 col-md-7">
                 {this.renderInput("description", "Descripción")}
               </div>
             </div>

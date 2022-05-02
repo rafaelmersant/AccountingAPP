@@ -22,8 +22,8 @@ class ChurchForm extends Form {
   schema = {
     id: Joi.number(),
     global_title: Joi.string().required().min(3).label("Titulo Conciliar"),
-    local_title: Joi.string().required().min(3).label("Titulo Local"),
-    location: Joi.string().label("Ubicación"),
+    local_title: Joi.optional().label("Titulo Local"),
+    location: Joi.optional().label("Ubicación"),
     shepherd_id: Joi.optional().label("Pastor"),
     created_by: Joi.number(),
     created_date: Joi.string(),
@@ -65,9 +65,11 @@ class ChurchForm extends Form {
   }
 
   doSubmit = async () => {
-    await saveChurch(this.state.data);
+    const { data } = { ...this.state };
+    const { data: church } = await saveChurch(this.state.data);
 
-    this.props.history.push("/iglesias");
+    if (!this.props.popUp) this.props.history.push("/iglesias");
+    else this.props.closeMe(church);    
   };
 
   render() {

@@ -26,6 +26,8 @@ export function getChurchesByName(searchText) {
 
 export function saveChurch(church) {
   if (!church.shepherd_id) delete church.shepherd_id;
+  if (!church.local_title) delete church.local_title;
+  if (!church.location) delete church.location;
   
   if (church.id) {
     const body = { ...church };
