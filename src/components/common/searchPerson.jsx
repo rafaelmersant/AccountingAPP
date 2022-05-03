@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Input from "./input";
 import { getPeopleByName } from "../../services/personService";
-import _ from "lodash";
 import { debounce } from "throttle-debounce";
 
 const SearchPerson = (props) => {

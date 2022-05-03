@@ -37,7 +37,7 @@ import ChurchModal from "../modals/churchModal";
 import PersonModal from "../modals/personModal";
 import ConceptModal from "../modals/conceptModal";
 import { getConcept, getConcepts } from "../../services/conceptService";
-import Select from "../common/select";
+// import Select from "../common/select";
 
 registerLocale("es", es);
 
@@ -83,6 +83,8 @@ class EntryForm extends Form {
     currentConcept: {},
     action: "Nuevo Registro",
     clearSearchConcept: false,
+    clearSearchPerson: false,
+    clearSearchChurch: false,
     hideSearchConcept: false,
     hideSearchChurch: false,
     hideSearchPerson: false,

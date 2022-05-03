@@ -8,6 +8,8 @@ import {
   getPersonByFirstLastName,
 } from "../../services/personService";
 import { getCurrentUser } from "../../services/authService";
+import SearchChurch from "../common/searchChurch";
+import ChurchModal from "../modals/churchModal";
 
 class PersonForm extends Form {
   state = {
@@ -22,6 +24,9 @@ class PersonForm extends Form {
     },
     errors: {},
     action: "Nuevo Obrero",
+    hideSearchChurch: false,
+    clearSearchChurch: false,
+    searchChurchText: "",
   };
 
   schema = {
@@ -41,9 +46,14 @@ class PersonForm extends Form {
 
       const { data: person } = await getPerson(personId);
 
+      const church = person.results[0].church
+        ? person.results[0].church.global_title
+        : "";
+
       this.setState({
         data: this.mapToViewModel(person.results),
         action: "Editar Obrero",
+        searchChurchText: church,
       });
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
@@ -62,13 +72,51 @@ class PersonForm extends Form {
     }
   }
 
+  handleSelectChurch = async (church) => {
+    const handler = (e) => {
+      e.preventDefault();
+    };
+    handler(window.event);
+
+    if (church.id === 0) {
+      this.raiseChurchModal.click();
+      return false;
+    }
+
+    const data = { ...this.state.data };
+    data.church_id = church.id;
+
+    this.setState({
+      data,
+      hideSearchChurch: true,
+      clearSearchChurch: false,
+      searchChurchText: `${church.global_title}`,
+    });
+  };
+
+  handleFocusChurch = (value) => {
+    setTimeout(() => {
+      this.setState({ hideSearchChurch: value });
+    }, 200);
+  };
+
+  handleCleanChurch = async () => {
+    const { data } = { ...this.state };
+    data.church_id = 0;
+    this.setState({ data, searchChurchText: "" });
+  };
+
+  handleSetNewChurch = (e) => {
+    this.handleSelectChurch(e);
+  };
+
   mapToViewModel(person) {
     return {
       id: person[0].id,
       first_name: person[0].first_name,
       last_name: person[0].last_name,
       identification: person[0].identification ? person[0].identification : "",
-      church_id: person[0].church_id ? person[0].church_id : "",
+      church_id: person[0].church ? person[0].church.id : "",
       created_by: person[0].created_by
         ? person[0].created_by
         : getCurrentUser().id,
@@ -124,11 +172,57 @@ class PersonForm extends Form {
               </div>
             </div>
 
-            {this.renderInput("church_id", "Iglesia")}
-            
+            <div className="row">
+              <div className="col">
+                <SearchChurch
+                  onSelect={this.handleSelectChurch}
+                  onFocus={() => this.handleFocusChurch(false)}
+                  onBlur={() => this.handleFocusChurch(true)}
+                  clearSearchChurch={this.state.clearSearchChurch}
+                  hide={this.state.hideSearchChurch}
+                  value={this.state.searchChurchText}
+                  label="Iglesia"
+                />
+              </div>
+              <div>
+                {this.state.data.church_id > 0 && (
+                  <div
+                    style={{
+                      marginTop: "36px",
+                    }}
+                  >
+                    <span
+                      className="fa fa-trash text-danger"
+                      style={{
+                        fontSize: "24px",
+                        position: "absolute",
+                        marginLeft: "-39px",
+                        cursor: "pointer",
+                      }}
+                      title="Limpiar filtro de iglesia"
+                      onClick={this.handleCleanChurch}
+                    ></span>
+                  </div>
+                )}
+              </div>
+            </div>
+
             {this.renderButton("Guardar")}
           </form>
         </div>
+
+        {!popUp && (
+          <div>
+            <button
+              type="button"
+              data-toggle="modal"
+              data-target="#churchModal"
+              hidden="hidden"
+              ref={(button) => (this.raiseChurchModal = button)}
+            ></button>
+            <ChurchModal popUp={false} setNewChurch={this.handleSetNewChurch} />
+          </div>
+        )}
       </div>
     );
   }

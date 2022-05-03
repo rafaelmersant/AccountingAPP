@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Input from "./input";
 import { getChurchesByName } from "../../services/churchService";
-import _ from "lodash";
 import { debounce } from "throttle-debounce";
 
 const SearchChurch = (props) => {

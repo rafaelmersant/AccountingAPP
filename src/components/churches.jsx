@@ -87,6 +87,7 @@ class Churches extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col">
+            <h5 className="pull-left text-info mt-2">Listado de Iglesias</h5>
             <div className="mb-4">
               <NewButton label="Nueva Iglesia" to="/iglesia/new" />
             </div>

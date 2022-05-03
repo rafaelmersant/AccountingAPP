@@ -65,7 +65,7 @@ class ConceptForm extends Form {
   doSubmit = async () => {
     const { data } = { ...this.state };
     // data.description = data.description.toUpperCase();
-    const { data: concept } = await saveConcept(this.state.data);
+    const { data: concept } = await saveConcept(data);
 
     if (!this.props.popUp) this.props.history.push("/conceptos");
     else this.props.closeMe(concept);
