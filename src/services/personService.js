@@ -40,7 +40,7 @@ export function getPeopleByName(searchText) {
 }
 
 export function savePerson(person) {
-  if (!person.identification) delete person.identification;
+  if (!person.identification.trim()) delete person.identification;
   if (!person.church_id) delete person.church_id;
 
   if (person.id) {

@@ -761,7 +761,7 @@ class EntryForm extends Form {
               className="btn btn-success mb-3 pull-right"
               onClick={this.newEntry}
             >
-              Nueva Registro
+              Nuevo Registro
             </button>
           </div>
 

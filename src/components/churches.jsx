@@ -7,12 +7,14 @@ import SearchBox from "./common/searchBox";
 import NewButton from "./common/newButton";
 import ChurchesTable from "./tables/churchesTable";
 import { getChurches, deleteChurch } from "../services/churchService";
+import Loading from "./common/loading";
 
 class Churches extends Component {
   state = {
+    loading: false,
     churches: [],
     currentPage: 1,
-    pageSize: 10,
+    pageSize: 50,
     searchQuery: "",
     sortColumn: { path: "created_date", order: "desc" },
   };
@@ -20,7 +22,7 @@ class Churches extends Component {
   async componentDidMount() {
     const { data: churches } = await getChurches();
 
-    this.setState({ churches: churches.results });
+    this.setState({ churches: churches.results, pageSize: churches.count });
   }
 
   handleDelete = async (church) => {
@@ -74,6 +76,8 @@ class Churches extends Component {
 
     const churches = paginate(sorted, currentPage, pageSize);
 
+    // this.setState({pageSize: filtered.length});
+
     return { totalCount: filtered.length, churches };
   };
 
@@ -97,25 +101,36 @@ class Churches extends Component {
               onChange={this.handleSearch}
               placeholder="Buscar..."
             />
-            <ChurchesTable
-              churches={churches}
-              user={user}
-              sortColumn={sortColumn}
-              onDelete={this.handleDelete}
-              onSort={this.handleSort}
-            />
 
-            <div className="row">
-              <Pagination
-                itemsCount={totalCount}
-                pageSize={pageSize}
-                currentPage={currentPage}
-                onPageChange={this.handlePageChange}
+            {this.state.loading && (
+              <div className="d-flex justify-content-center mb-3">
+                <Loading />
+              </div>
+            )}
+
+            {!this.state.loading && (
+              <ChurchesTable
+                churches={churches}
+                user={user}
+                sortColumn={sortColumn}
+                onDelete={this.handleDelete}
+                onSort={this.handleSort}
               />
-              <p className="text-muted ml-3 mt-2">
-                <em>Mostrando {totalCount} iglesias</em>
-              </p>
-            </div>
+            )}
+
+            {!this.state.loading && churches.length > 0 && (
+              <div className="row">
+                <Pagination
+                  itemsCount={totalCount}
+                  pageSize={pageSize}
+                  currentPage={currentPage}
+                  onPageChange={this.handlePageChange}
+                />
+                <p className="text-muted ml-3 mt-2">
+                  Mostrando {totalCount} iglesias
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

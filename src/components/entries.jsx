@@ -13,7 +13,7 @@ class Entries extends Component {
     loading: true,
     entries: [],
     currentPage: 1,
-    pageSize: 10,
+    pageSize: 20,
     totalEntries: 0,
     sortColumn: { path: "created_date", order: "desc" },
     searchParams: {

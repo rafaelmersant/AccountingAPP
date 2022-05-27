@@ -18,6 +18,7 @@ import "./simple-sidebar.css";
 import NavBarSide from "./components/navBarSide";
 import NavBarTop from "./components/navBarTop";
 import HomePage from "./components/homepage";
+
 import ConceptForm from "./components/forms/conceptForm";
 import Concepts from "./components/concepts";
 import Churchs from "./components/churches";
@@ -26,6 +27,7 @@ import People from "./components/people";
 import PersonForm from "./components/forms/personForm";
 import Entries from "./components/entries";
 import EntryForm from "./components/forms/entryForm";
+import Cuadre from "./components/reports/cuadre";
 
 class App extends Component {
   state = {
@@ -66,6 +68,8 @@ class App extends Component {
                   <Route path="/login" component={LoginForm} />
                   <Route path="/logout" component={Logout} />
                   
+                  <ProtectedRoute path="/cuadre" component={Cuadre} />
+
                   <ProtectedRoute path="/conceptos" component={Concepts} />
                   <ProtectedRoute path="/concepto/:id" component={ConceptForm} />
 
@@ -87,7 +91,6 @@ class App extends Component {
                   <Redirect exact from="/" to="/home" />
                   <Route path="/not-found" component={NotFound} />
                   <Redirect to="/not-found" />
-                  {/* <ProtectedRoute path="/invoice/:id" component={Invoice} /> */}
                 </Switch>
               </main>
             </div>

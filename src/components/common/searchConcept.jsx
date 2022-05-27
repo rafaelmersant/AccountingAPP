@@ -33,9 +33,7 @@ const SearchConcept = (props) => {
     if (value.length >= 0) {
       const conceptNameQuery = value.toUpperCase().split(" ").join("%20");
 
-      let { data: _concepts } = await getConceptsByName(
-        conceptNameQuery
-      );
+      let { data: _concepts } = await getConceptsByName(conceptNameQuery);
 
       _concepts = _concepts.results;
 
@@ -46,6 +44,7 @@ const SearchConcept = (props) => {
           {
             id: 0,
             description: "No existe el concepto, desea crearlo?",
+            type: "E",
           },
         ];
       }
@@ -71,19 +70,19 @@ const SearchConcept = (props) => {
 
   return (
     <div>
-       <Input
-          type="text"
-          id="searchConceptId"
-          name="query"
-          className="form-control form-control-sm"
-          placeholder="Buscar concepto..."
-          autoComplete="Off"
-          onChange={(e) => handleChange(e)}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          value={conceptName}
-          label={label}
-        />
+      <Input
+        type="text"
+        id="searchConceptId"
+        name="query"
+        className="form-control form-control-sm"
+        placeholder="Buscar concepto..."
+        autoComplete="Off"
+        onChange={(e) => handleChange(e)}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        value={conceptName}
+        label={label}
+      />
 
       {concepts.length > 0 && !hide && (
         <div
@@ -96,7 +95,13 @@ const SearchConcept = (props) => {
               onClick={() => handleSelectConcept(concept)}
               className="list-group-item list-group-item-action w-100 py-2"
             >
-             <span className="d-block">{concept.description}</span>
+              <span className="d-block">{concept.description}</span>
+              <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
+                <em>
+                  {"Tipo: " +
+                    concept.type.replace("S", "Salida").replace("E", "Entrada")}
+                </em>
+              </span>
             </button>
           ))}
         </div>

@@ -14,7 +14,7 @@ class PrintEntry extends Component {
     console.log("entryDetail", entryDetail);
 
     return (
-      <div className="mt-1" style={{ width: "338px" }}>
+      <div className="mt-1" style={{ width: "358px" }}>
         {entryHeader && (
           <div>
             <div className="text-center">
@@ -32,7 +32,7 @@ class PrintEntry extends Component {
                   fontWeight: "normal",
                 }}
               >
-                Concilio Evangelico Pentecostal
+                Concilio Evangélico Pentecostal
               </span>
             </div>
             <div className="text-center">
@@ -46,26 +46,38 @@ class PrintEntry extends Component {
                 Arca de Salvación, INC.
               </span>
             </div>
+            <div className="text-center">
+              <span
+                style={{
+                  fontFamily: "Calisto MT",
+                  fontSize: "1.0em",
+                  fontWeight: "normal",
+                }}
+              >
+                DECRETO 313-2000
+              </span>
+            </div>
+            
+            <div className="text-center">
+              <span className="font-receipt font-receipt-small-invoice">
+                C/Baltazar de los reyes #5 • Sto. Dgo.
+              </span>
+            </div>
 
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                B No 3, V Duarte, Santo Domingo
+                Tel. 809-688-7461
               </span>
             </div>
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                809-594-3222
-              </span>
-            </div>
-            <div className="text-center">
-              <span className="font-receipt font-receipt-small-invoice">
-                arcadesalvacion@gmail.com
+              concilioarcadesalvacion@gmail.com
               </span>
             </div>
 
-            <div className="text-center">
+            <div className="text-center mb-3">
               <span className="font-receipt font-receipt-small-invoice">
-                RNC: 00001111111
+                RNC: 4-01-51549-2
               </span>
             </div>
 
@@ -82,6 +94,12 @@ class PrintEntry extends Component {
               </span>
             )}
 
+            {entryHeader.church && entryHeader.church.shepherd && (
+              <span className="font-receipt font-receipt-small-invoice d-block">
+                Pastor(a): {entryHeader.church.shepherd.first_name} {entryHeader.church.shepherd.last_name}
+              </span>
+            )}
+
             {entryHeader.person && (
               <span className="font-receipt font-receipt-small-invoice d-block">
                 Obrero: {entryHeader.person.first_name}{" "}
@@ -90,7 +108,7 @@ class PrintEntry extends Component {
             )}
 
             {entryHeader.person &&
-              entryHeader.person.identification.length > 0 && (
+              entryHeader.person.identification.trim().length > 0 && (
                 <span className="font-receipt font-receipt-small-invoice d-block">
                   Cédula:{" "}
                   {entryHeader.person && entryHeader.person.identification}
@@ -101,7 +119,7 @@ class PrintEntry extends Component {
 
         <div className="d-block">
           <span className="d-block">
-            ----------------------------------------------------
+            ------------------------------------------------------
           </span>
 
           <div className="text-center">
@@ -112,11 +130,11 @@ class PrintEntry extends Component {
         </div>
 
         {entryDetail.length && (
-          <table>
+          <table style={{width: "358px"}}>
             <thead>
               <tr key="h1">
                 <td colSpan="2">
-                  ----------------------------------------------------
+                ------------------------------------------------------
                 </td>
               </tr>
               <tr key="h2">
@@ -129,7 +147,7 @@ class PrintEntry extends Component {
               </tr>
               <tr key="h3">
                 <td colSpan="2">
-                  ----------------------------------------------------
+                -------------------------------------------------------
                 </td>
               </tr>
             </thead>
@@ -172,7 +190,7 @@ class PrintEntry extends Component {
 
               <tr key="f1">
                 <td colSpan="2">
-                  ----------------------------------------------------
+                -------------------------------------------------------
                 </td>
               </tr>
               <tr key="f5">

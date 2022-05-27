@@ -36,6 +36,12 @@ export function getEntriesHeader(
   return http.get(urlQuery);
 }
 
+export function getEntryHeaderByRange(start_date, end_date) {
+  return http.get(
+    `${apiEndpointHeader}/?start_date=${start_date}&end_date=${end_date}&ordering=-created_date`
+  );
+}
+
 export function getEntryHeader(entryId) {
   return http.get(
     `${apiEndpointHeader}/${entryId}`
