@@ -37,6 +37,7 @@ import ChurchModal from "../modals/churchModal";
 import PersonModal from "../modals/personModal";
 import ConceptModal from "../modals/conceptModal";
 import { getConcept, getConcepts } from "../../services/conceptService";
+import PrintEntrySmall from "../reports/printEntrySmall";
 // import Select from "../common/select";
 
 registerLocale("es", es);
@@ -73,6 +74,8 @@ class EntryForm extends Form {
       amount: 0,
       reference: "",
       type: "",
+      period_year: new Date().getFullYear(),
+      period_month: new Date().getMonth(),
       created_date: new Date().toISOString(),
     },
     type: [
@@ -123,6 +126,8 @@ class EntryForm extends Form {
     line.amount = 0;
     line.reference = "";
     line.type = "";
+    line.period_year = new Date().getFullYear();
+    line.period_month = new Date().getMonth();
     line.created_date = new Date().toISOString();
 
     this.setState({ line });
@@ -455,6 +460,8 @@ class EntryForm extends Form {
           amount: item.amount,
           reference: item.reference,
           type: item.type,
+          period_year: item.period_year,
+          period_month: item.period_month,
           created_date: new Date().toISOString(),
         };
 
@@ -678,6 +685,24 @@ class EntryForm extends Form {
                     onChange={this.handleChangeEntryLine}
                   />
                 </div>
+                <div className="col-1 mr-0 ml-0 pr-0 pl-0">
+                  <Input
+                    type="text"
+                    name="period_month"
+                    value={this.state.line.period_month}
+                    label="Mes"
+                    onChange={this.handleChangeEntryLine}
+                  />
+                </div>
+                <div className="col-1 mr-0 ml-0 pr-0 pl-0">
+                  <Input
+                    type="text"
+                    name="period_year"
+                    value={this.state.line.period_year}
+                    label="Año"
+                    onChange={this.handleChangeEntryLine}
+                  />
+                </div>
                 {/* <div className="col-2 mr-0 ml-0 pr-0 pl-0">
                 <Select
                       name="type"
@@ -789,6 +814,31 @@ class EntryForm extends Form {
               entryDetail={this.state.serializedEntryDetail}
             />
           </div>
+
+          {/* <div className="d-flex justify-content-end w-100 pr-3 mb-3">
+            {this.state.data.id > 0 && (role === "Admin" || role === "Owner") && (
+              <ReactToPrint
+                trigger={() => (
+                  <span
+                    ref={(button) => (this.printButton2 = button)}
+                    className="fa fa-print text-info cursor-pointer"
+                    style={{ fontSize: "35px" }}
+                  ></span>
+                )}
+                content={() => this.componentRef}
+                // onAfterPrint={() => this.quotationPrinted()}
+                //onBeforePrint={() => this.quotationPrinted()}
+              />
+            )}
+          </div>
+
+          <div hidden="hidden">
+            <PrintEntrySmall
+              ref={(el) => (this.componentRef = el)}
+              entryHeader={this.state.serializedEntryHeader}
+              entryDetail={this.state.serializedEntryDetail}
+            />
+          </div> */}
         </div>
       </React.Fragment>
     );

@@ -109,3 +109,11 @@ div[disabled] {
 .list-group-item.active {
   background-color: #e8f4f8 !important;
 }
+
+.border-top-dashed {
+  border-top: 1px dashed black;
+}
+
+.border-bottom-dashed {
+  border-bottom: 1px dashed black;
+}

@@ -15,6 +15,8 @@ class EntryDetailTable extends Component {
       ),
     },
     { path: "reference", label: "Referencia" },
+    { path: "period_month", label: "Mes" },
+    { path: "period_year", label: "Año" },
     {
       path: "amount",
       label: "Monto",
@@ -78,6 +80,8 @@ class EntryDetailTable extends Component {
             <tfoot>
               <tr className="table-active">
                 <th>Total</th>
+                <th></th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th className="text-right">{formatNumber(entryHeader.total_amount)}</th>

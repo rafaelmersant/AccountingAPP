@@ -28,6 +28,8 @@ export function mapToViewEntryDetail(entryDetail) {
       concept: item.concept.description,
       reference: item.reference,
       type: item.type,
+      period_year: item.period_year,
+      period_month: item.period_month,
       amount: item.amount,
     });
   }

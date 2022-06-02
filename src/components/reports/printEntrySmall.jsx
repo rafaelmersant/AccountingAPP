@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { formatNumber, getMonthName } from "../../utils/custom";
 
-class PrintEntry extends Component {
+class PrintEntrySmall extends Component {
   render() {
     const { entryHeader, entryDetail } = this.props;
 
@@ -224,4 +224,4 @@ class PrintEntry extends Component {
   }
 }
 
-export default PrintEntry;
+export default PrintEntrySmall;
