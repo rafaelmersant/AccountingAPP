@@ -137,12 +137,14 @@ class EntryForm extends Form {
     window.location = `/registro/new`;
   };
 
-  updateLine = (concept) => {
+  updateLine = (concept, amount = 0, defaultMonth = 0) => {
     const line = { ...this.state.line };
 
     line.concept_id = concept.id;
     line.concept = concept.description;
     line.type = concept.type;
+    line.amount = amount;
+    line.period_month = defaultMonth;
     this.setState({ line });
   };
 
@@ -254,7 +256,10 @@ class EntryForm extends Form {
       return false;
     }
 
-    this.updateLine(concept);
+    //default Cuota Obrero amount
+    const defaultAmount = concept.id === 4 ? 100 : 0;
+    const defaultMonth = concept.id === 4 ? new Date().getMonth() + 1 : new Date().getMonth();
+    this.updateLine(concept, defaultAmount, defaultMonth);
 
     this.setState({
       hideSearchConcept: true,
@@ -333,10 +338,15 @@ class EntryForm extends Form {
     handler(window.event);
 
     setTimeout(() => {
-      this.updateLine(this.state.currentConcept);
+      const defaultAmount = this.state.currentConcept.id === 4 ? 100 : 0;
+      const defaultMonth = this.state.currentConcept.id === 4 ? new Date().getMonth() + 1 : new Date().getMonth();
+
+      this.updateLine(this.state.currentConcept, defaultAmount, defaultMonth);
       const details = [...this.state.details];
       const line = { ...this.state.line };
       line.amount = Math.round(line.amount * 100) / 100;
+
+      console.log('line', line)
 
       if (this.state.line.concept_id) details.push(line);
 

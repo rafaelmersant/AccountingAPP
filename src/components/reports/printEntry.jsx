@@ -137,7 +137,7 @@ class PrintEntry extends Component {
         {entryDetail.length && (
           <table style={{ width: "378px" }} className="mt-2">
             <thead>
-              <tr key="h1">
+              <tr key="header1">
                 <td style={{ cellSpacing: "10px" }}>
                   <span className="font-receipt">CONCEPTO</span>
                 </td>
@@ -145,7 +145,7 @@ class PrintEntry extends Component {
                   <span className="font-receipt">MONTO</span>
                 </td>
               </tr>
-              <tr key="h2">
+              <tr key="header2">
                 <td colSpan="2" className="border-top-dashed pt-1"></td>
               </tr>
             </thead>
