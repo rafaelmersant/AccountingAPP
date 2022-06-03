@@ -26,7 +26,10 @@ class EntriesTable extends Component {
       path: "person",
       label: "Obrero",
       content: (entry) => (
-        <span>{entry.person && `${entry.person.first_name} ${entry.person.last_name}`}</span>
+        <div>
+          <span>{entry.person && `${entry.person.first_name} ${entry.person.last_name}`}</span>
+          <span className="text-danger" >{!entry.church && !entry.person && `Nota: ${entry.note}`}</span>
+        </div>
       ),
     },
     {

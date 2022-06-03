@@ -23,6 +23,10 @@ class Cuadre extends Component {
     entriesExcel: [],
     totalCount: 0,
     totalAmount: 0,
+    totalOfrendaMisionera: 0,
+    total20Concilio: 0,
+    totalCuotaObrero: 0,
+    totalOtrosIngresos: 0,
     start_date: new Date().toISOString().substring(0, 10),
     end_date: new Date().toISOString().substring(0, 10),
     sortColumn: { path: "created_date", order: "desc" },
@@ -92,19 +96,42 @@ class Cuadre extends Component {
   getPagedData = () => {
     const { sortColumn, entries: allEntries } = this.state;
 
-    // let filtered = allEntries;
-    // if (searchQuery)
-    //   filtered = allEntries.filter((m) =>
-    //     `${m.total_amount.toLowerCase()}`.includes(
-    //       searchQuery.toLocaleLowerCase()
-    //     )
-    //   );
+    const totalAmount = _.sumBy(allEntries, (item) =>
+      parseFloat(item.total_amount)
+    );
 
-    const totalAmount = _.sumBy(allEntries, (item) => parseFloat(item.total_amount))
+    let totalOfrendaMisionera = 0;
+    let total20Concilio = 0;
+    let totalCuotaObrero = 0;
+    let totalOtrosIngresos = 0;
+
+    for (const entry of allEntries) {
+      for (const item of entry.item_set) {
+        if (item.concept.id === 1) total20Concilio += parseFloat(item.amount);
+        if (item.concept.id === 2)
+          totalOfrendaMisionera += parseFloat(item.amount);
+        if (item.concept.id === 4) totalCuotaObrero += parseFloat(item.amount);
+        if (
+          item.concept.id !== 1 &&
+          item.concept.id !== 2 &&
+          item.concept.id !== 4
+        )
+          totalOtrosIngresos += parseFloat(item.amount);
+      }
+    }
+
     const sorted = _.orderBy(allEntries, [sortColumn.path], [sortColumn.order]);
     const entries = paginate(sorted, 1, 9999999);
 
-    return { totalCount: allEntries.length, totalAmount, entries };
+    return {
+      totalCount: allEntries.length,
+      totalAmount,
+      totalOfrendaMisionera,
+      total20Concilio,
+      totalCuotaObrero,
+      totalOtrosIngresos,
+      entries,
+    };
   };
 
   entriesExportFormat = (data) => {
@@ -128,7 +155,14 @@ class Cuadre extends Component {
     const { sortColumn } = this.state;
     const { user } = this.props;
 
-    const { entries, totalAmount } = this.getPagedData();
+    const {
+      entries,
+      totalAmount,
+      totalOfrendaMisionera,
+      total20Concilio,
+      totalCuotaObrero,
+      totalOtrosIngresos,
+    } = this.getPagedData();
 
     return (
       <div className="container-fluid">
@@ -191,6 +225,10 @@ class Cuadre extends Component {
                 <CuadreTable
                   entries={entries}
                   totalAmount={totalAmount}
+                  totalOfrendaMisionera={totalOfrendaMisionera}
+                  total20Concilio={total20Concilio}
+                  totalCuotaObrero={totalCuotaObrero}
+                  totalOtrosIngresos={totalOtrosIngresos}
                   user={user}
                   sortColumn={sortColumn}
                 />

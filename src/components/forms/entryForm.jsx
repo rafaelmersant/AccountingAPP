@@ -137,15 +137,12 @@ class EntryForm extends Form {
     window.location = `/registro/new`;
   };
 
-  updateLine = (concept, amount = 0, defaultMonth = 0) => {
+  updateLine = (concept) => {
     const line = { ...this.state.line };
 
     line.concept_id = concept.id;
     line.concept = concept.description;
-    line.type = concept.type;
-    line.amount = amount === 0 ? line.amount : amount;
-    line.period_month = defaultMonth === 0 ? line.period_month : defaultMonth;
-
+    line.type = concept.type; 
     line.amount = line.type === "S" ? line.amount * -1 : line.amount;
 
     this.setState({ line });
@@ -260,16 +257,21 @@ class EntryForm extends Form {
     }
 
     //default Cuota Obrero amount
+    const { line } = {...this.state};
     const defaultAmount = concept.id === 4 ? 100 : 0;
     const defaultMonth = concept.id === 4 ? new Date().getMonth() + 1 : new Date().getMonth();
-    this.updateLine(concept, defaultAmount, defaultMonth);
+    line.amount = defaultAmount;
+    line.period_month = defaultMonth;
 
     this.setState({
+      line,
       hideSearchConcept: true,
       clearSearchConcept: false,
       currentConcept: concept,
       searchConceptText: concept.description,
     });
+
+    this.updateLine(concept);
   };
 
   handleFocusConcept = (value) => {
@@ -341,10 +343,7 @@ class EntryForm extends Form {
     handler(window.event);
 
     setTimeout(() => {
-      const defaultAmount = this.state.currentConcept.id === 4 ? 100 : 0;
-      const defaultMonth = this.state.currentConcept.id === 4 ? new Date().getMonth() + 1 : new Date().getMonth();
-
-      this.updateLine(this.state.currentConcept, defaultAmount, defaultMonth);
+      this.updateLine(this.state.currentConcept);
       const details = [...this.state.details];
       const line = { ...this.state.line };
       line.amount = Math.round(line.amount * 100) / 100;
@@ -483,7 +482,7 @@ class EntryForm extends Form {
 
       try {
         for (const item of this.state.detailsToDelete) {
-          await deleteEntryDetail(item.id);
+          await deleteEntryDetail(item.entry_id, item.id);
         }
       } catch (ex) {
         try {

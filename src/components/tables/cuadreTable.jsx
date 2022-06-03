@@ -100,8 +100,17 @@ class CuadreTable extends Component {
   ];
 
   render() {
-    const { entries, totalAmount, sortColumn, onSort } = this.props;
-    console.log("entries", entries);
+    const {
+      entries,
+      totalAmount,
+      totalOfrendaMisionera,
+      total20Concilio,
+      totalCuotaObrero,
+      totalOtrosIngresos,
+      sortColumn,
+      onSort,
+    } = this.props;
+
     return (
       <React.Fragment>
         <Table
@@ -114,11 +123,24 @@ class CuadreTable extends Component {
           <table className="table col-12">
             <thead className="thead-dark">
               <tr>
-                <td className="bg-dark text-light">
+                <td colSpan={4} className="bg-dark text-warning">
                   Total registros: {entries.length}
                 </td>
-                <td className="bg-dark text-light text-right">
-                  Monto Total: {formatNumber(totalAmount)}
+
+                <td className="bg-dark text-warning text-right">
+                  Ofrenda Misionera: {formatNumber(totalOfrendaMisionera)}
+                </td>
+                <td className="bg-dark text-warning text-right">
+                  20% al Concilio: {formatNumber(total20Concilio)}
+                </td>
+                <td className="bg-dark text-warning text-right">
+                  Cuota Obreros: {formatNumber(totalCuotaObrero)}
+                </td>
+                <td className="bg-dark text-warning text-right">
+                  Otros Ingresos:{formatNumber(totalOtrosIngresos)}
+                </td>
+                <td className="bg-dark text-warning text-right">
+                  Total: {formatNumber(totalAmount)}
                 </td>
               </tr>
             </thead>
