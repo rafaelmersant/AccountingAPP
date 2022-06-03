@@ -143,8 +143,11 @@ class EntryForm extends Form {
     line.concept_id = concept.id;
     line.concept = concept.description;
     line.type = concept.type;
-    line.amount = amount;
-    line.period_month = defaultMonth;
+    line.amount = amount === 0 ? line.amount : amount;
+    line.period_month = defaultMonth === 0 ? line.period_month : defaultMonth;
+
+    line.amount = line.type === "S" ? line.amount * -1 : line.amount;
+
     this.setState({ line });
   };
 
