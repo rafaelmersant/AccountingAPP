@@ -1,7 +1,7 @@
 import http from "./httpService";
-import * as config from "../config.json";
+import { environment } from "../settings";
 
-const apiEndpoint = `${config.apiUrl}/concepts`;
+const apiEndpoint = `${environment.apiUrl}/concepts`;
 
 function conceptUrl(id) {
   return `${apiEndpoint}/${id}/`;

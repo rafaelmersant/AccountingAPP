@@ -1,8 +1,8 @@
 //import jwtDecode from "jwt-decode";
 import http from "./httpService";
-import * as config from "../config.json";
+import { environment } from "../settings";
 
-const apiEndpoint = `${config.apiUrl}/auth`;
+const apiEndpoint = `${environment.apiUrl}/auth`;
 const token = {
   userId: "cepas_userId",
   username: "cepas_username",
