@@ -41,6 +41,13 @@ class EntriesTable extends Component {
         </div>
       ),
     },
+    {
+      path: "created_by",
+      label: "Creado por",
+      content: (entry) => (
+          <span>{entry.created_by.name}</span>
+      ),
+    },
     { path: "created_date", label: "Fecha (m/d/a)" },
   ];
 

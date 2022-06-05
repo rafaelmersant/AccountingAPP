@@ -117,3 +117,7 @@ div[disabled] {
 .border-bottom-dashed {
   border-bottom: 1px dashed black;
 }
+
+.date-min-width {
+  min-width: 170px !important;
+}

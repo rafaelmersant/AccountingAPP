@@ -32,7 +32,7 @@ class TableHeader extends Component {
         <tr>
           {this.props.columns.map((column) => (
             <th
-              className={"clickable py-1 " + column.align}
+              className={"clickable py-1 " + column.align + " " + column.classes}
               key={column.path || column.key}
               onClick={() => this.raiseSort(column.path)}
             >

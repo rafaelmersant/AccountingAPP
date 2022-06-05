@@ -4,7 +4,7 @@ import { formatNumber } from "../../utils/custom";
 
 class CuadreTable extends Component {
   columns = [
-    { path: "created_date", label: "Fecha (m/d/a)" },
+    { path: "created_date", label: "Fecha (m/d/a)", classes: "date-min-width" },
     {
       path: "church",
       label: "Iglesia",
@@ -23,6 +23,9 @@ class CuadreTable extends Component {
             <span>
               {entry.person.first_name} {entry.person.last_name}
             </span>
+          )}
+          {!entry.church && !entry.person && (
+            <span className="text-danger">{`Nota: ${entry.note}`}</span>
           )}
         </div>
       ),

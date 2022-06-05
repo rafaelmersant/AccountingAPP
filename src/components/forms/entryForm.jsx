@@ -37,8 +37,6 @@ import ChurchModal from "../modals/churchModal";
 import PersonModal from "../modals/personModal";
 import ConceptModal from "../modals/conceptModal";
 import { getConcept, getConcepts } from "../../services/conceptService";
-import PrintEntrySmall from "../reports/printEntrySmall";
-// import Select from "../common/select";
 
 registerLocale("es", es);
 
@@ -108,7 +106,7 @@ class EntryForm extends Form {
     note: Joi.optional(),
     period_year: Joi.optional(),
     period_month: Joi.optional(),
-    total_amount: Joi.optional(),
+    total_amount: Joi.number().min(1),
     created_by: Joi.number(),
     created_date: Joi.string(),
   };
@@ -142,7 +140,7 @@ class EntryForm extends Form {
 
     line.concept_id = concept.id;
     line.concept = concept.description;
-    line.type = concept.type; 
+    line.type = concept.type;
     line.amount = line.type === "S" ? line.amount * -1 : line.amount;
 
     this.setState({ line });
@@ -174,7 +172,7 @@ class EntryForm extends Form {
       const { data: entryDetail } = await getEntryDetail(entryHeader.id);
 
       const entryHeaderMapped = mapToViewEntryHeader(entryHeader);
-      
+
       const searchChurchText = entryHeader.church
         ? `${entryHeader.church.global_title}`
         : "";
@@ -257,9 +255,10 @@ class EntryForm extends Form {
     }
 
     //default Cuota Obrero amount
-    const { line } = {...this.state};
+    const { line } = { ...this.state };
     const defaultAmount = concept.id === 4 ? 100 : 0;
-    const defaultMonth = concept.id === 4 ? new Date().getMonth() + 1 : new Date().getMonth();
+    const defaultMonth =
+      concept.id === 4 ? new Date().getMonth() + 1 : new Date().getMonth();
     line.amount = defaultAmount;
     line.period_month = defaultMonth;
 
@@ -348,7 +347,7 @@ class EntryForm extends Form {
       const line = { ...this.state.line };
       line.amount = Math.round(line.amount * 100) / 100;
 
-      console.log('line', line)
+      console.log("line", line);
 
       if (this.state.line.concept_id) details.push(line);
 
@@ -456,9 +455,24 @@ class EntryForm extends Form {
     if (this.state.line.amount <= 0) return false;
   }
 
+  validateRelatedConcepts() {
+    const OfrendaMisionera_20Concilio = this.state.details.filter(
+      (item) => item.concept_id === 1 || item.concept_id === 2
+    );
+
+    if (OfrendaMisionera_20Concilio.length && !this.state.data.church_id) {
+      toast.error("Debe agregar el nombre de la iglesia.");
+      return false;
+    }
+
+    return true;
+  }
+
   doSubmit = async () => {
     try {
       if (this.state.disabledSave) return false;
+
+      if (!this.validateRelatedConcepts()) return false;
 
       this.setState({ disabledSave: true });
 
@@ -567,7 +581,7 @@ class EntryForm extends Form {
                   />
                 </div>
                 <div>
-                {this.state.data.church_id > 0 && (
+                  {this.state.data.church_id > 0 && (
                     <div
                       style={{
                         marginTop: "36px",
@@ -621,7 +635,7 @@ class EntryForm extends Form {
                   />
                 </div>
                 <div>
-                {this.state.data.person_id > 0 && (
+                  {this.state.data.person_id > 0 && (
                     <div
                       style={{
                         marginTop: "36px",
@@ -827,30 +841,6 @@ class EntryForm extends Form {
             />
           </div>
 
-          {/* <div className="d-flex justify-content-end w-100 pr-3 mb-3">
-            {this.state.data.id > 0 && (role === "Admin" || role === "Owner") && (
-              <ReactToPrint
-                trigger={() => (
-                  <span
-                    ref={(button) => (this.printButton2 = button)}
-                    className="fa fa-print text-info cursor-pointer"
-                    style={{ fontSize: "35px" }}
-                  ></span>
-                )}
-                content={() => this.componentRef}
-                // onAfterPrint={() => this.quotationPrinted()}
-                //onBeforePrint={() => this.quotationPrinted()}
-              />
-            )}
-          </div>
-
-          <div hidden="hidden">
-            <PrintEntrySmall
-              ref={(el) => (this.componentRef = el)}
-              entryHeader={this.state.serializedEntryHeader}
-              entryDetail={this.state.serializedEntryDetail}
-            />
-          </div> */}
         </div>
       </React.Fragment>
     );

@@ -9,6 +9,7 @@ import { paginate } from "../../utils/paginate";
 import CuadreTable from "../tables/cuadreTable";
 // import ExportInvoices607 from "./reports/exportInvoices607";
 import { getEntryHeaderByRange } from "../../services/entryServices";
+import { formatNumber } from "../../utils/custom";
 
 registerLocale("es", es);
 
@@ -27,6 +28,7 @@ class Cuadre extends Component {
     total20Concilio: 0,
     totalCuotaObrero: 0,
     totalOtrosIngresos: 0,
+    totalDepositos: 0,
     start_date: new Date().toISOString().substring(0, 10),
     end_date: new Date().toISOString().substring(0, 10),
     sortColumn: { path: "created_date", order: "desc" },
@@ -82,6 +84,7 @@ class Cuadre extends Component {
     data.forEach((item) => {
       result.push({
         id: item.id,
+        note: item.note,
         person: item.person,
         church: item.church,
         item_set: item.item_set,
@@ -104,6 +107,7 @@ class Cuadre extends Component {
     let total20Concilio = 0;
     let totalCuotaObrero = 0;
     let totalOtrosIngresos = 0;
+    let totalDepositos = 0;
 
     for (const entry of allEntries) {
       for (const item of entry.item_set) {
@@ -117,6 +121,12 @@ class Cuadre extends Component {
           item.concept.id !== 4
         )
           totalOtrosIngresos += parseFloat(item.amount);
+
+        if (item.reference && item.reference.toLowerCase().includes("deposito")){
+          totalDepositos += parseFloat(item.amount);
+          console.log('Deposito::::', item.amount)
+        }
+          
       }
     }
 
@@ -130,6 +140,7 @@ class Cuadre extends Component {
       total20Concilio,
       totalCuotaObrero,
       totalOtrosIngresos,
+      totalDepositos,
       entries,
     };
   };
@@ -140,6 +151,7 @@ class Cuadre extends Component {
     data.forEach((item) => {
       result.push({
         id: item.id,
+        note: item.note,
         person: item.person,
         church: item.church,
         item_set: item.item_set,
@@ -162,10 +174,11 @@ class Cuadre extends Component {
       total20Concilio,
       totalCuotaObrero,
       totalOtrosIngresos,
+      totalDepositos
     } = this.getPagedData();
 
     return (
-      <div className="container-fluid">
+      <div className="container-fluid mb-3">
         <div className="row">
           <div className="col">
             <h2 className="text-info bg-light mb-3">Reporte - Cuadre</h2>
@@ -232,6 +245,7 @@ class Cuadre extends Component {
                   user={user}
                   sortColumn={sortColumn}
                 />
+                <span className="text-success h5">Monto en Deposito: {formatNumber(totalDepositos)}</span>
               </div>
             )}
           </div>
