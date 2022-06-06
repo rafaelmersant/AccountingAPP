@@ -20,7 +20,7 @@ class PrintEntry extends Component {
             <div className="text-center">
               <img
                 width="140px"
-                src={process.env.PUBLIC_URL + "/images/logocepasH50.png"}
+                src={process.env.PUBLIC_URL + "/images/logocepasH50_small.png"}
                 alt="CEPAS"
               />
             </div>
