@@ -10,7 +10,7 @@ class HomePage extends Component {
         <div className="d-flex justify-content-center">
           <img
             style={{ width: "40%", padding: "5px", margin: "0" }}
-            src={process.env.PUBLIC_URL + "/images/logocepasH50.png"}
+            src={process.env.PUBLIC_URL + "/images/logocepasH50_home.png"}
             alt="CEPAS"
           />
         </div>
