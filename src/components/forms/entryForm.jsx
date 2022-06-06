@@ -460,8 +460,17 @@ class EntryForm extends Form {
       (item) => item.concept_id === 1 || item.concept_id === 2
     );
 
+    const cuotaObrero = this.state.details.filter(
+      (item) => item.concept_id === 4
+    );
+
     if (OfrendaMisionera_20Concilio.length && !this.state.data.church_id) {
       toast.error("Debe agregar el nombre de la iglesia.");
+      return false;
+    }
+
+    if (cuotaObrero.length && !this.state.data.church_id && !this.state.data.person_id) {
+      toast.error("Debe agregar el nombre de la iglesia o el nombre del obrero.");
       return false;
     }
 
