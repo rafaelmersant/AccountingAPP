@@ -12,7 +12,7 @@ class Concepts extends Component {
   state = {
     concepts: [],
     currentPage: 1,
-    pageSize: 10,
+    pageSize: 200,
     searchQuery: "",
     sortColumn: { path: "created_date", order: "desc" },
   };
@@ -67,7 +67,7 @@ class Concepts extends Component {
     let filtered = allConcepts;
     if (searchQuery)
       filtered = allConcepts.filter((m) =>
-        m.description.toLowerCase().startsWith(searchQuery.toLocaleLowerCase())
+        m.description.toLowerCase().includes(searchQuery.toLocaleLowerCase())
       );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
