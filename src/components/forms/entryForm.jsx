@@ -106,7 +106,7 @@ class EntryForm extends Form {
     note: Joi.optional(),
     period_year: Joi.optional(),
     period_month: Joi.optional(),
-    total_amount: Joi.number().min(1),
+    total_amount: Joi.number(),
     created_by: Joi.number(),
     created_date: Joi.string(),
   };
@@ -452,24 +452,27 @@ class EntryForm extends Form {
     if (!this.state.line.concept_id) return true;
     if (!parseFloat(this.state.line.amount) > 0) return true;
 
-    if (this.state.line.amount <= 0) return false;
+    if (this.state.line.amount === 0) return false;
   }
 
   validateRelatedConcepts() {
-    const OfrendaMisionera_20Concilio = this.state.details.filter(
-      (item) => item.concept_id === 1 || item.concept_id === 2
+    const requiredPerson = [4, 7, 8];
+    const requiredChurch = [1, 2, 10, 11];
+
+    const anyChurch = this.state.details.filter(
+      (item) => requiredChurch.includes(item.concept_id)
     );
 
-    const cuotaObrero = this.state.details.filter(
-      (item) => item.concept_id === 4
+    const anyPerson = this.state.details.filter(
+      (item) => requiredPerson.includes(item.concept_id)
     );
-
-    if (OfrendaMisionera_20Concilio.length && !this.state.data.church_id) {
+    
+    if (anyChurch.length && !this.state.data.church_id) {
       toast.error("Debe agregar el nombre de la iglesia.");
       return false;
     }
 
-    if (cuotaObrero.length && !this.state.data.church_id && !this.state.data.person_id) {
+    if (anyPerson.length && !this.state.data.church_id && !this.state.data.person_id) {
       toast.error("Debe agregar el nombre de la iglesia o el nombre del obrero.");
       return false;
     }
@@ -480,6 +483,11 @@ class EntryForm extends Form {
   doSubmit = async () => {
     try {
       if (this.state.disabledSave) return false;
+
+      if (this.state.details.length === 0) {
+        toast.error("Debe agregar al menos una linea en el detalle.");
+        return false;
+      }
 
       if (!this.validateRelatedConcepts()) return false;
 
