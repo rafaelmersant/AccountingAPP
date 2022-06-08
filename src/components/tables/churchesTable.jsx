@@ -24,7 +24,7 @@ class ChurchesTable extends Component {
     {
       path: "local_title",
       label: "Titulo Local",
-      content: (church) => <span>{`${church.local_title}`}</span>,
+      content: (church) => <span>{`${church.local_title ? church.local_title : ""}`}</span>,
     },
     {
       path: "shepherd",

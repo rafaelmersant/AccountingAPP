@@ -69,7 +69,7 @@ class Churches extends Component {
     let filtered = allChurches;
     if (searchQuery)
       filtered = allChurches.filter((m) =>
-        m.global_title.toLowerCase().startsWith(searchQuery.toLocaleLowerCase())
+        m.global_title.toLowerCase().includes(searchQuery.toLocaleLowerCase())
       );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
