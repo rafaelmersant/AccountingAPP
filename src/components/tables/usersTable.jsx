@@ -34,7 +34,7 @@ class UsersTable extends Component {
     const user = auth.getCurrentUser().email;
     const role = auth.getCurrentUser().role;
 
-    if (user && (role === "Admin" || role === "Owner"))
+    if (user && role === "Owner")
       this.columns.push(this.deleteColumn);
   }
 
