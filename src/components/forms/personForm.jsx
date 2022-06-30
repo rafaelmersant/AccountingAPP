@@ -46,7 +46,7 @@ class PersonForm extends Form {
     min_ordenado: Joi.optional(),
     church_id: Joi.optional(),
     created_by: Joi.number(),
-    created_date: Joi.string(),
+    created_date: Joi.optional(),
   };
 
   async populatePerson() {
