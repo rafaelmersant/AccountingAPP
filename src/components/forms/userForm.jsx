@@ -21,6 +21,7 @@ class UserForm extends Form {
     companies: [],
     roles: [
       { id: "Admin", name: "Admin" },
+      { id: "Obrero", name: "Obrero" },
       { id: "Level1", name: "Level1" },
       { id: "Reportes", name: "Reportes" },
     ],

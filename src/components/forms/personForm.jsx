@@ -18,6 +18,11 @@ class PersonForm extends Form {
       first_name: "",
       last_name: "",
       identification: "",
+      obrero_inicial: "",
+      obrero_exhortador: "",
+      obrero_licenciado: "",
+      min_licenciado: "",
+      min_ordenado: "",
       church_id: "",
       created_by: getCurrentUser().id,
       created_date: new Date().toISOString(),
@@ -34,6 +39,11 @@ class PersonForm extends Form {
     first_name: Joi.string().required().max(100).min(3).label("Nombre"),
     last_name: Joi.string().required().min(3).max(100).label("Apellidos"),
     identification: Joi.optional(),
+    obrero_inicial: Joi.optional(),
+    obrero_exhortador: Joi.optional(),
+    obrero_licenciado: Joi.optional(),
+    min_licenciado: Joi.optional(),
+    min_ordenado: Joi.optional(),
     church_id: Joi.optional(),
     created_by: Joi.number(),
     created_date: Joi.string(),
@@ -116,6 +126,11 @@ class PersonForm extends Form {
       first_name: person[0].first_name,
       last_name: person[0].last_name,
       identification: person[0].identification ? person[0].identification : "",
+      obrero_inicial: person[0].obrero_inicial ? person[0].obrero_inicial : "",
+      obrero_exhortador: person[0].obrero_exhortador ? person[0].obrero_exhortador : "",
+      obrero_licenciado: person[0].obrero_licenciado ? person[0].obrero_licenciado : "",
+      min_licenciado: person[0].min_licenciado ? person[0].min_licenciado : "",
+      min_ordenado: person[0].min_ordenado ? person[0].min_ordenado : "",
       church_id: person[0].church ? person[0].church.id : "",
       created_by: person[0].created_by
         ? person[0].created_by
@@ -170,6 +185,23 @@ class PersonForm extends Form {
               <div className="col">
                 {this.renderInput("identification", "Identificación")}
               </div>
+            </div>
+            <div className="row">
+              <div className="col">
+                {this.renderInput("obrero_inicial", "Obrero Inicial")}
+              </div>
+              <div className="col">
+              {this.renderInput("obrero_exhortador", "Obrero Exhortador")}  
+              </div>
+              <div className="col">
+              {this.renderInput("obrero_licenciado", "Obrero Licenciado")}
+              </div>
+              <div className="col">
+              {this.renderInput("min_licenciado", "Ministro Licenciado")}
+              </div>
+              <div className="col">
+              {this.renderInput("min_ordenado", "Ministro Ordenado")}
+              </div>              
             </div>
 
             <div className="row">

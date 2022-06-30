@@ -26,7 +26,7 @@ class ChurchForm extends Form {
 
   schema = {
     id: Joi.number(),
-    global_title: Joi.string().required().min(3).label("Titulo Conciliar"),
+    global_title: Joi.optional().label("Titulo Conciliar"),
     local_title: Joi.optional().label("Titulo Local"),
     location: Joi.optional().label("Ubicación"),
     shepherd_id: Joi.optional().label("Pastor"),

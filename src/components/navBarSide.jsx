@@ -14,53 +14,62 @@ const NavBarSide = ({ user }) => {
         </NavLink>
       </div>
       <div className="list-group list-group-flush">
-        {user &&
-          (user.role === "Admin" ||
-            user.role === "Owner" ||
-            user.role === "Level1") && (
-            <React.Fragment>
-              <NavLink
-                className="list-group-item list-group-item-action border-none"
-                to="/Registros"
-              >
-                <span className="fa fa-money mr-2 color-local" />
-                Registros
-              </NavLink>
+        <React.Fragment>
+          {user &&
+            (user.role === "Admin" ||
+              user.role === "Owner" ||
+              user.role === "Level1") && (
+              <div>
+                <NavLink
+                  className="list-group-item list-group-item-action border-none"
+                  to="/Registros"
+                >
+                  <span className="fa fa-money mr-2 color-local" />
+                  Registros
+                </NavLink>
 
-              <NavLink
-                className="list-group-item list-group-item-action border-none"
-                to="/iglesias"
-              >
-                <span className="fa fa-home mr-2 color-local" />
-                Iglesias
-              </NavLink>
+                <NavLink
+                  className="list-group-item list-group-item-action border-none"
+                  to="/conceptos"
+                >
+                  <span className="fa fa-book mr-2 color-local" />
+                  Conceptos
+                </NavLink>
 
-              <NavLink
-                className="list-group-item list-group-item-action border-none"
-                to="/obreros"
-              >
-                <span className="fa fa-users mr-2 color-local" />
-                Obreros
-              </NavLink>
+                <NavLink
+                  className="list-group-item list-group-item-action border-none"
+                  to="/cuadre"
+                >
+                  <span className="fa fa-book mr-2 color-local" />
+                  Cuadre (reporte)
+                </NavLink>
 
-              <NavLink
-                className="list-group-item list-group-item-action border-none"
-                to="/conceptos"
-              >
-                <span className="fa fa-book mr-2 color-local" />
-                Conceptos
-              </NavLink>
+                <NavLink
+                  className="list-group-item list-group-item-action border-none"
+                  to="/iglesias"
+                >
+                  <span className="fa fa-home mr-2 color-local" />
+                  Iglesias
+                </NavLink>
+              </div>
+            )}
 
-              <NavLink
-                className="list-group-item list-group-item-action border-none"
-                to="/cuadre"
-              >
-                <span className="fa fa-book mr-2 color-local" />
-                Cuadre (reporte)
-              </NavLink>
-            </React.Fragment>
-          )}
-
+          {user &&
+            (user.role === "Admin" ||
+              user.role === "Owner" ||
+              user.role === "Level1" ||
+              user.role === "Obrero") && (
+              <div>
+                <NavLink
+                  className="list-group-item list-group-item-action border-none"
+                  to="/obreros"
+                >
+                  <span className="fa fa-users mr-2 color-local" />
+                  Obreros
+                </NavLink>
+              </div>
+            )}
+        </React.Fragment>
 
         {/* {user &&
           (user.role === "Admin" ||
@@ -77,7 +86,6 @@ const NavBarSide = ({ user }) => {
           )} */}
       </div>
     </div>
-  
   );
 };
 
