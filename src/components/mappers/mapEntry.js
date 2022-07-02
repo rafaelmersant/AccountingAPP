@@ -28,7 +28,7 @@ export function mapToViewEntryDetail(entryDetail) {
       concept: item.concept.description,
       reference: item.reference,
       type: item.type,
-      method: item.method ? item.method : "",
+      method: item.method,
       period_year: item.period_year,
       period_month: item.period_month,
       amount: item.amount,

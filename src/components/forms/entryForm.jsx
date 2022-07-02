@@ -81,7 +81,7 @@ class EntryForm extends Form {
     methods: [
       { id: "E", name: "Efectivo" },
       { id: "D", name: "Deposito" },
-      { id: "R", name: "Retenido" },
+      // { id: "R", name: "Retenido" },
     ],
     months: [
       {id: "1", name: "Enero"},
@@ -521,6 +521,7 @@ class EntryForm extends Form {
           amount: item.amount,
           reference: item.reference,
           type: item.type,
+          method: item.method,
           period_year: item.period_year,
           period_month: item.period_month,
           created_date: new Date().toISOString(),
