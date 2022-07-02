@@ -37,6 +37,7 @@ import ChurchModal from "../modals/churchModal";
 import PersonModal from "../modals/personModal";
 import ConceptModal from "../modals/conceptModal";
 import { getConcept, getConcepts } from "../../services/conceptService";
+import Select from "../common/select";
 
 registerLocale("es", es);
 
@@ -72,13 +73,29 @@ class EntryForm extends Form {
       amount: 0,
       reference: "",
       type: "",
+      method: "E",
       period_year: new Date().getFullYear(),
       period_month: new Date().getMonth(),
       created_date: new Date().toISOString(),
     },
-    type: [
-      { id: "E", name: "Entrada" },
-      { id: "S", name: "Salida" },
+    methods: [
+      { id: "E", name: "Efectivo" },
+      { id: "D", name: "Deposito" },
+      { id: "R", name: "Retenido" },
+    ],
+    months: [
+      {id: "1", name: "Enero"},
+      {id: "2", name: "Febrero"},
+      {id: "3", name: "Marzo"},
+      {id: "4", name: "Abril"},
+      {id: "5", name: "Mayo"},
+      {id: "6", name: "Junio"},
+      {id: "7", name: "Julio"},
+      {id: "8", name: "Agosto"},
+      {id: "9", name: "Septiembre"},
+      {id: "10", name: "Octubre"},
+      {id: "11", name: "Noviembre"},
+      {id: "12", name: "Diciembre"},
     ],
     errors: {},
     currentConcept: {},
@@ -124,6 +141,7 @@ class EntryForm extends Form {
     line.amount = 0;
     line.reference = "";
     line.type = "";
+    line.method = "E";
     line.period_year = new Date().getFullYear();
     line.period_month = new Date().getMonth();
     line.created_date = new Date().toISOString();
@@ -141,7 +159,7 @@ class EntryForm extends Form {
     line.concept_id = concept.id;
     line.concept = concept.description;
     line.type = concept.type;
-    line.amount = line.type === "S" ? line.amount * -1 : line.amount;
+    line.amount = line.type === "S" ? Math.abs(line.amount) * -1 : line.amount;
 
     this.setState({ line });
   };
@@ -679,7 +697,7 @@ class EntryForm extends Form {
               </div>
 
               <div className="row mr-0 ml-0 pr-0 pl-0">
-                <div className="col-5 mr-0 ml-0 pr-0 pl-0">
+                <div className="col-4 mr-0 ml-0 pr-0 pl-0">
                   <SearchConcept
                     onSelect={this.handleSelectConcept}
                     onFocus={() => this.handleFocusConcept(false)}
@@ -719,22 +737,24 @@ class EntryForm extends Form {
                     onChange={this.handleChangeEntryLine}
                   />
                 </div>
-                <div className="col-2 mr-0 ml-0 pr-0 pl-0">
-                  <Input
-                    type="text"
-                    name="reference"
-                    value={this.state.line.reference}
-                    label="Referencia"
+                <div className="col-1 mr-0 ml-0 pr-0 pl-0">
+                  <Select
+                    name="method"
+                    value={this.state.line.method}
+                    label="Metodo"
+                    options={this.state.methods}
                     onChange={this.handleChangeEntryLine}
+                    error={null}
                   />
                 </div>
                 <div className="col-1 mr-0 ml-0 pr-0 pl-0">
-                  <Input
-                    type="text"
+                <Select
                     name="period_month"
                     value={this.state.line.period_month}
                     label="Mes"
+                    options={this.state.months}
                     onChange={this.handleChangeEntryLine}
+                    error={null}
                   />
                 </div>
                 <div className="col-1 mr-0 ml-0 pr-0 pl-0">
@@ -743,6 +763,15 @@ class EntryForm extends Form {
                     name="period_year"
                     value={this.state.line.period_year}
                     label="Año"
+                    onChange={this.handleChangeEntryLine}
+                  />
+                </div>
+                <div className="col-2 mr-0 ml-0 pr-0 pl-0">
+                  <Input
+                    type="text"
+                    name="reference"
+                    value={this.state.line.reference}
+                    label="Referencia"
                     onChange={this.handleChangeEntryLine}
                   />
                 </div>
@@ -857,7 +886,6 @@ class EntryForm extends Form {
               entryDetail={this.state.serializedEntryDetail}
             />
           </div>
-
         </div>
       </React.Fragment>
     );

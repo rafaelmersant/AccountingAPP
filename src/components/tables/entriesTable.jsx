@@ -19,7 +19,9 @@ class EntriesTable extends Component {
       path: "church",
       label: "Iglesia",
       content: (entry) => (
-        <span>{entry.church && `${entry.church.global_title}`}</span>
+        <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
+          {entry.church && `${entry.church.global_title}`}
+        </span>
       ),
     },
     {
@@ -27,8 +29,13 @@ class EntriesTable extends Component {
       label: "Obrero",
       content: (entry) => (
         <div>
-          <span>{entry.person && `${entry.person.first_name} ${entry.person.last_name}`}</span>
-          <span className="text-danger" >{!entry.church && !entry.person && `Nota: ${entry.note}`}</span>
+          <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
+            {entry.person &&
+              `${entry.person.first_name} ${entry.person.last_name}`}
+          </span>
+          <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
+            {!entry.church && !entry.person && `Nota: ${entry.note}`}
+          </span>
         </div>
       ),
     },
@@ -37,16 +44,16 @@ class EntriesTable extends Component {
       label: "Monto",
       content: (entry) => (
         <div className="text-right">
-          <span>{formatNumber(entry.total_amount)}</span>
+          <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
+            {formatNumber(entry.total_amount)}
+          </span>
         </div>
       ),
     },
     {
       path: "created_by",
       label: "Creado por",
-      content: (entry) => (
-          <span>{entry.created_by.name}</span>
-      ),
+      content: (entry) => <span>{entry.created_by.name}</span>,
     },
     { path: "created_date", label: "Fecha (m/d/a)" },
   ];
@@ -68,8 +75,7 @@ class EntriesTable extends Component {
     const user = auth.getCurrentUser().email;
     const role = auth.getCurrentUser().role;
 
-    if (user && role === "Owner")
-      this.columns.push(this.deleteColumn);
+    if (user && role === "Owner") this.columns.push(this.deleteColumn);
   }
 
   render() {

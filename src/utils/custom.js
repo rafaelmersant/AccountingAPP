@@ -5,6 +5,7 @@ export function formatNumber(amount) {
 }
 
 export function getMonthName(month) {
+  month = parseInt(month);
   if (month === 1) return "Enero";
   if (month === 2) return "Febrero";
   if (month === 3) return "Marzo";

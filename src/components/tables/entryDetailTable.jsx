@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import TableBody from "../common/tableBody";
-import { formatNumber } from "../../utils/custom";
+import { formatNumber, getMonthName } from "../../utils/custom";
 
 class EntryDetailTable extends Component {
   columns = [
@@ -14,9 +14,26 @@ class EntryDetailTable extends Component {
         </span>
       ),
     },
-    { path: "reference", label: "Referencia" },
-    { path: "period_month", label: "Mes" },
+    {
+      path: "method",
+      label: "Metodo",
+      content: (item) => (
+        <span>
+          {`${item.method.replace("E", "Efectivo").replace("D", "Deposito").replace("R", "Retenido")}`}
+        </span>
+      ),
+    },    
+    {
+      path: "period_month",
+      label: "Mes",
+      content: (item) => (
+        <div className="text-right">
+          <span>{getMonthName(item.period_month)}</span>
+        </div>
+      ),
+    },
     { path: "period_year", label: "Año" },
+    { path: "reference", label: "Referencia" },
     {
       path: "amount",
       label: "Monto",
@@ -80,6 +97,7 @@ class EntryDetailTable extends Component {
             <tfoot>
               <tr className="table-active">
                 <th>Total</th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
