@@ -122,11 +122,9 @@ class Cuadre extends Component {
         )
           totalOtrosIngresos += parseFloat(item.amount);
 
-        if (item.reference && item.reference.toLowerCase().includes("deposito")){
+        if (item.method === "D" && item.type !== "S") {
           totalDepositos += parseFloat(item.amount);
-          console.log('Deposito::::', item.amount)
         }
-          
       }
     }
 
