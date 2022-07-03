@@ -42,6 +42,12 @@ export function getEntryHeaderByRange(start_date, end_date) {
   );
 }
 
+export function getEntryHeaderByRangeDashboard(period_month, period_year) {
+  return http.get(
+    `${apiEndpointHeader}/?period_month=${period_month}&period_year=${period_year}&dashboard=yes`
+  );
+}
+
 export function getEntryHeader(entryId) {
   return http.get(
     `${apiEndpointHeader}/${entryId}`

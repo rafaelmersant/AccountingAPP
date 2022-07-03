@@ -28,6 +28,7 @@ import PersonForm from "./components/forms/personForm";
 import Entries from "./components/entries";
 import EntryForm from "./components/forms/entryForm";
 import Cuadre from "./components/reports/cuadre";
+import Dashboard from "./components/reports/dashboard";
 
 class App extends Component {
   state = {
@@ -69,6 +70,7 @@ class App extends Component {
                   <Route path="/logout" component={Logout} />
                   
                   <ProtectedRoute path="/cuadre" component={Cuadre} />
+                  <ProtectedRoute path="/dashboard" component={Dashboard} />
 
                   <ProtectedRoute path="/conceptos" component={Concepts} />
                   <ProtectedRoute path="/concepto/:id" component={ConceptForm} />

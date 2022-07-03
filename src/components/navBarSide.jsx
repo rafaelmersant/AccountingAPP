@@ -46,6 +46,14 @@ const NavBarSide = ({ user }) => {
 
                 <NavLink
                   className="list-group-item list-group-item-action border-none"
+                  to="/dashboard"
+                >
+                  <span className="fa fa-book mr-2 color-local" />
+                  Dashboard
+                </NavLink>
+
+                <NavLink
+                  className="list-group-item list-group-item-action border-none"
                   to="/iglesias"
                 >
                   <span className="fa fa-home mr-2 color-local" />

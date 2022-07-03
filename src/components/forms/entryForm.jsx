@@ -511,7 +511,11 @@ class EntryForm extends Form {
 
       this.setState({ disabledSave: true });
 
-      const { data: entryHeader } = await saveEntryHeader(this.state.data);
+      const { data } = {...this.state};
+      data.period_month = this.state.details[0].period_month;
+      data.period_year = this.state.details[0].period_year;
+
+      const { data: entryHeader } = await saveEntryHeader(data);
 
       for (const item of this.state.details) {
         const detail = {

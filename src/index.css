@@ -121,3 +121,11 @@ div[disabled] {
 .date-min-width {
   min-width: 170px !important;
 }
+
+.card-size {
+  min-width: 18rem !important;
+}
+
+.text-orange {
+  color: orange !important;
+}
