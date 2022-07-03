@@ -126,23 +126,23 @@ class CuadreTable extends Component {
           <table className="table col-12">
             <thead className="thead-dark">
               <tr>
-                <td colSpan={4} className="bg-dark text-warning">
+                <td colSpan={4} className="bg-dark text-white h6">
                   Total registros: {entries.length}
                 </td>
 
-                <td className="bg-dark text-warning text-right">
+                <td className="bg-dark text-white h6">
                   Ofrenda Misionera: {formatNumber(totalOfrendaMisionera)}
                 </td>
-                <td className="bg-dark text-warning text-right">
+                <td className="bg-dark text-white h6">
                   20% al Concilio: {formatNumber(total20Concilio)}
                 </td>
-                <td className="bg-dark text-warning text-right">
+                <td className="bg-dark text-white h6">
                   Cuota Obreros: {formatNumber(totalCuotaObrero)}
                 </td>
-                <td className="bg-dark text-warning text-right">
-                  Otros Ingresos:{formatNumber(totalOtrosIngresos)}
+                <td className="bg-dark text-white h6">
+                  Otros Ingresos: {formatNumber(totalOtrosIngresos)}
                 </td>
-                <td className="bg-dark text-warning text-right">
+                <td className="bg-dark text-white h6">
                   Total: {formatNumber(totalAmount)}
                 </td>
               </tr>

@@ -81,17 +81,18 @@ class Cuadre extends Component {
   mapToModel = (data) => {
     let result = [];
 
-    data.forEach((item) => {
-      result.push({
-        id: item.id,
-        note: item.note,
-        person: item.person,
-        church: item.church,
-        item_set: item.item_set,
-        created_date: item.created_date,
-        total_amount: item.total_amount,
-      });
-    });
+    for (const item of data) {
+      if (item.total_amount > 0)
+        result.push({
+          id: item.id,
+          note: item.note,
+          person: item.person,
+          church: item.church,
+          item_set: item.item_set,
+          created_date: item.created_date,
+          total_amount: item.total_amount,
+        });
+    }
 
     return result;
   };
@@ -99,15 +100,18 @@ class Cuadre extends Component {
   getPagedData = () => {
     const { sortColumn, entries: allEntries } = this.state;
 
-    const totalAmount = _.sumBy(allEntries, (item) =>
-      parseFloat(item.total_amount)
-    );
+    // const totalAmount = _.sumBy(allEntries, (item) =>
+    //   parseFloat(item.total_amount)
+    // );
 
+    let totalAmount = 0;
     let totalOfrendaMisionera = 0;
     let total20Concilio = 0;
     let totalCuotaObrero = 0;
     let totalOtrosIngresos = 0;
     let totalDepositos = 0;
+    let totalEfectivo = 0;
+    let totalSalidas = 0;
 
     for (const entry of allEntries) {
       for (const item of entry.item_set) {
@@ -118,12 +122,23 @@ class Cuadre extends Component {
         if (
           item.concept.id !== 1 &&
           item.concept.id !== 2 &&
-          item.concept.id !== 4
+          item.concept.id !== 4 &&
+          item.type !== "S"
         )
           totalOtrosIngresos += parseFloat(item.amount);
 
         if (item.method === "D" && item.type !== "S") {
           totalDepositos += parseFloat(item.amount);
+        }
+
+        if (item.method === "E" && item.type !== "S") {
+          totalEfectivo += parseFloat(item.amount);
+        }
+
+        if (item.type === "S") {
+          totalSalidas += parseFloat(item.amount);
+        } else {
+          totalAmount += parseFloat(item.amount);
         }
       }
     }
@@ -139,6 +154,8 @@ class Cuadre extends Component {
       totalCuotaObrero,
       totalOtrosIngresos,
       totalDepositos,
+      totalEfectivo,
+      totalSalidas,
       entries,
     };
   };
@@ -172,7 +189,9 @@ class Cuadre extends Component {
       total20Concilio,
       totalCuotaObrero,
       totalOtrosIngresos,
-      totalDepositos
+      totalDepositos,
+      totalEfectivo,
+      totalSalidas,
     } = this.getPagedData();
 
     return (
@@ -243,7 +262,29 @@ class Cuadre extends Component {
                   user={user}
                   sortColumn={sortColumn}
                 />
-                <span className="text-success h5">Monto en Deposito: {formatNumber(totalDepositos)}</span>
+                <section>
+                  <div className="row">
+                    <div className="col">
+                      <span className="text-success h5">
+                        Monto en Deposito: {formatNumber(totalDepositos)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="row mt-2">
+                    <div className="col">
+                      <span className="text-primary h5">
+                        Monto en Efectivo: {formatNumber(totalEfectivo)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* <div className="col">
+                    <span className="text-danger h5">
+                      Monto en Salidas: {formatNumber(totalSalidas)}
+                    </span>
+                  </div> */}
+                </section>
               </div>
             )}
           </div>
