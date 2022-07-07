@@ -29,6 +29,7 @@ import Entries from "./components/entries";
 import EntryForm from "./components/forms/entryForm";
 import Cuadre from "./components/reports/cuadre";
 import Dashboard from "./components/reports/dashboard";
+import ChurchesPayment from "./components/reports/churchesPayment";
 
 class App extends Component {
   state = {
@@ -71,6 +72,7 @@ class App extends Component {
                   
                   <ProtectedRoute path="/cuadre" component={Cuadre} />
                   <ProtectedRoute path="/dashboard" component={Dashboard} />
+                  <ProtectedRoute path="/pago-de-iglesias" component={ChurchesPayment} />
 
                   <ProtectedRoute path="/conceptos" component={Concepts} />
                   <ProtectedRoute path="/concepto/:id" component={ConceptForm} />

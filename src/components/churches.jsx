@@ -8,6 +8,8 @@ import NewButton from "./common/newButton";
 import ChurchesTable from "./tables/churchesTable";
 import { getChurches, deleteChurch } from "../services/churchService";
 import Loading from "./common/loading";
+import { NavLink } from "react-router-dom";
+import { getCurrentUser } from "../services/authService";
 
 class Churches extends Component {
   state = {
@@ -91,10 +93,19 @@ class Churches extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col">
+            <NavLink
+              className="mt-2 mb-2 d-block text-danger"
+              to="/pago-de-iglesias"
+            >
+              Pago de 20% y Ofrenda Misionera
+            </NavLink>
             <h5 className="pull-left text-info mt-2">Listado de Iglesias</h5>
-            <div className="mb-4">
-              <NewButton label="Nueva Iglesia" to="/iglesia/new" />
-            </div>
+            <div className="mb-4"></div>
+            {getCurrentUser().role === "Owner" && (
+              <div className="mb-4">
+                <NewButton label="Nueva Iglesia" to="/iglesia/new" />
+              </div>
+            )}
 
             <SearchBox
               value={searchQuery}

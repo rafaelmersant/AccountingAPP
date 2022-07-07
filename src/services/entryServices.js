@@ -48,6 +48,12 @@ export function getEntryHeaderByRangeDashboard(period_month, period_year) {
   );
 }
 
+export function getEntryHeaderByRangeChurchesReport(period_month, period_year) {
+  return http.get(
+    `${environment.apiUrl}/churchesreport?period_month=${period_month}&period_year=${period_year}`
+  );
+}
+
 export function getEntryHeader(entryId) {
   return http.get(
     `${apiEndpointHeader}/${entryId}`
