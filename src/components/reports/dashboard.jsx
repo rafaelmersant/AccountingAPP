@@ -163,9 +163,6 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { sortColumn } = this.state;
-    const { user } = this.props;
-
     const {
       totalAmount,
       totalAmountDeposito,

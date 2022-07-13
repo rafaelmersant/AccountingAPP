@@ -25,6 +25,7 @@ import {
   getEntryHeader,
   getEntryDetail,
   deleteEntryDetail,
+  getEntryHeaderByRangeChurchesReport,
 } from "../../services/entryServices";
 
 import EntryDetailTable from "../tables/entryDetailTable";
@@ -84,18 +85,18 @@ class EntryForm extends Form {
       // { id: "R", name: "Retenido" },
     ],
     months: [
-      {id: "1", name: "Enero"},
-      {id: "2", name: "Febrero"},
-      {id: "3", name: "Marzo"},
-      {id: "4", name: "Abril"},
-      {id: "5", name: "Mayo"},
-      {id: "6", name: "Junio"},
-      {id: "7", name: "Julio"},
-      {id: "8", name: "Agosto"},
-      {id: "9", name: "Septiembre"},
-      {id: "10", name: "Octubre"},
-      {id: "11", name: "Noviembre"},
-      {id: "12", name: "Diciembre"},
+      { id: "1", name: "Enero" },
+      { id: "2", name: "Febrero" },
+      { id: "3", name: "Marzo" },
+      { id: "4", name: "Abril" },
+      { id: "5", name: "Mayo" },
+      { id: "6", name: "Junio" },
+      { id: "7", name: "Julio" },
+      { id: "8", name: "Agosto" },
+      { id: "9", name: "Septiembre" },
+      { id: "10", name: "Octubre" },
+      { id: "11", name: "Noviembre" },
+      { id: "12", name: "Diciembre" },
     ],
     errors: {},
     currentConcept: {},
@@ -353,19 +354,42 @@ class EntryForm extends Form {
     }, 200);
   };
 
+  validateDuplicity = async (line) => {
+    const { data: record } = await getEntryHeaderByRangeChurchesReport(
+      line.period_month,
+      line.period_year,
+      this.state.data.church_id
+    );
+
+    const percent_concilio = record.reduce((acc, item) => acc + parseInt(item.percent_concilio), 0);
+    const ofrenda_misionera = record.reduce((acc, item) => acc + parseInt(item.ofrenda_misionera), 0);
+    
+    if (line.concept_id === 1 && record.length && percent_concilio) return true;
+    if (line.concept_id === 2 && record.length && ofrenda_misionera)
+      return true;
+
+    return false;
+  };
+
   handleAddDetail = () => {
     const handler = (e) => {
       e.preventDefault();
     };
     handler(window.event);
 
-    setTimeout(() => {
+    setTimeout(async () => {
       this.updateLine(this.state.currentConcept);
       const details = [...this.state.details];
       const line = { ...this.state.line };
       line.amount = Math.round(line.amount * 100) / 100;
 
-      console.log("line", line);
+      const duplicity = await this.validateDuplicity(line);
+      if (duplicity) {
+        toast.error(
+          "El 20% u Ofrenda Misionera ya fueron digitados para el periodo seleccionado."
+        );
+        return false;
+      }
 
       if (this.state.line.concept_id) details.push(line);
 
@@ -477,21 +501,27 @@ class EntryForm extends Form {
     const requiredPerson = [4, 7, 8];
     const requiredChurch = [1, 2, 10, 11];
 
-    const anyChurch = this.state.details.filter(
-      (item) => requiredChurch.includes(item.concept_id)
+    const anyChurch = this.state.details.filter((item) =>
+      requiredChurch.includes(item.concept_id)
     );
 
-    const anyPerson = this.state.details.filter(
-      (item) => requiredPerson.includes(item.concept_id)
+    const anyPerson = this.state.details.filter((item) =>
+      requiredPerson.includes(item.concept_id)
     );
-    
+
     if (anyChurch.length && !this.state.data.church_id) {
       toast.error("Debe agregar el nombre de la iglesia.");
       return false;
     }
 
-    if (anyPerson.length && !this.state.data.church_id && !this.state.data.person_id) {
-      toast.error("Debe agregar el nombre de la iglesia o el nombre del obrero.");
+    if (
+      anyPerson.length &&
+      !this.state.data.church_id &&
+      !this.state.data.person_id
+    ) {
+      toast.error(
+        "Debe agregar el nombre de la iglesia o el nombre del obrero."
+      );
       return false;
     }
 
@@ -511,7 +541,7 @@ class EntryForm extends Form {
 
       this.setState({ disabledSave: true });
 
-      const { data } = {...this.state};
+      const { data } = { ...this.state };
       data.period_month = this.state.details[0].period_month;
       data.period_year = this.state.details[0].period_year;
 
@@ -753,7 +783,7 @@ class EntryForm extends Form {
                   />
                 </div>
                 <div className="col-1 mr-0 ml-0 pr-0 pl-0">
-                <Select
+                  <Select
                     name="period_month"
                     value={this.state.line.period_month}
                     label="Mes"

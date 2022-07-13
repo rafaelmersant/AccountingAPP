@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import _ from "lodash";
 import { registerLocale } from "react-datepicker";
 import es from "date-fns/locale/es";
 import "react-datepicker/dist/react-datepicker.css";
@@ -110,7 +109,7 @@ class ChurchesPayment extends Component {
   };
 
   getPagedData = () => {
-    const { sortColumn, entries: allEntries } = this.state;
+    const { entries: allEntries } = this.state;
 
     const totalAmount = allEntries.reduce(
       (acc, item) =>
