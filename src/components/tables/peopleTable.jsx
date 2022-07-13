@@ -34,6 +34,18 @@ class PeopleTable extends Component {
         );
       },
     },
+    {
+      path: "zone",
+      label: "Presbiterio",
+      content: (person) => {
+        return (
+          <span>
+            {(person.church && person.church.zone &&
+              `${person.church.zone}`)}
+          </span>
+        );
+      },
+    },
     { path: "created_date", label: "Creado (m/d/a)" },
   ];
 

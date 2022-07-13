@@ -38,6 +38,7 @@ class ChurchesTable extends Component {
         );
       },
     },
+    { path: "zone", label: "Presbiterio" },
     { path: "location", label: "Ubicación" },
     { path: "created_date", label: "Creada (m/d/a)" },
   ];

@@ -5,6 +5,7 @@ import { getCurrentUser } from "../../services/authService";
 import { getChurch, saveChurch } from "../../services/churchService";
 import SearchPerson from "../common/searchPerson";
 import PersonModal from "../modals/personModal";
+import Select from "../common/select";
 
 class ChurchForm extends Form {
   state = {
@@ -14,6 +15,7 @@ class ChurchForm extends Form {
       local_title: "",
       location: "",
       shepherd_id: "",
+      zone: "",
       created_by: getCurrentUser().id,
       created_date: new Date().toISOString(),
     },
@@ -22,6 +24,30 @@ class ChurchForm extends Form {
     hideSearchPerson: false,
     searchPersonText: "",
     clearSearchPerson: false,
+    zones: [
+      { id: "Cibao Central", name: "Cibao Central" },
+      { id: "Metropolitana", name: "Metropolitana" },
+      { id: "Santo Domingo Este A", name: "Santo Domingo Este A" },
+      { id: "Santo Domingo Este B", name: "Santo Domingo Este B" },
+      { id: "Santo Domingo Este C-A", name: "Santo Domingo Este C-A" },
+      { id: "Santo Domingo Este C-B", name: "Santo Domingo Este C-B" },
+      { id: "Santo Domingo Este D", name: "Santo Domingo Este D" },
+      { id: "Santo Domingo Este D-2", name: "Santo Domingo Este D-2" },
+      { id: "Santo Domingo Este D-2A", name: "Santo Domingo Este D-2A" },
+      { id: "Santo Domingo Oeste-A", name: "Santo Domingo Oeste-A" },
+      { id: "Santo Domingo Oeste-B", name: "Santo Domingo Oeste-B" },
+      { id: "Region Este", name: "Region Este" },
+      { id: "Sur A-1", name: "Sur A-1" },
+      { id: "Sur A-2", name: "Sur A-2" },
+      { id: "Sur A-3", name: "Sur A-3" },
+      { id: "Sur B", name: "Sur B" },
+      { id: "Sur C", name: "Sur C" },
+      { id: "Sur D", name: "Sur D" },
+      { id: "Sur E", name: "Sur E" },
+      { id: "Sur Lejano", name: "Sur Lejano" },
+      { id: "USA-Caribe", name: "USA-Caribe" },
+      { id: "Europa", name: "Europa" },
+    ],
   };
 
   schema = {
@@ -30,6 +56,7 @@ class ChurchForm extends Form {
     local_title: Joi.optional().label("Titulo Local"),
     location: Joi.optional().label("Ubicación"),
     shepherd_id: Joi.optional().label("Pastor"),
+    zone: Joi.optional().label("Presbiterio"),
     created_by: Joi.number(),
     created_date: Joi.string(),
   };
@@ -43,7 +70,7 @@ class ChurchForm extends Form {
       const shepherd = church.results[0].shepherd
         ? church.results[0].shepherd.first_name +
           " " +
-          church.results[0].shepherd.first_name
+          church.results[0].shepherd.last_name
         : "";
 
       this.setState({
@@ -106,6 +133,7 @@ class ChurchForm extends Form {
       local_title: church[0].local_title ? church[0].local_title : "",
       location: church[0].location ? church[0].location : "",
       shepherd_id: church[0].shepherd ? church[0].shepherd.id : "",
+      zone: church[0].zone ? church[0].zone : "",
       created_by: church[0].created_by
         ? church[0].created_by
         : getCurrentUser().id,
@@ -171,6 +199,19 @@ class ChurchForm extends Form {
                     ></span>
                   </div>
                 )}
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-7">
+                <Select
+                  name="zone"
+                  value={this.state.data.zone}
+                  label="Presbiterio"
+                  options={this.state.zones}
+                  onChange={this.handleChange}
+                  error={null}
+                />
               </div>
             </div>
             <div className="row">

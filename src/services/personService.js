@@ -16,7 +16,7 @@ export function getPeople(sortColumn, currentPage, searchQuery) {
   let urlQuery = `${apiEndpoint}/?ordering=${order}${column}&page=${page}`;
 
   if (searchQuery) urlQuery += `&search=${searchQuery}`;
-
+  
   return http.get(urlQuery);
 }
 
