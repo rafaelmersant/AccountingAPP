@@ -333,7 +333,8 @@ class EntryForm extends Form {
     handler(window.event);
 
     if (person.id === 0) {
-      this.raisePersonModal.click();
+      // this.raisePersonModal.click();
+      toast.error("Los obreros estan siendo agregados desde el sistema de huellas digitales.");
       return false;
     }
 
