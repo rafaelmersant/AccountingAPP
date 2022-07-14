@@ -80,7 +80,7 @@ class Dashboard extends Component {
 
   handleChangeParams = ({ currentTarget: input }) => {
     const { data } = { ...this.state };
-    data[input.name] = input.value;
+    data[input.name] = parseInt(input.value);
     this.setState({ data });
   };
   
@@ -104,6 +104,7 @@ class Dashboard extends Component {
 
   getPagedData = () => {
     const { sortColumn, entries: allEntries } = this.state;
+    const { period_month, period_year } = this.state.data;
 
     let totalAmount = 0;
     let totalOfrendaMisionera = 0;
@@ -116,11 +117,18 @@ class Dashboard extends Component {
 
     for (const entry of allEntries) {
       for (const item of entry.item_set) {
-        
         if (item.concept.id === 1) total20Concilio += parseFloat(item.amount);
         if (item.concept.id === 2)
           totalOfrendaMisionera += parseFloat(item.amount);
-        if (item.concept.id === 4) totalCuotaObrero += parseFloat(item.amount);
+        if (
+          item.concept.id === 4 &&
+          item.period_month === period_month &&
+          item.period_year === period_year
+        ) {
+          console.log('item', item)
+          totalCuotaObrero += parseFloat(item.amount);
+        }
+          
         if (
           item.concept.id !== 1 &&
           item.concept.id !== 2 &&
