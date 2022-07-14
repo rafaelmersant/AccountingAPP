@@ -124,10 +124,8 @@ class Dashboard extends Component {
           item.concept.id === 4 &&
           item.period_month === period_month &&
           item.period_year === period_year
-        ) {
-          console.log('item', item)
+        ) 
           totalCuotaObrero += parseFloat(item.amount);
-        }
           
         if (
           item.concept.id !== 1 &&
