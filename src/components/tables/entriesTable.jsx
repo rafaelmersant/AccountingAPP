@@ -53,10 +53,10 @@ class EntriesTable extends Component {
     {
       path: "created_by",
       label: "Creado por",
-      classes: "max-width-entries-column-1",
+      classes: "min-width-entries-column-1",
       content: (entry) => <span>{entry.created_by.name}</span>,
     },
-    { path: "created_date", label: "Fecha (m/d/a)", classes: "max-width-entries-column-1" },
+    { path: "created_date", label: "Fecha (m/d/a)", classes: "min-width-entries-column-1" },
   ];
 
   deleteColumn = {

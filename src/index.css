@@ -130,8 +130,8 @@ div[disabled] {
   color: orange !important;
 }
 
-.max-width-entries-column-1 {
-  max-width: 180px !important;
+.min-width-entries-column-1 {
+  min-width: 180px !important;
 }
 
 
