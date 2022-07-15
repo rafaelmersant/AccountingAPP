@@ -130,6 +130,10 @@ div[disabled] {
   color: orange !important;
 }
 
+.max-width-person {
+  max-width: 371px !important;
+}
+
 
 table.table-fit {
   width: auto !important;

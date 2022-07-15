@@ -27,6 +27,7 @@ class EntriesTable extends Component {
     {
       path: "person",
       label: "Obrero",
+      classes: "max-width-person",
       content: (entry) => (
         <div>
           <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
