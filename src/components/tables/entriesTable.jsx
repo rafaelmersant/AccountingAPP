@@ -27,7 +27,6 @@ class EntriesTable extends Component {
     {
       path: "person",
       label: "Obrero",
-      classes: "max-width-person",
       content: (entry) => (
         <div>
           <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
@@ -54,9 +53,10 @@ class EntriesTable extends Component {
     {
       path: "created_by",
       label: "Creado por",
+      classes: "max-width-entries-column-1",
       content: (entry) => <span>{entry.created_by.name}</span>,
     },
-    { path: "created_date", label: "Fecha (m/d/a)" },
+    { path: "created_date", label: "Fecha (m/d/a)", classes: "max-width-entries-column-1" },
   ];
 
   deleteColumn = {
