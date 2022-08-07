@@ -116,7 +116,7 @@ class PrintEntry extends Component {
                 </span>
               )}
 
-            {entryHeader.person &&
+            {entryHeader.person && entryHeader.person.identification &&
               entryHeader.person.identification.trim().length > 0 && (
                 <span className="font-receipt font-receipt-small-invoice d-block">
                   Cédula:{" "}
