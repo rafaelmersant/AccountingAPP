@@ -66,9 +66,12 @@ export function getEntryDetail(entryId) {
   return http.get(entryItemsUrl(entryId));
 }
 
-export function saveEntryHeader(entry) {
+export function saveEntryHeader(entry, note = "") {
   delete entry.church;
   delete entry.person;
+
+  if (!entry.church_id && !entry.person_id)
+    entry.note = note;
 
   if (!entry.church_id) delete entry.church_id;
   if (!entry.person_id) delete entry.person_id;
