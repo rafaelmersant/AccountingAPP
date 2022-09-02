@@ -78,6 +78,7 @@ class EntryForm extends Form {
       period_year: new Date().getFullYear(),
       period_month: new Date().getMonth(),
       created_date: new Date().toISOString(),
+      editing: false
     },
     methods: [
       { id: "E", name: "Efectivo" },
@@ -146,6 +147,7 @@ class EntryForm extends Form {
     line.period_year = new Date().getFullYear();
     line.period_month = new Date().getMonth();
     line.created_date = new Date().toISOString();
+    line.editing = false;
 
     this.setState({ line });
   }
@@ -356,6 +358,8 @@ class EntryForm extends Form {
   };
 
   validateDuplicity = async (line) => {
+    if (line.editing) return false;
+
     const { data: record } = await getEntryHeaderByRangeChurchesReport(
       line.period_month,
       line.period_year,
@@ -385,6 +389,7 @@ class EntryForm extends Form {
       line.amount = Math.round(line.amount * 100) / 100;
 
       const duplicity = await this.validateDuplicity(line);
+
       if (duplicity) {
         toast.error(
           "El 20% u Ofrenda Misionera ya fueron digitados para el periodo seleccionado."
@@ -439,6 +444,8 @@ class EntryForm extends Form {
 
     const line = { ...detail };
     const { data: concept } = await getConcept(detail.concept_id);
+
+    line.editing = true;
 
     this.setState({
       line,
