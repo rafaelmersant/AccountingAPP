@@ -60,16 +60,16 @@ class Dashboard extends Component {
     );
 
     entries = this.mapToModel(entries.results);
-    console.log('entries:', entries)
+    // console.log('entries:', entries)
 
-    for (const entry of entries) {
-      for (const item of entry.item_set) {
-        if (item.concept.id === 1 && item.period_month === 8)
-          console.log(
-            `${item.id} month: ${item.period_month} | concept: ${item.concept.description} ${item.concept.id} | item.Amount: ${item.amount}`
-          );
-      }
-    }
+    // for (const entry of entries) {
+    //   for (const item of entry.item_set) {
+    //     if (item.concept.id === 1 && item.period_month === 8)
+    //       console.log(
+    //         `${item.id} month: ${item.period_month} | concept: ${item.concept.description} ${item.concept.id} | item.Amount: ${item.amount}`
+    //       );
+    //   }
+    // }
 
     this.setState({ entries, loading: false });
   }
