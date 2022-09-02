@@ -135,15 +135,15 @@ class Dashboard extends Component {
       for (const item of entry.item_set) {
         if (
           item.concept.id === 1 &&
-          item.period_month == period_month &&
-          item.period_year == period_year
+          item.period_month === period_month &&
+          item.period_year === period_year
         )
           total20Concilio += parseFloat(item.amount);
 
         if (
           item.concept.id === 2 &&
-          item.period_month == period_month &&
-          item.period_year == period_year
+          item.period_month === period_month &&
+          item.period_year === period_year
         )
           totalOfrendaMisionera += parseFloat(item.amount);
 
@@ -159,16 +159,16 @@ class Dashboard extends Component {
           item.concept.id !== 2 &&
           item.concept.id !== 4 &&
           item.type !== "S" &&
-          item.period_month == period_month &&
-          item.period_year == period_year
+          item.period_month === period_month &&
+          item.period_year === period_year
         )
           totalOtrosIngresos += parseFloat(item.amount);
 
         if (
           item.method === "D" &&
           item.type !== "S" &&
-          item.period_month == period_month &&
-          item.period_year == period_year
+          item.period_month === period_month &&
+          item.period_year === period_year
         ) {
           totalAmountDeposito += parseFloat(item.amount);
         }
@@ -176,21 +176,21 @@ class Dashboard extends Component {
         if (
           item.method === "E" &&
           item.type !== "S" &&
-          item.period_month == period_month &&
-          item.period_year == period_year
+          item.period_month === period_month &&
+          item.period_year === period_year
         ) {
           totalAmountEfectivo += parseFloat(item.amount);
         }
 
         if (
           item.type === "S" &&
-          item.period_month == period_month &&
-          item.period_year == period_year
+          item.period_month === period_month &&
+          item.period_year === period_year
         ) {
           totalAmountSalidas += parseFloat(item.amount);
         } else if (
-          item.period_month == period_month &&
-          item.period_year == period_year
+          item.period_month === period_month &&
+          item.period_year === period_year
         ) {
           totalAmount += parseFloat(item.amount);
         }
