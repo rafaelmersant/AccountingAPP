@@ -15,8 +15,8 @@ registerLocale("es", es);
 class Dashboard extends Component {
   state = {
     data: {
-        period_month: new Date().getMonth(),
-        period_year: new Date().getFullYear(),
+      period_month: new Date().getMonth(),
+      period_year: new Date().getFullYear(),
     },
     loading: true,
     entries: [],
@@ -31,20 +31,20 @@ class Dashboard extends Component {
     totalOtrosIngresos: 0,
     sortColumn: { path: "created_date", order: "desc" },
     months: [
-        {id: "0", name: "TODOS"},
-        {id: "1", name: "Enero"},
-        {id: "2", name: "Febrero"},
-        {id: "3", name: "Marzo"},
-        {id: "4", name: "Abril"},
-        {id: "5", name: "Mayo"},
-        {id: "6", name: "Junio"},
-        {id: "7", name: "Julio"},
-        {id: "8", name: "Agosto"},
-        {id: "9", name: "Septiembre"},
-        {id: "10", name: "Octubre"},
-        {id: "11", name: "Noviembre"},
-        {id: "12", name: "Diciembre"},
-      ],
+      { id: "0", name: "TODOS" },
+      { id: "1", name: "Enero" },
+      { id: "2", name: "Febrero" },
+      { id: "3", name: "Marzo" },
+      { id: "4", name: "Abril" },
+      { id: "5", name: "Mayo" },
+      { id: "6", name: "Junio" },
+      { id: "7", name: "Julio" },
+      { id: "8", name: "Agosto" },
+      { id: "9", name: "Septiembre" },
+      { id: "10", name: "Octubre" },
+      { id: "11", name: "Noviembre" },
+      { id: "12", name: "Diciembre" },
+    ],
   };
 
   async componentDidMount() {
@@ -54,9 +54,22 @@ class Dashboard extends Component {
 
   async populateEntries(period_month, period_year) {
     this.setState({ loading: true });
-    let { data: entries } = await getEntryHeaderByRangeDashboard(period_month, period_year);
+    let { data: entries } = await getEntryHeaderByRangeDashboard(
+      period_month,
+      period_year
+    );
 
     entries = this.mapToModel(entries.results);
+    console.log('entries:', entries)
+
+    for (const entry of entries) {
+      for (const item of entry.item_set) {
+        if (item.concept.id === 1 && item.period_month === 8)
+          console.log(
+            `${item.id} month: ${item.period_month} | concept: ${item.concept.description} ${item.concept.id} | item.Amount: ${item.amount}`
+          );
+      }
+    }
 
     this.setState({ entries, loading: false });
   }
@@ -83,21 +96,24 @@ class Dashboard extends Component {
     data[input.name] = parseInt(input.value);
     this.setState({ data });
   };
-  
+
   mapToModel = (data) => {
     let result = [];
 
-    data.forEach((item) => {
-      result.push({
-        id: item.id,
-        note: item.note,
-        person: item.person,
-        church: item.church,
-        item_set: item.item_set,
-        created_date: item.created_date,
-        total_amount: item.total_amount,
-      });
-    });
+    for (const item of data) {
+      const exist = result.find(_item => _item.id === item.id);
+      // console.log('exist:', exist)
+      if (!exist)
+        result.push({
+          id: item.id,
+          note: item.note,
+          person: item.person,
+          church: item.church,
+          item_set: item.item_set,
+          created_date: item.created_date,
+          total_amount: item.total_amount,
+        });
+    }
 
     return result;
   };
@@ -117,35 +133,65 @@ class Dashboard extends Component {
 
     for (const entry of allEntries) {
       for (const item of entry.item_set) {
-        if (item.concept.id === 1) total20Concilio += parseFloat(item.amount);
-        if (item.concept.id === 2)
+        if (
+          item.concept.id === 1 &&
+          item.period_month == period_month &&
+          item.period_year == period_year
+        )
+          total20Concilio += parseFloat(item.amount);
+
+        if (
+          item.concept.id === 2 &&
+          item.period_month == period_month &&
+          item.period_year == period_year
+        )
           totalOfrendaMisionera += parseFloat(item.amount);
+
         if (
           item.concept.id === 4 &&
           item.period_month === period_month &&
           item.period_year === period_year
-        ) 
+        )
           totalCuotaObrero += parseFloat(item.amount);
-          
+
         if (
           item.concept.id !== 1 &&
           item.concept.id !== 2 &&
           item.concept.id !== 4 &&
-          item.type !== "S"
+          item.type !== "S" &&
+          item.period_month == period_month &&
+          item.period_year == period_year
         )
           totalOtrosIngresos += parseFloat(item.amount);
 
-        if (item.method === "D" && item.type !== "S") {
+        if (
+          item.method === "D" &&
+          item.type !== "S" &&
+          item.period_month == period_month &&
+          item.period_year == period_year
+        ) {
           totalAmountDeposito += parseFloat(item.amount);
         }
 
-        if (item.method === "E" && item.type !== "S") {
+        if (
+          item.method === "E" &&
+          item.type !== "S" &&
+          item.period_month == period_month &&
+          item.period_year == period_year
+        ) {
           totalAmountEfectivo += parseFloat(item.amount);
         }
 
-        if (item.type === "S") {
+        if (
+          item.type === "S" &&
+          item.period_month == period_month &&
+          item.period_year == period_year
+        ) {
           totalAmountSalidas += parseFloat(item.amount);
-        } else {
+        } else if (
+          item.period_month == period_month &&
+          item.period_year == period_year
+        ) {
           totalAmount += parseFloat(item.amount);
         }
       }
@@ -186,10 +232,9 @@ class Dashboard extends Component {
           <div className="col">
             <h2 className="text-info bg-light mb-3">Dashboard</h2>
             <div className="d-flex flex-row">
-             
               <div className="col-2">
                 <div className="mr-3">
-                <Select
+                  <Select
                     name="period_month"
                     className="form-control form-control-sm"
                     value={this.state.data.period_month}
@@ -199,12 +244,11 @@ class Dashboard extends Component {
                     error={null}
                   />
                 </div>
-
               </div>
 
               <div className="col-2">
                 <div className="mr-3">
-                <Input
+                  <Input
                     type="text"
                     name="period_year"
                     className="form-control form-control-sm"
@@ -307,7 +351,9 @@ class Dashboard extends Component {
                   <div className="card card-size text-white bg-secondary mb-3">
                     <div className="card-header">Entradas Total</div>
                     <div className="card-body">
-                      <h5 className="card-title">{formatNumber(totalAmount)}</h5>
+                      <h5 className="card-title">
+                        {formatNumber(totalAmount)}
+                      </h5>
                     </div>
                   </div>
 
