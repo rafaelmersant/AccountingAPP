@@ -30,6 +30,7 @@ import EntryForm from "./components/forms/entryForm";
 import Cuadre from "./components/reports/cuadre";
 import Dashboard from "./components/reports/dashboard";
 import ChurchesPayment from "./components/reports/churchesPayment";
+import DetailedByConcept from "./components/reports/detailedByConcept";
 
 class App extends Component {
   state = {
@@ -72,6 +73,7 @@ class App extends Component {
                   
                   <ProtectedRoute path="/cuadre" component={Cuadre} />
                   <ProtectedRoute path="/dashboard" component={Dashboard} />
+                  <ProtectedRoute path="/detallado-por-concepto" component={DetailedByConcept} />
                   <ProtectedRoute path="/pago-de-iglesias" component={ChurchesPayment} />
 
                   <ProtectedRoute path="/conceptos" component={Concepts} />

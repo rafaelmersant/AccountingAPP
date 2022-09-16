@@ -110,7 +110,7 @@ class Entries extends Component {
     searchParams.entryId = entryId;
 
     this.setState({ searchParams, loading: true });
-    this.populateEntries();
+    this.populateEntries(null, 1);
   };
 
   handlePersonChange = async (personId) => {
@@ -140,7 +140,7 @@ class Entries extends Component {
     searchParams.entryId = "";
 
     this.setState({ searchParams, loading: true });
-    this.populateEntries();
+    this.populateEntries(null, 1);
   };
 
   render() {
