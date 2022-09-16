@@ -127,10 +127,10 @@ class DetailedByConcept extends Component {
 
           if (item.type === "E") {
             records[item.concept.description] = amount + acc;
-            totalIngresos += amount + acc;
+            totalIngresos += amount;
           } else {
             records[item.concept.description] = amount - acc;
-            totalEgresos -= amount - acc;
+            totalEgresos -= amount;
           }
         }
       }
