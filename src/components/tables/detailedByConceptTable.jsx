@@ -6,7 +6,7 @@ class DetailedByConceptTable extends Component {
   columns = [
     { path: "concept", label: "Concepto" },
     {
-      path: "amount",
+      path: "Ingreso",
       label: "Ingreso",
       content: (entry) =>
         entry.amount > 0 && (
@@ -16,7 +16,7 @@ class DetailedByConceptTable extends Component {
         ),
     },
     {
-      path: "amount",
+      path: "Egreso",
       label: "Egreso",
       content: (entry) =>
         entry.amount < 0 && (

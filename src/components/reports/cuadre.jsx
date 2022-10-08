@@ -111,7 +111,7 @@ class Cuadre extends Component {
     let totalOtrosIngresos = 0;
     let totalDepositos = 0;
     let totalEfectivo = 0;
-    let totalSalidas = 0;
+    //let totalSalidas = 0;
 
     for (const entry of allEntries) {
       for (const item of entry.item_set) {
@@ -136,7 +136,7 @@ class Cuadre extends Component {
         }
 
         if (item.type === "S") {
-          totalSalidas += parseFloat(item.amount);
+          //totalSalidas += parseFloat(item.amount);
         } else {
           totalAmount += parseFloat(item.amount);
         }
@@ -155,7 +155,7 @@ class Cuadre extends Component {
       totalOtrosIngresos,
       totalDepositos,
       totalEfectivo,
-      totalSalidas,
+      //totalSalidas,
       entries,
     };
   };
@@ -191,7 +191,7 @@ class Cuadre extends Component {
       totalOtrosIngresos,
       totalDepositos,
       totalEfectivo,
-      totalSalidas,
+      //totalSalidas,
     } = this.getPagedData();
 
     return (

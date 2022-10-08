@@ -6,7 +6,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import Loading from "../common/loading";
 import { paginate } from "../../utils/paginate";
 import { getEntryHeaderByRangeDashboard } from "../../services/entryServices";
-import { formatNumber } from "../../utils/custom";
 import Select from "../common/select";
 import Input from "../common/input";
 import DetailedByConceptTable from "../tables/detailedByConceptTable";
@@ -129,9 +128,11 @@ class DetailedByConcept extends Component {
             records[item.concept.description] = amount + acc;
             totalIngresos += amount;
           } else {
-            records[item.concept.description] = amount - acc;
+            records[item.concept.description] = amount + acc;
             totalEgresos -= amount;
           }
+
+          console.log(`Concepto: ${item.concept.description} => ${amount}`);
         }
       }
     }
@@ -141,8 +142,9 @@ class DetailedByConcept extends Component {
     const sorted = _.orderBy(allEntries, [sortColumn.path], [sortColumn.order]);
     const entries = paginate(sorted, 1, 9999999);
 
+    let counter = 1;
     for (const key in records) {
-      items.push({ concept: key, amount: records[key] });
+      items.push({ id: counter++, concept: key, amount: records[key] });
     }
 
     return {
