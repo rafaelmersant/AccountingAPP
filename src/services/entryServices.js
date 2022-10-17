@@ -70,7 +70,7 @@ export function saveEntryHeader(entry, note = "") {
   delete entry.church;
   delete entry.person;
 
-  if (!entry.church_id && !entry.person_id)
+  if (!entry.church_id && !entry.person_id && entry.note === "")
     entry.note = note;
 
   if (!entry.church_id) delete entry.church_id;

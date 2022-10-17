@@ -132,7 +132,7 @@ class DetailedByConcept extends Component {
             totalEgresos -= amount;
           }
 
-          console.log(`Concepto: ${item.concept.description} => ${amount}`);
+          console.log(`id: ${entry.id} - Concepto: ${item.concept.description} => ${amount}`);
         }
       }
     }
