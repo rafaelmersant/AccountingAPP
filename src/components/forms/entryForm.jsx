@@ -278,10 +278,9 @@ class EntryForm extends Form {
     //default Cuota Obrero amount
     const { line } = { ...this.state };
     const defaultAmount = concept.id === 4 ? 100 : 0;
-    const defaultMonth =
-      concept.id === 4 ? new Date().getMonth() + 1 : new Date().getMonth();
+    // const defaultMonth = concept.id === 4 ? new Date().getMonth() + 1 : new Date().getMonth();
     line.amount = defaultAmount;
-    line.period_month = defaultMonth;
+    line.period_month = new Date().getMonth() + 1;
 
     this.setState({
       line,
