@@ -270,10 +270,10 @@ class EntryForm extends Form {
       return item.concept_id === concept.id;
     });
 
-    if (concept_found !== undefined) {
-      toast.error("Este concepto ya fue agregado.");
-      return false;
-    }
+    // if (concept_found !== undefined) {
+    //   toast.error("Este concepto ya fue agregado.");
+    //   return false;
+    // }
 
     this.setState({
       hideSearchConcept: true,
