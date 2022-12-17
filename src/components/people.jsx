@@ -104,11 +104,11 @@ class People extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col">
-            <h5 className="pull-left text-info mt-2">Listado de Obreros</h5>
+            <h5 className="pull-left text-info mt-2">Listado de Miembros</h5>
 
-            {/* <div className="mb-4">
-              <NewButton label="Nuevo Obrero" to="/obrero/new" />
-            </div> */}
+            <div className="mb-4">
+              <NewButton label="Nuevo Miembro" to="/obrero/new" />
+            </div>
 
             <SearchBox
               value={searchQuery}

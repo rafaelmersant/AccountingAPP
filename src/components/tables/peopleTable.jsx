@@ -20,32 +20,32 @@ class PeopleTable extends Component {
         <Link to={`/obrero/${person.id}`}> {person.last_name} </Link>
       ),
     },
-    { path: "credential", label: "Credencial" },
-    { path: "identification", label: "Cédula" },
-    {
-      path: "church_id",
-      label: "Iglesia",
-      content: (person) => {
-        return (
-          <span>
-            {person.church &&
-              `${person.church.global_title}`}
-          </span>
-        );
-      },
-    },
-    {
-      path: "zone",
-      label: "Presbiterio",
-      content: (person) => {
-        return (
-          <span>
-            {(person.church && person.church.zone &&
-              `${person.church.zone}`)}
-          </span>
-        );
-      },
-    },
+    // { path: "credential", label: "Credencial" },
+    // { path: "identification", label: "Cédula" },
+    // {
+    //   path: "church_id",
+    //   label: "Iglesia",
+    //   content: (person) => {
+    //     return (
+    //       <span>
+    //         {person.church &&
+    //           `${person.church.global_title}`}
+    //       </span>
+    //     );
+    //   },
+    // },
+    // {
+    //   path: "zone",
+    //   label: "Presbiterio",
+    //   content: (person) => {
+    //     return (
+    //       <span>
+    //         {(person.church && person.church.zone &&
+    //           `${person.church.zone}`)}
+    //       </span>
+    //     );
+    //   },
+    // },
     { path: "created_date", label: "Creado (m/d/a)" },
   ];
 
