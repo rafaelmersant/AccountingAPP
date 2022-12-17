@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { toast } from "react-toastify";
 import Pagination from "react-js-pagination";
 import SearchBox from "./common/searchBox";
-//import NewButton from "./common/newButton";
+import NewButton from "./common/newButton";
 import Loading from "./common/loading";
 import { getPeople, deletePerson } from "../services/personService";
 import PeopleTable from "./tables/peopleTable";
