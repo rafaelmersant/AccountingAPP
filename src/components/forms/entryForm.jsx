@@ -512,15 +512,15 @@ class EntryForm extends Form {
     //   return false;
     // }
 
-    if (
-      anyPerson.length &&
-      !this.state.data.person_id
-    ) {
-      toast.error(
-        "Debe agregar el nombre del miembro."
-      );
-      return false;
-    }
+    // if (
+    //   anyPerson.length &&
+    //   !this.state.data.person_id
+    // ) {
+    //   toast.error(
+    //     "Debe agregar el nombre del miembro."
+    //   );
+    //   return false;
+    // }
 
     return true;
   }
