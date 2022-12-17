@@ -8,7 +8,7 @@ const NavBarSide = ({ user }) => {
         <NavLink className="" to="/home">
           <img
             style={{ width: "100px", padding: "5px", margin: "0" }}
-            src={process.env.PUBLIC_URL + "/images/logocepasH50_small.png"}
+            src={process.env.PUBLIC_URL + "/images/logoEmanuel.jpg"}
             alt="CEPAS"
           />
         </NavLink>
@@ -36,21 +36,21 @@ const NavBarSide = ({ user }) => {
                   Conceptos
                 </NavLink>
 
-                <NavLink
+                {/* <NavLink
                   className="list-group-item list-group-item-action border-none"
                   to="/cuadre"
                 >
                   <span className="fa fa-book mr-2 color-local" />
                   Cuadre (reporte)
-                </NavLink>
+                </NavLink> */}
 
-                <NavLink
+                {/* <NavLink
                   className="list-group-item list-group-item-action border-none"
                   to="/dashboard"
                 >
                   <span className="fa fa-book mr-2 color-local" />
                   Dashboard
-                </NavLink>
+                </NavLink> */}
 
                 <NavLink
                   className="list-group-item list-group-item-action border-none"
@@ -62,15 +62,24 @@ const NavBarSide = ({ user }) => {
 
                 <NavLink
                   className="list-group-item list-group-item-action border-none"
+                  to="/obreros"
+                >
+                  <span className="fa fa-users mr-2 color-local" />
+                  Miembros
+                </NavLink>
+
+                {/* <NavLink
+                
+                  className="list-group-item list-group-item-action border-none"
                   to="/iglesias"
                 >
                   <span className="fa fa-home mr-2 color-local" />
                   Iglesias
-                </NavLink>
+                </NavLink> */}
               </div>
             )}
 
-          {user &&
+          {/* {user &&
             (user.role === "Admin" ||
               user.role === "Owner" ||
               user.role === "Level1" ||
@@ -84,7 +93,7 @@ const NavBarSide = ({ user }) => {
                   Obreros
                 </NavLink>
               </div>
-            )}
+            )} */}
         </React.Fragment>
 
         {/* {user &&

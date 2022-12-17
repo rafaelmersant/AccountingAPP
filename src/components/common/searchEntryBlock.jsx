@@ -77,7 +77,7 @@ class SearchEntryBlock extends Component {
     handler(window.event);
 
     if (person.id === 0) {
-      toast.error("Lo sentimos, no puede crear un nuevo obrero desde aqui.");
+      toast.error("Lo sentimos, no puede crear un nuevo miembro desde aqui.");
       return false;
     }
 
@@ -168,7 +168,7 @@ class SearchEntryBlock extends Component {
               onBlur={() => this.handleFocusPerson(true)}
               hide={this.state.hideSearchPerson}
               value={this.state.searchPersonText}
-              label="Obrero"
+              label="Miembro"
               name="searchPerson"
             />
           </div>
@@ -187,7 +187,7 @@ class SearchEntryBlock extends Component {
                     marginLeft: "-36px",
                     cursor: "pointer",
                   }}
-                  title="Limpiar filtro de obrero"
+                  title="Limpiar filtro de miembro"
                   onClick={this.handleClearPersonSelection}
                 ></span>
               </div>

@@ -15,7 +15,7 @@ registerLocale("es", es);
 class DetailedByConcept extends Component {
   state = {
     data: {
-      period_month: new Date().getMonth(),
+      period_month: new Date().getMonth() + 1,
       period_year: new Date().getFullYear(),
     },
     items: [],

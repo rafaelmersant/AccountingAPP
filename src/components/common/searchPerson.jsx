@@ -69,7 +69,7 @@ const SearchPerson = (props) => {
         id="searchPersonId"
         name="query"
         className="form-control form-control-sm"
-        placeholder="Buscar obrero..."
+        placeholder="Buscar miembro..."
         autoComplete="Off"
         onChange={(e) => handleChange(e)}
         onFocus={onFocus}

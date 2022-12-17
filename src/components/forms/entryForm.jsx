@@ -48,7 +48,7 @@ class EntryForm extends Form {
   state = {
     data: {
       id: 0,
-      church_id: "",
+      church_id: "2",
       church: {},
       person_id: "",
       person: {},
@@ -76,7 +76,7 @@ class EntryForm extends Form {
       type: "",
       method: "E",
       period_year: new Date().getFullYear(),
-      period_month: new Date().getMonth(),
+      period_month: new Date().getMonth() + 1,
       created_date: new Date().toISOString(),
       editing: false
     },
@@ -109,7 +109,7 @@ class EntryForm extends Form {
     hideSearchChurch: false,
     hideSearchPerson: false,
     searchConceptText: "",
-    searchChurchText: "",
+    searchChurchText: "ALMIRANTE II",
     searchPersonText: "",
     serializedEntryHeader: {},
     serializedEntryDetail: [],
@@ -145,7 +145,7 @@ class EntryForm extends Form {
     line.type = "";
     line.method = "E";
     line.period_year = new Date().getFullYear();
-    line.period_month = new Date().getMonth();
+    line.period_month = new Date().getMonth() + 1;
     line.created_date = new Date().toISOString();
     line.editing = false;
 
@@ -275,15 +275,7 @@ class EntryForm extends Form {
       return false;
     }
 
-    //default Cuota Obrero amount
-    const { line } = { ...this.state };
-    const defaultAmount = concept.id === 4 ? 100 : 0;
-    // const defaultMonth = concept.id === 4 ? new Date().getMonth() + 1 : new Date().getMonth();
-    line.amount = defaultAmount;
-    line.period_month = new Date().getMonth() + 1;
-
     this.setState({
-      line,
       hideSearchConcept: true,
       clearSearchConcept: false,
       currentConcept: concept,
@@ -334,7 +326,6 @@ class EntryForm extends Form {
     handler(window.event);
 
     if (person.id === 0) {
-      // this.raisePersonModal.click();
       toast.error("Los obreros estan siendo agregados desde el sistema de huellas digitales.");
       return false;
     }
@@ -359,18 +350,18 @@ class EntryForm extends Form {
   validateDuplicity = async (line) => {
     if (line.editing) return false;
 
-    const { data: record } = await getEntryHeaderByRangeChurchesReport(
-      line.period_month,
-      line.period_year,
-      this.state.data.church_id
-    );
+    // const { data: record } = await getEntryHeaderByRangeChurchesReport(
+    //   line.period_month,
+    //   line.period_year,
+    //   this.state.data.church_id
+    // );
 
-    const percent_concilio = record.reduce((acc, item) => acc + parseInt(item.percent_concilio), 0);
-    const ofrenda_misionera = record.reduce((acc, item) => acc + parseInt(item.ofrenda_misionera), 0);
+    // const percent_concilio = record.reduce((acc, item) => acc + parseInt(item.percent_concilio), 0);
+    // const ofrenda_misionera = record.reduce((acc, item) => acc + parseInt(item.ofrenda_misionera), 0);
     
-    if (line.concept_id === 1 && record.length && percent_concilio) return true;
-    if (line.concept_id === 2 && record.length && ofrenda_misionera)
-      return true;
+    // if (line.concept_id === 1 && record.length && percent_concilio) return true;
+    // if (line.concept_id === 2 && record.length && ofrenda_misionera)
+    //   return true;
 
     return false;
   };
@@ -506,28 +497,27 @@ class EntryForm extends Form {
 
   validateRelatedConcepts() {
     const requiredPerson = [4, 7, 8];
-    const requiredChurch = [1, 2, 10, 11];
+    // const requiredChurch = [1, 2, 10, 11];
 
-    const anyChurch = this.state.details.filter((item) =>
-      requiredChurch.includes(item.concept_id)
-    );
+    // const anyChurch = this.state.details.filter((item) =>
+    //   requiredChurch.includes(item.concept_id)
+    // );
 
     const anyPerson = this.state.details.filter((item) =>
       requiredPerson.includes(item.concept_id)
     );
 
-    if (anyChurch.length && !this.state.data.church_id) {
-      toast.error("Debe agregar el nombre de la iglesia.");
-      return false;
-    }
+    // if (anyChurch.length && !this.state.data.church_id) {
+    //   toast.error("Debe agregar el nombre de la iglesia.");
+    //   return false;
+    // }
 
     if (
       anyPerson.length &&
-      !this.state.data.church_id &&
       !this.state.data.person_id
     ) {
       toast.error(
-        "Debe agregar el nombre de la iglesia o el nombre del obrero."
+        "Debe agregar el nombre del miembro."
       );
       return false;
     }
@@ -708,7 +698,7 @@ class EntryForm extends Form {
                     clearSearchPerson={this.state.clearSearchPerson}
                     hide={this.state.hideSearchPerson}
                     value={this.state.searchPersonText}
-                    label="Obrero"
+                    label="Miembro"
                   />
                 </div>
                 <div>
@@ -726,7 +716,7 @@ class EntryForm extends Form {
                           marginLeft: "-39px",
                           cursor: "pointer",
                         }}
-                        title="Limpiar filtro de obrero"
+                        title="Limpiar filtro de miembro"
                         onClick={this.handleCleanPerson}
                       ></span>
                     </div>
