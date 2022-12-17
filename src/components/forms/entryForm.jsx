@@ -78,7 +78,7 @@ class EntryForm extends Form {
       period_year: new Date().getFullYear(),
       period_month: new Date().getMonth() + 1,
       created_date: new Date().toISOString(),
-      editing: false
+      editing: false,
     },
     methods: [
       { id: "E", name: "Efectivo" },
@@ -256,6 +256,7 @@ class EntryForm extends Form {
   };
 
   handleSelectConcept = async (concept) => {
+    console.log('SELECTED CONCEPT:', concept)
     const handler = (e) => {
       e.preventDefault();
     };
@@ -358,7 +359,7 @@ class EntryForm extends Form {
 
     // const percent_concilio = record.reduce((acc, item) => acc + parseInt(item.percent_concilio), 0);
     // const ofrenda_misionera = record.reduce((acc, item) => acc + parseInt(item.ofrenda_misionera), 0);
-    
+
     // if (line.concept_id === 1 && record.length && percent_concilio) return true;
     // if (line.concept_id === 2 && record.length && ofrenda_misionera)
     //   return true;
@@ -542,7 +543,10 @@ class EntryForm extends Form {
       data.period_month = this.state.details[0].period_month;
       data.period_year = this.state.details[0].period_year;
 
-      const { data: entryHeader } = await saveEntryHeader(data, this.state.details[0].concept);
+      const { data: entryHeader } = await saveEntryHeader(
+        data,
+        this.state.details[0].concept
+      );
 
       for (const item of this.state.details) {
         const detail = {
@@ -895,20 +899,21 @@ class EntryForm extends Form {
           </div>
 
           <div className="d-flex justify-content-end w-100 pr-3 mb-3">
-            {this.state.data.id > 0 && (role === "Admin" || role === "Owner") && (
-              <ReactToPrint
-                trigger={() => (
-                  <span
-                    ref={(button) => (this.printButton = button)}
-                    className="fa fa-print text-success cursor-pointer"
-                    style={{ fontSize: "35px" }}
-                  ></span>
-                )}
-                content={() => this.componentRef}
-                // onAfterPrint={() => this.quotationPrinted()}
-                //onBeforePrint={() => this.quotationPrinted()}
-              />
-            )}
+            {this.state.data.id > 0 &&
+              (role === "Admin" || role === "Owner") && (
+                <ReactToPrint
+                  trigger={() => (
+                    <span
+                      ref={(button) => (this.printButton = button)}
+                      className="fa fa-print text-success cursor-pointer"
+                      style={{ fontSize: "35px" }}
+                    ></span>
+                  )}
+                  content={() => this.componentRef}
+                  // onAfterPrint={() => this.quotationPrinted()}
+                  //onBeforePrint={() => this.quotationPrinted()}
+                />
+              )}
           </div>
 
           <div hidden="hidden">
