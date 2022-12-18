@@ -256,7 +256,6 @@ class EntryForm extends Form {
   };
 
   handleSelectConcept = async (concept) => {
-    console.log('SELECTED CONCEPT:', concept)
     const handler = (e) => {
       e.preventDefault();
     };

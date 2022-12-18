@@ -46,6 +46,8 @@ const SearchConcept = (props) => {
             id: 0,
             description: "No existe el concepto, desea crearlo?",
             type: "E",
+            created_date: new Date().toJSON(),
+            created_by: 1
           },
         ];
       }
@@ -54,6 +56,7 @@ const SearchConcept = (props) => {
         ? _.orderBy(_concepts, ["ocurrences"], ["desc"])
         : _concepts;
 
+      console.log(_concepts);
       setConcepts(_concepts);
     } else {
       setConcepts([]);
@@ -71,21 +74,21 @@ const SearchConcept = (props) => {
     // the string searched and for the second the results.
     setConceptName(string);
     debounced(string);
-  }
+  };
 
   const handleOnHover = (result) => {
     // the item hovered
     // console.log(result)
-  }
+  };
 
   const handleOnSelect = (concept) => {
     props.onSelect(concept);
-    console.log(concept)
-  }
+    console.log(concept);
+  };
 
   const handleOnFocus = () => {
     // console.log('Focused')
-  }
+  };
 
   const formatResult = (concept) => {
     return (
