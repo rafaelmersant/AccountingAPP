@@ -162,27 +162,32 @@ class EntryForm extends Form {
 
   updateLine = (concept) => {
     const line = { ...this.state.line };
-    let { totalEntradas } = { ...this.state };
-    let { totalSalidas } = { ...this.state };
-
+    let {totalEntradas, totalSalidas} = {...this.state};
+        
     line.concept_id = concept.id;
     line.concept = concept.description;
     line.type = concept.type;
     
-    if (line.type === "S" && line.amount !== "") {
-      line.amount = Math.abs(parseFloat(line.amount)) * -1
-      totalSalidas += Math.abs(parseFloat(line.amount));
-    } else {
-      totalEntradas += line.amount;
-    }
-    // line.amount = line.type === "S" && line.amount !== "" ? Math.abs(parseFloat(line.amount)) * -1 : line.amount;
+    
+    console.log('line', line)
+    const amount = line.amount === "" ? 0 : line.amount;
 
-    this.setState({ line, totalEntradas, totalSalidas });
+    if (line.type === "S" && line.concept_id !== 7) {
+      line.amount = Math.abs(parseFloat(amount)) * -1;
+      totalSalidas += Math.abs(amount);
+    }
+
+    if (line.type === "E")
+      totalEntradas += parseFloat(amount);
+    
+    this.setState({ line, totalEntradas,  totalSalidas });
+    this.updateTotals();
   };
 
   updateTotals = () => {
     const data = { ...this.state.data };
-    let { totalEntradas, totalSalidas } = { ...this.sate };
+    let totalEntradas = 0;
+    let totalSalidas = 0;
 
     data.total_amount = 0;
 
@@ -192,14 +197,16 @@ class EntryForm extends Form {
 
     //Total Entradas/Salidas
     this.state.details.forEach((item) => {
-      if (item.type !== "S")
+      if (item.type === "S" && item.concept.id !== 7)
+          totalSalidas += Math.abs(
+            Math.round(parseFloat(item.amount) * 100) / 100
+          );
+
+        if (item.type === "E") 
         totalEntradas += Math.round(parseFloat(item.amount) * 100) / 100;
-      else
-        totalSalidas += Math.abs(Math.round(parseFloat(item.amount) * 100) / 100);
     });
 
     data.total_amount = Math.round(data.total_amount * 100) / 100;
-
     this.setState({ data, totalEntradas, totalSalidas });
   };
 
@@ -225,14 +232,16 @@ class EntryForm extends Form {
         : "";
 
       //Total Entradas/Salidas
-      let {totalEntradas, totalSalidas} = {...this.state};
+      let totalEntradas = 0;
+      let totalSalidas = 0;
       entryDetail.forEach((item) => {
-        if (item.type !== "S")
-          totalEntradas += Math.round(parseFloat(item.amount) * 100) / 100;
-        else
+        if (item.type === "S" && item.concept.id !== 7)
           totalSalidas += Math.abs(
             Math.round(parseFloat(item.amount) * 100) / 100
           );
+
+        if (item.type === "E")
+          totalEntradas += Math.round(parseFloat(item.amount) * 100) / 100;
       });
 
       this.setState({
@@ -249,10 +258,9 @@ class EntryForm extends Form {
         serializedEntryDetail: entryDetail,
         loading: false,
         totalEntradas,
-        totalSalidas
+        totalSalidas,
       });
 
-      this.updateTotals();
       this.forceUpdate();
 
       if (sessionStorage["printEntry"] === "y") {

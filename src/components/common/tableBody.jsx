@@ -54,7 +54,8 @@ class TableBody extends Component {
     return (
       <tbody>
         {data.map((item, index) => (
-          <tr key={item.product_id || item.id || index}>
+          // <tr key={item.product_id || item.id || index}>
+          <tr key={ index }>
             {columns.map((column) => (
               <td key={this.createKey(item, column)} className="py-1">
                 {this.renderCell(item, column)}
