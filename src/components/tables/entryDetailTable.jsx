@@ -75,7 +75,7 @@ class EntryDetailTable extends Component {
   }
 
   render() {
-    const { details, entryHeader } = this.props;
+    const { details, entryHeader, totalEntradas, totalSalidas } = this.props;
 
     // if (entryHeader.id)
     //   this.columns = this.columns.filter(c => c.path !== "delete");
@@ -96,12 +96,12 @@ class EntryDetailTable extends Component {
           {details.length > 0 && (
             <tfoot>
               <tr className="table-active">
-                <th>Total</th>
+                <th>Total Entradas:</th>
+                <th className="text-right">{formatNumber(totalEntradas)}</th>
+                <th>Total Salidas:</th>
+                <th className="text-right">{formatNumber(totalSalidas)}</th>
                 <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>Total:</th>
                 <th className="text-right">{formatNumber(entryHeader.total_amount)}</th>
                 <th></th>
                 {/* {(!entryHeader.id) && <th></th>} */}

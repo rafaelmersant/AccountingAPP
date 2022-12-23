@@ -114,6 +114,8 @@ class EntryForm extends Form {
     searchPersonText: "",
     serializedEntryHeader: {},
     serializedEntryDetail: [],
+    totalEntradas: 0,
+    totalSalidas: 0
   };
 
   //Schema (Joi)
@@ -160,13 +162,22 @@ class EntryForm extends Form {
 
   updateLine = (concept) => {
     const line = { ...this.state.line };
+    let { totalEntradas } = { ...this.state };
+    let { totalSalidas } = { ...this.state };
 
     line.concept_id = concept.id;
     line.concept = concept.description;
     line.type = concept.type;
-    line.amount = line.type === "S" && line.amount !== "" ? Math.abs(parseFloat(line.amount)) * -1 : line.amount;
+    
+    if (line.type === "S" && line.amount !== "") {
+      line.amount = Math.abs(parseFloat(line.amount)) * -1
+      totalSalidas += Math.abs(parseFloat(line.amount));
+    } else {
+      totalEntradas += line.amount;
+    }
+    // line.amount = line.type === "S" && line.amount !== "" ? Math.abs(parseFloat(line.amount)) * -1 : line.amount;
 
-    this.setState({ line });
+    this.setState({ line, totalEntradas, totalSalidas });
   };
 
   updateTotals = () => {
@@ -848,6 +859,8 @@ console.log('Edit Detail:', detail);
                 <EntryDetailTable
                   entryHeader={this.state.data}
                   details={this.state.details}
+                  totalEntradas={this.state.totalEntradas}
+                  totalSalidas={this.state.totalSalidas}
                   user={user}
                   onDelete={this.handleDeleteDetail}
                   onEdit={this.handleEditDetail}
