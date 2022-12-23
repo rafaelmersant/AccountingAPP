@@ -11,14 +11,13 @@ const SearchConcept = (props) => {
   
   useEffect(() => {
     if (props.value) setConceptName(props.value);
-console.log('props.clearSearchConcept:', props.clearSearchConcept)
 
     if (props.clearSearchConcept) {
       setConceptName("");
       // handleSearchConcept("");
       props.onClearSearchConcept(false);
     }
-  }, []);
+  }, [props]);
 
   const handleSearchConcept = async (value) => {
     if (value.length >= 0) {
@@ -46,7 +45,6 @@ console.log('props.clearSearchConcept:', props.clearSearchConcept)
         ? _.orderBy(_concepts, ["ocurrences"], ["desc"])
         : _concepts;
 
-      console.log(_concepts);
       setConcepts(_concepts);
     } else {
       setConcepts([]);
@@ -57,8 +55,7 @@ console.log('props.clearSearchConcept:', props.clearSearchConcept)
     // onSearch will have as the first callback parameter
     // the string searched and for the second the results.
     // setConceptName(string);
-    console.log('RESULTS:', results)
-    console.log('SEARCHING...', string);
+
     handleSearchConcept(string);
     // debounced(string);
   };
@@ -69,7 +66,6 @@ console.log('props.clearSearchConcept:', props.clearSearchConcept)
   };
 
   const handleOnFocus = () => {
-    console.log('ON FOCUS: ', props.clearSearchConcept)
     if (props.clearSearchConcept) {
       setConceptName("");
       props.onClearSearchConcept(false);
