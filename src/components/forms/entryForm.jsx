@@ -58,6 +58,7 @@ class EntryForm extends Form {
       total_amount: 0,
       created_by: getCurrentUser().id,
       created_date: new Date().toISOString(),
+      entry_date: new Date().toISOString(),
     },
     loading: true,
     disabledSave: false,
@@ -71,7 +72,7 @@ class EntryForm extends Form {
       entry_id: 0,
       concept_id: 0,
       concept: "",
-      amount: 0,
+      amount: "",
       reference: "",
       type: "",
       method: "E",
@@ -128,6 +129,7 @@ class EntryForm extends Form {
     total_amount: Joi.number(),
     created_by: Joi.number(),
     created_date: Joi.string(),
+    entry_date: Joi.string(),
   };
 
   async populateConcepts() {
@@ -140,7 +142,7 @@ class EntryForm extends Form {
     line.id = 0;
     line.concept_id = 0;
     line.concept = "";
-    line.amount = 0;
+    line.amount = "";
     line.reference = "";
     line.type = "";
     line.method = "E";
@@ -162,7 +164,7 @@ class EntryForm extends Form {
     line.concept_id = concept.id;
     line.concept = concept.description;
     line.type = concept.type;
-    line.amount = line.type === "S" ? Math.abs(line.amount) * -1 : line.amount;
+    line.amount = line.type === "S" && line.amount !== "" ? Math.abs(parseFloat(line.amount)) * -1 : line.amount;
 
     this.setState({ line });
   };
@@ -205,7 +207,7 @@ class EntryForm extends Form {
         data: entryHeaderMapped,
         details: mapToViewEntryDetail(entryDetail),
         detailsOriginal: mapToViewEntryDetail(entryDetail),
-        entryDate: new Date(entryHeader.created_date),
+        entryDate: new Date(entryHeader.entry_date),
         searchChurchText: searchChurchText,
         searchPersonText: searchPersonText,
         hideSearchChurch: true,
@@ -242,7 +244,7 @@ class EntryForm extends Form {
 
   handleChangeEntryDate = (date) => {
     const data = { ...this.state.data };
-    data.creationDate = date.toISOString();
+    data.entry_date = date.toISOString();
     this.setState({ data, entryDate: date });
   };
 
@@ -266,9 +268,9 @@ class EntryForm extends Form {
       return false;
     }
 
-    const concept_found = _.find(this.state.details, function (item) {
-      return item.concept_id === concept.id;
-    });
+    // const concept_found = _.find(this.state.details, function (item) {
+    //   return item.concept_id === concept.id;
+    // });
 
     // if (concept_found !== undefined) {
     //   toast.error("Este concepto ya fue agregado.");
@@ -276,8 +278,8 @@ class EntryForm extends Form {
     // }
 
     this.setState({
-      hideSearchConcept: true,
-      clearSearchConcept: false,
+      // hideSearchConcept: true,
+      // clearSearchConcept: false,
       currentConcept: concept,
       searchConceptText: concept.description,
     });
@@ -379,23 +381,17 @@ class EntryForm extends Form {
       line.amount = Math.round(line.amount * 100) / 100;
 
       const duplicity = await this.validateDuplicity(line);
-
-      if (duplicity) {
-        toast.error(
-          "El 20% u Ofrenda Misionera ya fueron digitados para el periodo seleccionado."
-        );
-        return false;
-      }
-
       if (this.state.line.concept_id) details.push(line);
 
+      console.log('Add detail:', line)
       this.setState({
         details,
         currentConcept: {},
-        searchConceptText: "",
-        clearSearchConcept: true,
+        searchConceptText: ""
+        // clearSearchConcept: true,
       });
 
+      this.handleSearchConcept(true);
       this.updateTotals();
       this.resetLineValues();
     }, 150);
@@ -415,7 +411,8 @@ class EntryForm extends Form {
       if (!soft) detailsToDelete.push(detail);
 
       const details = this.state.details.filter(
-        (d) => d.concept_id !== detail.concept_id
+        (d) => d !== detail
+        // (d) => d.concept_id !== detail.concept_id
       );
 
       this.setState({ details, detailsToDelete });
@@ -431,6 +428,7 @@ class EntryForm extends Form {
       e.preventDefault();
     };
     handler(window.event);
+console.log('Edit Detail:', detail);
 
     const line = { ...detail };
     const { data: concept } = await getConcept(detail.concept_id);
@@ -492,7 +490,7 @@ class EntryForm extends Form {
     if (!this.state.line.concept_id) return true;
     if (!parseFloat(this.state.line.amount) > 0) return true;
 
-    if (this.state.line.amount === 0) return false;
+    if (parseFloat(this.state.line.amount) === 0) return false;
   }
 
   validateRelatedConcepts() {
@@ -552,7 +550,7 @@ class EntryForm extends Form {
           id: item.id,
           entry_id: entryHeader.id,
           concept_id: item.concept_id,
-          amount: item.amount,
+          amount: parseFloat(item.amount),
           reference: item.reference,
           type: item.type,
           method: item.method,
@@ -620,6 +618,10 @@ class EntryForm extends Form {
     this.setState({ data, searchPersonText: "" });
   };
 
+  handleSearchConcept = async (value) => {
+    this.setState({clearSearchConcept: value});
+  }
+
   render() {
     const { user } = this.props;
     const role = getCurrentUser().role;
@@ -686,7 +688,6 @@ class EntryForm extends Form {
                       selected={this.state.entryDate}
                       onChange={(date) => this.handleChangeEntryDate(date)}
                       dateFormat="dd/MM/yyyy hh:mm aa"
-                      disabled={true}
                     />
                   </div>
                 </div>
@@ -737,6 +738,7 @@ class EntryForm extends Form {
                     onSelect={this.handleSelectConcept}
                     onFocus={() => this.handleFocusConcept(false)}
                     onBlur={() => this.handleFocusConcept(true)}
+                    onClearSearchConcept={() => this.handleSearchConcept}
                     clearSearchConcept={this.state.clearSearchConcept}
                     hide={this.state.hideSearchConcept}
                     value={this.state.searchConceptText}

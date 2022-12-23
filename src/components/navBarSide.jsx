@@ -60,13 +60,13 @@ const NavBarSide = ({ user }) => {
                   Reporte detallado
                 </NavLink>
 
-                <NavLink
+                {/* <NavLink
                   className="list-group-item list-group-item-action border-none"
                   to="/obreros"
                 >
                   <span className="fa fa-users mr-2 color-local" />
                   Miembros
-                </NavLink>
+                </NavLink> */}
 
                 {/* <NavLink
                 

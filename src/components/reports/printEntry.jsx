@@ -10,8 +10,8 @@ class PrintEntry extends Component {
       var entryDate = new Date(_date);
     }
 
-    console.log("entryHeader", entryHeader);
-    console.log("entryDetail", entryDetail);
+    // console.log("entryHeader", entryHeader);
+    // console.log("entryDetail", entryDetail);
 
     return (
       <div style={{ width: "378px" }}>

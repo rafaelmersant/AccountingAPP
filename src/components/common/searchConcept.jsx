@@ -1,34 +1,24 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import Input from "./input";
 import { getConceptsByName } from "../../services/conceptService";
 import _ from "lodash";
-import { debounce } from "throttle-debounce";
+// import { debounce } from "throttle-debounce";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 
 const SearchConcept = (props) => {
   const [concepts, setConcepts] = useState([]);
   const [conceptName, setConceptName] = useState(props.value);
-
+  
   useEffect(() => {
     if (props.value) setConceptName(props.value);
+console.log('props.clearSearchConcept:', props.clearSearchConcept)
 
-    if (props.hide && props.clearSearchConcept) {
+    if (props.clearSearchConcept) {
       setConceptName("");
-      handleSearchConcept("");
+      // handleSearchConcept("");
+      props.onClearSearchConcept(false);
     }
-  }, [conceptName, props]);
-
-  const debounced = useCallback(
-    debounce(400, (nextValue) => {
-      handleSearchConcept(nextValue);
-    }),
-    []
-  );
-
-  // const handleSelectConcept = (concept) => {
-  //   setConceptName(concept.description);
-  //   props.onSelect(concept);
-  // };
+  }, []);
 
   const handleSearchConcept = async (value) => {
     if (value.length >= 0) {
@@ -63,36 +53,33 @@ const SearchConcept = (props) => {
     }
   };
 
-  // const handleChange = (event) => {
-  //   const value = event.target.value;
-  //   setConceptName(value);
-  //   debounced(value);
-  // };
-
   const handleOnSearch = (string, results) => {
     // onSearch will have as the first callback parameter
     // the string searched and for the second the results.
-    setConceptName(string);
-    debounced(string);
-  };
-
-  const handleOnHover = (result) => {
-    // the item hovered
-    // console.log(result)
+    // setConceptName(string);
+    console.log('RESULTS:', results)
+    console.log('SEARCHING...', string);
+    handleSearchConcept(string);
+    // debounced(string);
   };
 
   const handleOnSelect = (concept) => {
     props.onSelect(concept);
-    console.log(concept);
+    // console.log(concept);
   };
 
   const handleOnFocus = () => {
-    // console.log('Focused')
-  };
+    console.log('ON FOCUS: ', props.clearSearchConcept)
+    if (props.clearSearchConcept) {
+      setConceptName("");
+      props.onClearSearchConcept(false);
+    }
+  }
 
   const formatResult = (concept) => {
+    console.log('Format Result WAS CALLED.')
     return (
-      <>
+      <div>
         <span className="d-block">{concept.description}</span>
         <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
           <em>
@@ -100,7 +87,7 @@ const SearchConcept = (props) => {
               concept.type.replace("S", "Salida").replace("E", "Entrada")}
           </em>
         </span>
-      </>
+      </div>
     );
   };
 
@@ -112,14 +99,16 @@ const SearchConcept = (props) => {
       <ReactSearchAutocomplete
         items={concepts}
         onSearch={handleOnSearch}
-        onHover={handleOnHover}
         onSelect={handleOnSelect}
         onFocus={handleOnFocus}
-        autoFocus
+        // onClear={() => setConceptName("")}
+        inputSearchString={conceptName}
+        inputDebounce={200}
         formatResult={formatResult}
         fuseOptions={{ keys: ["type", "description"] }} // Search on both fields
         resultStringKeyName="description" // String to display in the results
         showIcon={false}
+        showNoResultsText="No se existe el concepto."
         styling={{
           height: "30px",
           // border: "1px solid darkgreen",

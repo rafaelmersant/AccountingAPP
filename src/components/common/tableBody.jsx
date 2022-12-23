@@ -50,11 +50,11 @@ class TableBody extends Component {
 
   render() {
     const { data, columns } = this.props;
-
+    
     return (
       <tbody>
-        {data.map((item) => (
-          <tr key={item.product_id || item.id}>
+        {data.map((item, index) => (
+          <tr key={item.product_id || item.id || index}>
             {columns.map((column) => (
               <td key={this.createKey(item, column)} className="py-1">
                 {this.renderCell(item, column)}
