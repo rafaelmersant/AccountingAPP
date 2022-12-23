@@ -115,7 +115,8 @@ class EntryForm extends Form {
     serializedEntryHeader: {},
     serializedEntryDetail: [],
     totalEntradas: 0,
-    totalSalidas: 0
+    totalSalidas: 0,
+    totalDiezmos: 0
   };
 
   //Schema (Joi)
@@ -162,7 +163,7 @@ class EntryForm extends Form {
 
   updateLine = (concept) => {
     const line = { ...this.state.line };
-    let {totalEntradas, totalSalidas} = {...this.state};
+    let {totalEntradas, totalSalidas, totalDiezmos} = {...this.state};
         
     line.concept_id = concept.id;
     line.concept = concept.description;
@@ -179,8 +180,11 @@ class EntryForm extends Form {
 
     if (line.type === "E")
       totalEntradas += parseFloat(amount);
+
+    if (line.concept_id === 2)
+      totalDiezmos += parseFloat(amount);
     
-    this.setState({ line, totalEntradas,  totalSalidas });
+    this.setState({ line, totalEntradas,  totalSalidas, totalDiezmos });
     this.updateTotals();
   };
 
@@ -188,6 +192,7 @@ class EntryForm extends Form {
     const data = { ...this.state.data };
     let totalEntradas = 0;
     let totalSalidas = 0;
+    let totalDiezmos = 0;
 
     data.total_amount = 0;
 
@@ -198,16 +203,19 @@ class EntryForm extends Form {
     //Total Entradas/Salidas
     this.state.details.forEach((item) => {
       if (item.type === "S" && item.concept.id !== 7)
-          totalSalidas += Math.abs(
-            Math.round(parseFloat(item.amount) * 100) / 100
-          );
+        totalSalidas += Math.abs(
+          Math.round(parseFloat(item.amount) * 100) / 100
+        );
 
-        if (item.type === "E") 
+      if (item.type === "E")
         totalEntradas += Math.round(parseFloat(item.amount) * 100) / 100;
+
+      if (item.concept.id === 2)
+        totalDiezmos += Math.round(parseFloat(item.amount) * 100) / 100;
     });
 
     data.total_amount = Math.round(data.total_amount * 100) / 100;
-    this.setState({ data, totalEntradas, totalSalidas });
+    this.setState({ data, totalEntradas, totalSalidas, totalDiezmos });
   };
 
   async populateEntry() {
@@ -234,6 +242,8 @@ class EntryForm extends Form {
       //Total Entradas/Salidas
       let totalEntradas = 0;
       let totalSalidas = 0;
+      let totalDiezmos = 0;
+
       entryDetail.forEach((item) => {
         if (item.type === "S" && item.concept.id !== 7)
           totalSalidas += Math.abs(
@@ -242,6 +252,9 @@ class EntryForm extends Form {
 
         if (item.type === "E")
           totalEntradas += Math.round(parseFloat(item.amount) * 100) / 100;
+
+        if (item.concept.id === 2)
+          totalDiezmos += Math.round(parseFloat(item.amount) * 100) / 100;
       });
 
       this.setState({
@@ -259,6 +272,7 @@ class EntryForm extends Form {
         loading: false,
         totalEntradas,
         totalSalidas,
+        totalDiezmos
       });
 
       this.forceUpdate();
@@ -892,6 +906,7 @@ console.log('Edit Detail:', detail);
                   details={this.state.details}
                   totalEntradas={this.state.totalEntradas}
                   totalSalidas={this.state.totalSalidas}
+                  totalDiezmos={this.state.totalDiezmos}
                   user={user}
                   onDelete={this.handleDeleteDetail}
                   onEdit={this.handleEditDetail}
