@@ -239,6 +239,7 @@ class EntryForm extends Form {
         loading: false,
       });
 
+      this.updateTotals();
       this.forceUpdate();
 
       if (sessionStorage["printEntry"] === "y") {
