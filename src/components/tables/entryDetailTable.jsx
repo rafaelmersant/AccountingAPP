@@ -96,13 +96,13 @@ class EntryDetailTable extends Component {
           {details.length > 0 && (
             <tfoot>
               <tr className="table-active">
-                <th>Total Entradas:</th>
-                <th className="text-right">{formatNumber(totalEntradas)}</th>
-                <th>Total Salidas:</th>
-                <th className="text-right">{formatNumber(totalSalidas)}</th>
+                <th className="text-right">Total Entradas:</th>
+                <th className="text-left">{formatNumber(totalEntradas)}</th>
+                <th className="text-right">Total Salidas:</th>
+                <th className="text-left">{formatNumber(totalSalidas)}</th>
                 <th></th>
-                <th>Total:</th>
-                <th className="text-right">{formatNumber(entryHeader.total_amount)}</th>
+                <th className="text-right">Total:</th>
+                <th className="text-left">{formatNumber(entryHeader.total_amount)}</th>
                 <th></th>
                 {/* {(!entryHeader.id) && <th></th>} */}
               </tr>
