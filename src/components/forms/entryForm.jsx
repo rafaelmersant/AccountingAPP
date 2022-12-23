@@ -224,6 +224,17 @@ class EntryForm extends Form {
         ? `${entryHeader.person.first_name} ${entryHeader.person.last_name}`
         : "";
 
+      //Total Entradas/Salidas
+      let {totalEntradas, totalSalidas} = {...this.state};
+      entryDetail.forEach((item) => {
+        if (item.type !== "S")
+          totalEntradas += Math.round(parseFloat(item.amount) * 100) / 100;
+        else
+          totalSalidas += Math.abs(
+            Math.round(parseFloat(item.amount) * 100) / 100
+          );
+      });
+
       this.setState({
         data: entryHeaderMapped,
         details: mapToViewEntryDetail(entryDetail),
@@ -237,6 +248,8 @@ class EntryForm extends Form {
         serializedEntryHeader: entryHeader,
         serializedEntryDetail: entryDetail,
         loading: false,
+        totalEntradas,
+        totalSalidas
       });
 
       this.updateTotals();
