@@ -182,15 +182,25 @@ class EntryForm extends Form {
 
   updateTotals = () => {
     const data = { ...this.state.data };
+    let { totalEntradas, totalSalidas } = { ...this.sate };
+
     data.total_amount = 0;
 
     this.state.details.forEach((item) => {
       data.total_amount += Math.round(parseFloat(item.amount) * 100) / 100;
     });
 
+    //Total Entradas/Salidas
+    this.state.details.forEach((item) => {
+      if (item.type !== "S")
+        totalEntradas += Math.round(parseFloat(item.amount) * 100) / 100;
+      else
+        totalSalidas += Math.abs(Math.round(parseFloat(item.amount) * 100) / 100);
+    });
+
     data.total_amount = Math.round(data.total_amount * 100) / 100;
 
-    this.setState({ data });
+    this.setState({ data, totalEntradas, totalSalidas });
   };
 
   async populateEntry() {
@@ -394,7 +404,6 @@ class EntryForm extends Form {
       const duplicity = await this.validateDuplicity(line);
       if (this.state.line.concept_id) details.push(line);
 
-      console.log('Add detail:', line)
       this.setState({
         details,
         currentConcept: {},
