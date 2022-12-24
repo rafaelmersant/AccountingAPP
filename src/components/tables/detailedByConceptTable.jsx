@@ -92,9 +92,10 @@ class DetailedByConceptTable extends Component {
                 <td className="bg-info text-white h6">Total al pastor: {formatNumber((totalDiezmosResiduo * 0.70) + (totalOfrendaResiduo * 0.90))}</td>
               </tr>
               <tr>
-                <td className="bg-info text-white h6">Total al copastor - adelanto: {formatNumber((totalDiezmosResiduo * 0.10) + (totalOfrendaResiduo * 0.10) - adelantoCopastor)}</td>
-                <td className="bg-info text-white h6">Total al pastor - adelanto: {formatNumber((totalDiezmosResiduo * 0.70) + (totalOfrendaResiduo * 0.90) - adelantoPastor)}</td>
-                <td colSpan={2} className="bg-info text-white h6">Total 20% - adelanto: {formatNumber((totalDiezmosResiduo * 0.20) - adelantoConcilio)}</td>
+                <td className="bg-warning text-dark h6">Copastor - adelanto: {formatNumber((totalDiezmosResiduo * 0.10) + (totalOfrendaResiduo * 0.10) - adelantoCopastor)}</td>
+                <td className="bg-warning text-dark h6">Pastor - adelanto: {formatNumber((totalDiezmosResiduo * 0.70) + (totalOfrendaResiduo * 0.90) - adelantoPastor)}</td>
+                <td className="bg-warning text-dark h6">Total 20% - adelanto: {formatNumber((totalDiezmosResiduo * 0.20) - adelantoConcilio)}</td>
+                <td className="bg-warning text-warning h6">|</td>
               </tr>
             </thead>
           </table>
