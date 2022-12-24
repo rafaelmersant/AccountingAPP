@@ -17,7 +17,7 @@ const SearchConcept = (props) => {
       // handleSearchConcept("");
       props.onClearSearchConcept(false);
     }
-  }, [concepts, conceptName, props]);
+  }, [conceptName, props]);
 
   const handleSearchConcept = async (value) => {
     console.log('this will be searched:', value)
@@ -27,7 +27,6 @@ const SearchConcept = (props) => {
       let { data: _concepts } = await getConceptsByName(conceptNameQuery);
       console.log('FIRST concepts:', _concepts);
       _concepts = _concepts.results;
-      setConcepts(_concepts.results);
 
       if (value === "" || value.length < 1) _concepts = [];
 
@@ -47,10 +46,7 @@ const SearchConcept = (props) => {
       //   ? _.orderBy(_concepts, ["ocurrences"], ["desc"])
       //   : _concepts;
 
-        console.log('_concepts:', _concepts)
       setConcepts(_concepts);
-      console.log('concepts:', concepts)
-
     } else {
       setConcepts([]);
     }
