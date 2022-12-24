@@ -8,7 +8,7 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 const SearchConcept = (props) => {
   const [concepts, setConcepts] = useState([]);
   const [conceptName, setConceptName] = useState(props.value);
-  
+
   useEffect(() => {
     if (props.value) setConceptName(props.value);
 
@@ -17,15 +17,17 @@ const SearchConcept = (props) => {
       // handleSearchConcept("");
       props.onClearSearchConcept(false);
     }
-  }, [props]);
+  }, [concepts, conceptName, props]);
 
   const handleSearchConcept = async (value) => {
+    console.log('this will be searched:', value)
     if (value.length >= 0) {
       const conceptNameQuery = value.toUpperCase().split(" ").join("%20");
 
       let { data: _concepts } = await getConceptsByName(conceptNameQuery);
-
+      console.log('FIRST concepts:', _concepts);
       _concepts = _concepts.results;
+      setConcepts(_concepts.results);
 
       if (value === "" || value.length < 1) _concepts = [];
 
@@ -41,11 +43,14 @@ const SearchConcept = (props) => {
         ];
       }
 
-      _concepts = _concepts.length
-        ? _.orderBy(_concepts, ["ocurrences"], ["desc"])
-        : _concepts;
+      // _concepts = _concepts.length
+      //   ? _.orderBy(_concepts, ["ocurrences"], ["desc"])
+      //   : _concepts;
 
+        console.log('_concepts:', _concepts)
       setConcepts(_concepts);
+      console.log('concepts:', concepts)
+
     } else {
       setConcepts([]);
     }
@@ -56,6 +61,8 @@ const SearchConcept = (props) => {
     // the string searched and for the second the results.
     // setConceptName(string);
 
+    console.log('searching:', string)
+    console.log('searching results:', results)
     handleSearchConcept(string);
     // debounced(string);
   };
@@ -99,12 +106,12 @@ const SearchConcept = (props) => {
         onFocus={handleOnFocus}
         // onClear={() => setConceptName("")}
         inputSearchString={conceptName}
-        inputDebounce={200}
+        inputDebounce={400}
         formatResult={formatResult}
         fuseOptions={{ keys: ["type", "description"] }} // Search on both fields
         resultStringKeyName="description" // String to display in the results
         showIcon={false}
-        showNoResultsText="No se existe el concepto."
+        showNoResultsText="No existe el concepto."
         styling={{
           height: "30px",
           // border: "1px solid darkgreen",

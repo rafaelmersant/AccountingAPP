@@ -35,7 +35,13 @@ class DetailedByConceptTable extends Component {
       totalAmount,
       totalIngresos,
       totalEgresos,
+      totalDiezmos,
+      totalSalidas,
+      totalOfrendas,
+      ofrendaMisionera
     } = this.props;
+
+    const totalDiezmosResiduo = totalDiezmos - totalSalidas;
 
     return (
       <React.Fragment>
@@ -68,6 +74,18 @@ class DetailedByConceptTable extends Component {
                 <td colSpan={3} className="bg-dark text-white h6 text-right">
                   {formatNumber(totalAmount)}
                 </td>
+              </tr>
+              <tr>
+                <td className="bg-dark text-white h6">10% Diezmos: {formatNumber(totalDiezmosResiduo * 0.10)} </td>
+                <td className="bg-dark text-white h6">20% Diezmos: {formatNumber(totalDiezmosResiduo * 0.20)}</td>
+                <td className="bg-dark text-white h6">70% Diezmos: {formatNumber(totalDiezmosResiduo * 0.70)}</td>
+                <td className="bg-dark text-white h6">Diezmos residuo: {formatNumber(totalDiezmosResiduo)}</td>
+              </tr>
+              <tr>
+                <td className="bg-dark text-white h6">10% Ofrendas: {formatNumber(totalOfrendas * 0.10)}</td>
+                <td className="bg-dark text-white h6">90% Ofrendas: {formatNumber(totalOfrendas * 0.90)}</td>
+                <td className="bg-dark text-white h6">Total al copastor: {formatNumber((totalDiezmosResiduo * 0.10) + (totalOfrendas * 0.10))}</td>
+                <td className="bg-dark text-white h6">Total al pastor: {formatNumber((totalDiezmosResiduo * 0.70) + (totalOfrendas * 0.90))}</td>
               </tr>
             </thead>
           </table>

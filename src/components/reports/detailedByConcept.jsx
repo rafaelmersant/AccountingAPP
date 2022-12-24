@@ -23,6 +23,10 @@ class DetailedByConcept extends Component {
     entries: [],
     totalCount: 0,
     totalAmount: 0,
+    totalDiezmos: 0,
+    totalOfrendas: 0,
+    totalSalidas: 0,
+    ofrendaMisionera: 0,
     sortColumn: { path: "concept", order: "desc" },
     months: [
       { id: "0", name: "TODOS" },
@@ -112,6 +116,10 @@ class DetailedByConcept extends Component {
     let totalIngresos = 0;
     let totalEgresos = 0;
     let totalAmount = 0;
+    let totalSalidas = 0;
+    let totalDiezmos = 0;
+    let totalOfrendas = 0;
+    let ofrendaMisionera = 0;
 
     for (const entry of allEntries) {
       for (const item of entry.item_set) {
@@ -131,6 +139,18 @@ class DetailedByConcept extends Component {
             records[item.concept.description] = amount + acc;
             totalEgresos -= amount;
           }
+
+          if (item.concept.id === 8)
+            ofrendaMisionera = amount;
+          
+          if (item.concept.id === 2)
+            totalDiezmos += amount;
+          
+          if (item.type === "S")
+            totalSalidas += amount;
+          
+          if (item.concept.id === 1)
+            totalOfrendas += amount;
 
           console.log(`id: ${entry.id} - Concepto: ${item.concept.description} => ${amount}`);
         }
@@ -154,12 +174,24 @@ class DetailedByConcept extends Component {
       totalEgresos,
       entries,
       items,
+      totalDiezmos,
+      totalSalidas,
+      totalOfrendas,
+      ofrendaMisionera
     };
   };
 
   render() {
-    const { totalAmount, totalIngresos, totalEgresos, items } =
-      this.getPagedData();
+    const {
+      totalAmount,
+      totalIngresos,
+      totalEgresos,
+      items,
+      totalDiezmos,
+      totalSalidas,
+      totalOfrendas,
+      ofrendaMisionera,
+    } = this.getPagedData();
 
     return (
       <div className="container-fluid mb-3">
@@ -214,6 +246,10 @@ class DetailedByConcept extends Component {
                   totalAmount={totalAmount}
                   totalIngresos={totalIngresos}
                   totalEgresos={totalEgresos}
+                  totalDiezmos={totalDiezmos}
+                  totalSalidas={totalSalidas}
+                  totalOfrendas={totalOfrendas}
+                  ofrendaMisionera={ofrendaMisionera}
                 />
               </section>
             )}
