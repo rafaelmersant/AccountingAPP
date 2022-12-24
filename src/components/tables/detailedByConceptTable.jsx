@@ -38,10 +38,14 @@ class DetailedByConceptTable extends Component {
       totalDiezmos,
       totalSalidas,
       totalOfrendas,
-      ofrendaMisionera
+      ofrendaMisionera,
+      adelantoPastor,
+      adelantoCopastor,
+      adelantoConcilio
     } = this.props;
 
     const totalDiezmosResiduo = totalDiezmos + totalSalidas;
+    const totalOfrendaResiduo = totalOfrendas - ofrendaMisionera;
 
     return (
       <React.Fragment>
@@ -82,10 +86,15 @@ class DetailedByConceptTable extends Component {
                 <td className="bg-info text-white h6">Diezmos residuo: {formatNumber(totalDiezmosResiduo)}</td>
               </tr>
               <tr>
-                <td className="bg-info text-white h6">10% Ofrendas: {formatNumber(totalOfrendas * 0.10)}</td>
-                <td className="bg-info text-white h6">90% Ofrendas: {formatNumber(totalOfrendas * 0.90)}</td>
-                <td className="bg-info text-white h6">Total al copastor: {formatNumber((totalDiezmosResiduo * 0.10) + (totalOfrendas * 0.10))}</td>
-                <td className="bg-info text-white h6">Total al pastor: {formatNumber((totalDiezmosResiduo * 0.70) + (totalOfrendas * 0.90))}</td>
+                <td className="bg-info text-white h6">10% Ofrendas: {formatNumber(totalOfrendaResiduo * 0.10)}</td>
+                <td className="bg-info text-white h6">90% Ofrendas: {formatNumber(totalOfrendaResiduo * 0.90)}</td>
+                <td className="bg-info text-white h6">Total al copastor: {formatNumber((totalDiezmosResiduo * 0.10) + (totalOfrendaResiduo * 0.10))}</td>
+                <td className="bg-info text-white h6">Total al pastor: {formatNumber((totalDiezmosResiduo * 0.70) + (totalOfrendaResiduo * 0.90))}</td>
+              </tr>
+              <tr>
+                <td className="bg-info text-white h6">Total al copastor - adelanto: {formatNumber((totalDiezmosResiduo * 0.10) + (totalOfrendaResiduo * 0.10) - adelantoCopastor)}</td>
+                <td className="bg-info text-white h6">Total al pastor - adelanto: {formatNumber((totalDiezmosResiduo * 0.70) + (totalOfrendaResiduo * 0.90) - adelantoPastor)}</td>
+                <td colSpan={2} className="bg-info text-white h6">Total 20% - adelanto: {formatNumber((totalDiezmosResiduo * 0.20) - adelantoConcilio)}</td>
               </tr>
             </thead>
           </table>

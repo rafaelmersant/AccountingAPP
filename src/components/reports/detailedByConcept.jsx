@@ -27,6 +27,9 @@ class DetailedByConcept extends Component {
     totalOfrendas: 0,
     totalSalidas: 0,
     ofrendaMisionera: 0,
+    adelantoPastor: 0,
+    adelantoCopastor: 0,
+    adelantoConcilio: 0,
     sortColumn: { path: "concept", order: "desc" },
     months: [
       { id: "0", name: "TODOS" },
@@ -120,6 +123,9 @@ class DetailedByConcept extends Component {
     let totalDiezmos = 0;
     let totalOfrendas = 0;
     let ofrendaMisionera = 0;
+    let adelantoPastor = 0;
+    let adelantoCopastor = 0;
+    let adelantoConcilio = 0;
 
     for (const entry of allEntries) {
       for (const item of entry.item_set) {
@@ -140,17 +146,19 @@ class DetailedByConcept extends Component {
             totalEgresos -= amount;
           }
 
-          if (item.concept.id === 8)
-            ofrendaMisionera = amount;
-          
-          if (item.concept.id === 2)
-            totalDiezmos += amount;
-          
-          if (item.type === "S")
-            totalSalidas += amount;
-          
-          if (item.concept.id === 1)
-            totalOfrendas += amount;
+          if (item.concept.id === 8) ofrendaMisionera = amount;
+
+          if (item.concept.id === 2) totalDiezmos += amount;
+
+          if (item.type === "S") totalSalidas += amount;
+
+          if (item.concept.id === 1) totalOfrendas += amount;
+
+          if (item.concept.id === 7) adelantoPastor += amount;
+
+          if (item.concept.id === 14) adelantoCopastor += amount;
+
+          if (item.concept.id === 12) adelantoConcilio += amount;
 
           console.log(`id: ${entry.id} - Concepto: ${item.concept.description} => ${amount}`);
         }
@@ -177,7 +185,10 @@ class DetailedByConcept extends Component {
       totalDiezmos,
       totalSalidas,
       totalOfrendas,
-      ofrendaMisionera
+      ofrendaMisionera,
+      adelantoPastor,
+      adelantoCopastor,
+      adelantoConcilio
     };
   };
 
@@ -191,6 +202,9 @@ class DetailedByConcept extends Component {
       totalSalidas,
       totalOfrendas,
       ofrendaMisionera,
+      adelantoPastor,
+      adelantoCopastor,
+      adelantoConcilio
     } = this.getPagedData();
 
     return (
@@ -250,6 +264,9 @@ class DetailedByConcept extends Component {
                   totalSalidas={totalSalidas}
                   totalOfrendas={totalOfrendas}
                   ofrendaMisionera={ofrendaMisionera}
+                  adelantoPastor={adelantoPastor}
+                  adelantoCopastor={adelantoCopastor}
+                  adelantoConcilio={adelantoConcilio}
                 />
               </section>
             )}
