@@ -88,14 +88,13 @@ class DetailedByConceptTable extends Component {
               <tr>
                 <td className="bg-info text-white h6">10% Ofrendas: {formatNumber(totalOfrendaResiduo * 0.10)}</td>
                 <td className="bg-info text-white h6">90% Ofrendas: {formatNumber(totalOfrendaResiduo * 0.90)}</td>
-                <td className="bg-info text-white h6">Total al copastor: {formatNumber((totalDiezmosResiduo * 0.10) + (totalOfrendaResiduo * 0.10))}</td>
                 <td className="bg-info text-white h6">Total al pastor: {formatNumber((totalDiezmosResiduo * 0.70) + (totalOfrendaResiduo * 0.90))}</td>
+                <td className="bg-info text-white h6">Total al copastor: {formatNumber((totalDiezmosResiduo * 0.10) + (totalOfrendaResiduo * 0.10))}</td>
               </tr>
               <tr>
-                <td className="bg-warning text-dark h6">Copastor - adelanto: {formatNumber((totalDiezmosResiduo * 0.10) + (totalOfrendaResiduo * 0.10) - adelantoCopastor)}</td>
-                <td className="bg-warning text-dark h6">Pastor - adelanto: {formatNumber((totalDiezmosResiduo * 0.70) + (totalOfrendaResiduo * 0.90) - adelantoPastor)}</td>
-                <td className="bg-warning text-dark h6">Total 20% - adelanto: {formatNumber((totalDiezmosResiduo * 0.20) - adelantoConcilio)}</td>
-                <td className="bg-warning text-warning h6">|</td>
+                <td colSpan={2} className="bg-warning text-dark h6">Total 20% - adelanto: {formatNumber((totalDiezmosResiduo * 0.20) + adelantoConcilio)}</td>
+                <td className="bg-warning text-dark h6">Pastor - adelanto: {formatNumber((totalDiezmosResiduo * 0.70) + (totalOfrendaResiduo * 0.90) + adelantoPastor)}</td>
+                <td className="bg-warning text-dark h6">Copastor - adelanto: {formatNumber((totalDiezmosResiduo * 0.10) + (totalOfrendaResiduo * 0.10) + adelantoCopastor)}</td>
               </tr>
             </thead>
           </table>
