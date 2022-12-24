@@ -41,7 +41,7 @@ class DetailedByConceptTable extends Component {
       ofrendaMisionera
     } = this.props;
 
-    const totalDiezmosResiduo = totalDiezmos - totalSalidas;
+    const totalDiezmosResiduo = totalDiezmos + totalSalidas;
 
     return (
       <React.Fragment>
