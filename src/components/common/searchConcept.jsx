@@ -56,14 +56,14 @@ const SearchConcept = (props) => {
     }
   };
 
-  const handleOnSearch = (string, results) => {
+  const handleOnSearch = async (string, results) => {
     // onSearch will have as the first callback parameter
     // the string searched and for the second the results.
     // setConceptName(string);
 
     console.log('searching:', string)
     console.log('searching results:', results)
-    handleSearchConcept(string);
+    await handleSearchConcept(string);
     // debounced(string);
   };
 
@@ -106,7 +106,7 @@ const SearchConcept = (props) => {
         onFocus={handleOnFocus}
         // onClear={() => setConceptName("")}
         inputSearchString={conceptName}
-        inputDebounce={400}
+        // inputDebounce={400}
         formatResult={formatResult}
         fuseOptions={{ keys: ["type", "description"] }} // Search on both fields
         resultStringKeyName="description" // String to display in the results
