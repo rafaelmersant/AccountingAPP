@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import Input from "./input";
-import { getConceptsByName } from "../../services/conceptService";
 import _ from "lodash";
-// import { debounce } from "throttle-debounce";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 
 const SearchConcept = (props) => {
@@ -11,56 +8,20 @@ const SearchConcept = (props) => {
 
   useEffect(() => {
     if (props.value) setConceptName(props.value);
-
+console.log('clearSearchConcept:', props.clearSearchConcept);
     if (props.clearSearchConcept) {
       setConceptName("");
-      // handleSearchConcept("");
       props.onClearSearchConcept(false);
     }
-  }, [conceptName, props]);
+  }, [props.clearSearchConcept]);
 
-  const handleSearchConcept = async (value) => {
-    console.log('this will be searched:', value)
-    if (value.length >= 0) {
-      const conceptNameQuery = value.toUpperCase().split(" ").join("%20");
-
-      let { data: _concepts } = await getConceptsByName(conceptNameQuery);
-      console.log('FIRST concepts:', _concepts);
-      _concepts = _concepts.results;
-
-      if (value === "" || value.length < 1) _concepts = [];
-
-      if (value.length > 0 && _concepts.length === 0) {
-        _concepts = [
-          {
-            id: 0,
-            description: "No existe el concepto, desea crearlo?",
-            type: "E",
-            created_date: new Date().toJSON(),
-            created_by: 1
-          },
-        ];
-      }
-
-      // _concepts = _concepts.length
-      //   ? _.orderBy(_concepts, ["ocurrences"], ["desc"])
-      //   : _concepts;
-
-      setConcepts(_concepts);
-    } else {
-      setConcepts([]);
-    }
-  };
-
+  
   const handleOnSearch = async (string, results) => {
     // onSearch will have as the first callback parameter
     // the string searched and for the second the results.
-    // setConceptName(string);
-
+    props.onClearSearchConcept(true);
     console.log('searching:', string)
     console.log('searching results:', results)
-    await handleSearchConcept(string);
-    // debounced(string);
   };
 
   const handleOnSelect = (concept) => {
@@ -68,15 +29,7 @@ const SearchConcept = (props) => {
     // console.log(concept);
   };
 
-  const handleOnFocus = () => {
-    if (props.clearSearchConcept) {
-      setConceptName("");
-      props.onClearSearchConcept(false);
-    }
-  }
-
   const formatResult = (concept) => {
-    console.log('Format Result WAS CALLED.')
     return (
       <div>
         <span className="d-block">{concept.description}</span>
@@ -96,15 +49,12 @@ const SearchConcept = (props) => {
     <div>
       <label htmlFor="">Concepto</label>
       <ReactSearchAutocomplete
-        items={concepts}
+        items={props.allConcepts}
         onSearch={handleOnSearch}
         onSelect={handleOnSelect}
-        onFocus={handleOnFocus}
-        // onClear={() => setConceptName("")}
         inputSearchString={conceptName}
-        // inputDebounce={400}
         formatResult={formatResult}
-        fuseOptions={{ keys: ["type", "description"] }} // Search on both fields
+        fuseOptions={{ keys: ["description"] }} // Search on both fields
         resultStringKeyName="description" // String to display in the results
         showIcon={false}
         showNoResultsText="No existe el concepto."
@@ -127,45 +77,6 @@ const SearchConcept = (props) => {
         }}
       />
     </div>
-
-    // <div>
-    //   <Input
-    //     type="text"
-    //     id="searchConceptId"
-    //     name="query"
-    //     className="form-control form-control-sm"
-    //     placeholder="Buscar concepto..."
-    //     autoComplete="Off"
-    //     onChange={(e) => handleChange(e)}
-    //     onFocus={onFocus}
-    //     onBlur={onBlur}
-    //     value={conceptName}
-    //     label={label}
-    //   />
-
-    //   {concepts.length > 0 && !hide && (
-    //     <div
-    //       className="list-group col-12 shadow bg-white position-absolute p-0"
-    //       style={{ marginTop: "-15px", zIndex: "999", maxWidth: "600px" }}
-    //     >
-    //       {concepts.map((concept) => (
-    //         <div
-    //           key={concept.id}
-    //           onClick={() => handleSelectConcept(concept)}
-    //           className="list-group-item list-group-item-action w-100 py-2 bg-info"
-    //         >
-    //           <span className="d-block">{concept.description}</span>
-    //           <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
-    //             <em>
-    //               {"Tipo: " +
-    //                 concept.type.replace("S", "Salida").replace("E", "Entrada")}
-    //             </em>
-    //           </span>
-    //         </div>
-    //       ))}
-    //     </div>
-    //   )}
-    // </div>
   );
 };
 

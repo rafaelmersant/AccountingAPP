@@ -37,7 +37,7 @@ import {
 import ChurchModal from "../modals/churchModal";
 import PersonModal from "../modals/personModal";
 import ConceptModal from "../modals/conceptModal";
-import { getConcept, getConcepts } from "../../services/conceptService";
+import { getConcept, getConcepts, getConceptsByName } from "../../services/conceptService";
 import Select from "../common/select";
 
 registerLocale("es", es);
@@ -116,7 +116,7 @@ class EntryForm extends Form {
     serializedEntryDetail: [],
     totalEntradas: 0,
     totalSalidas: 0,
-    totalDiezmos: 0
+    totalDiezmos: 0,
   };
 
   //Schema (Joi)
@@ -163,14 +163,13 @@ class EntryForm extends Form {
 
   updateLine = (concept) => {
     const line = { ...this.state.line };
-    let {totalEntradas, totalSalidas, totalDiezmos} = {...this.state};
-        
+    let { totalEntradas, totalSalidas, totalDiezmos } = { ...this.state };
+
     line.concept_id = concept.id;
     line.concept = concept.description;
     line.type = concept.type;
-    
-    
-    console.log('line', line)
+
+    console.log("line", line);
     const amount = line.amount === "" ? 0 : line.amount;
 
     if (line.type === "S" && line.concept_id !== 7) {
@@ -178,13 +177,11 @@ class EntryForm extends Form {
       totalSalidas += Math.abs(amount);
     }
 
-    if (line.type === "E")
-      totalEntradas += parseFloat(amount);
+    if (line.type === "E") totalEntradas += parseFloat(amount);
 
-    if (line.concept_id === 2)
-      totalDiezmos += parseFloat(amount);
-    
-    this.setState({ line, totalEntradas,  totalSalidas, totalDiezmos });
+    if (line.concept_id === 2) totalDiezmos += parseFloat(amount);
+
+    this.setState({ line, totalEntradas, totalSalidas, totalDiezmos });
     this.updateTotals();
   };
 
@@ -272,7 +269,7 @@ class EntryForm extends Form {
         loading: false,
         totalEntradas,
         totalSalidas,
-        totalDiezmos
+        totalDiezmos,
       });
 
       this.forceUpdate();
@@ -443,8 +440,45 @@ class EntryForm extends Form {
       this.setState({
         details,
         currentConcept: {},
-        searchConceptText: ""
+        searchConceptText: "",
         // clearSearchConcept: true,
+      });
+
+      this.handleSearchConcept(true);
+      this.updateTotals();
+      this.resetLineValues();
+    }, 150);
+  };
+
+  handleAddDetailDiezmo = () => {
+    const handler = (e) => {
+      e.preventDefault();
+    };
+    handler(window.event);
+
+    setTimeout(async () => {
+      const diezmo = this.state.concepts.filter(item => item.id === 2);
+      
+      this.setState({currentConcept: diezmo[0]});
+      this.updateLine(diezmo[0]);
+      
+      const details = [...this.state.details];
+      const line = { ...this.state.line };
+      const data = { ...this.state.data };
+      
+      line.concept = diezmo[0].description;
+      line.concept_id = diezmo[0].id;
+      line.amount = Math.round(parseFloat(this.state.data.note) * 100) / 100;
+      line.reference = this.state.searchPersonText;
+      console.log('line x:', line)
+
+      if (this.state.line.concept_id) details.push(line);
+      data.note = "";
+    
+      this.setState({
+        details,
+        data,
+        currentConcept: {},
       });
 
       this.handleSearchConcept(true);
@@ -484,7 +518,7 @@ class EntryForm extends Form {
       e.preventDefault();
     };
     handler(window.event);
-console.log('Edit Detail:', detail);
+    console.log("Edit Detail:", detail);
 
     const line = { ...detail };
     const { data: concept } = await getConcept(detail.concept_id);
@@ -675,8 +709,8 @@ console.log('Edit Detail:', detail);
   };
 
   handleSearchConcept = async (value) => {
-    this.setState({clearSearchConcept: value});
-  }
+    this.setState({ clearSearchConcept: value });
+  };
 
   render() {
     const { user } = this.props;
@@ -758,7 +792,7 @@ console.log('Edit Detail:', detail);
                     clearSearchPerson={this.state.clearSearchPerson}
                     hide={this.state.hideSearchPerson}
                     value={this.state.searchPersonText}
-                    label="Miembro"
+                    label="Diezmo de Miembro"
                   />
                 </div>
                 <div>
@@ -783,8 +817,26 @@ console.log('Edit Detail:', detail);
                   )}
                 </div>
 
-                <div className="col-4">
-                  {this.renderInput("note", "Nota", "text", "", "Opcional")}
+                <div className="col-2">
+                  {this.renderInput(
+                    "note",
+                    "Monto",
+                    "text",
+                    "",
+                    "Monto del Diezmo"
+                  )}
+                </div>
+                <div className="col-2">
+                  <button
+                    className="btn btn-warning text-black btn-sm"
+                    style={{ marginTop: "2.3em" }}
+                    onClick={this.handleAddDetailDiezmo}
+                    disabled={
+                      !this.state.data.person_id || !this.state.data.note
+                    }
+                  >
+                    Agregar Diezmo
+                  </button>
                 </div>
               </div>
 
@@ -799,6 +851,7 @@ console.log('Edit Detail:', detail);
                     hide={this.state.hideSearchConcept}
                     value={this.state.searchConceptText}
                     label="Concepto"
+                    allConcepts={this.state.concepts}
                   />
                 </div>
                 {Object.keys(this.state.currentConcept).length > 0 && (
