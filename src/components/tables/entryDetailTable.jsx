@@ -23,16 +23,6 @@ class EntryDetailTable extends Component {
         </span>
       ),
     },    
-    {
-      path: "period_month",
-      label: "Mes",
-      content: (item) => (
-        <div className="text-right">
-          <span>{getMonthName(item.period_month)}</span>
-        </div>
-      ),
-    },
-    { path: "period_year", label: "Año" },
     { path: "reference", label: "Referencia" },
     {
       path: "amount",
@@ -96,15 +86,11 @@ class EntryDetailTable extends Component {
           {details.length > 0 && (
             <tfoot>
               <tr className="table-active">
-                <th className="text-right">Total Entradas:</th>
-                <th className="text-left">{formatNumber(totalEntradas)}</th>
-                <th className="text-right">Total Salidas:</th>
-                <th className="text-left">{formatNumber(totalSalidas)}</th>
-                <th className="text-right">Total Diezmos:</th>
-                <th className="text-left">{formatNumber(totalDiezmos)}</th>
-                <th className="text-right">Total:</th>
-                <th className="text-left">{formatNumber(entryHeader.total_amount)}</th>
-                {/* {(!entryHeader.id) && <th></th>} */}
+                <th className="text-right">Total Entradas: {formatNumber(totalEntradas)}</th>
+                <th className="text-right">Total Salidas: {formatNumber(totalSalidas)}</th>
+                <th className="text-right">Total Diezmos: {formatNumber(totalDiezmos)}</th>
+                <th className="text-right">Total: {formatNumber(entryHeader.total_amount)}</th>
+                <th colSpan={2} className="text-right"></th>
               </tr>
             </tfoot>
           )}

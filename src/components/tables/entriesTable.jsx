@@ -40,11 +40,27 @@ class EntriesTable extends Component {
     //   ),
     // },
     {
+      path: "detail",
+      label: "Detalle",
+      content: (entry) =>
+        entry.item_set.map((item) => (
+          <div className="text-left" key={item.id}>
+            <span style={{ fontSize: "12px" }}>
+              {item.concept.description}{" "}
+              {item.reference && <span>({item.reference})</span>}:{" "}
+              <strong>{formatNumber(item.amount)}</strong>
+            </span>
+          </div>
+        )),
+    },
+    {
       path: "total_amount",
       label: "Monto",
       content: (entry) => (
         <div className="text-right">
-          <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
+          <span
+            className={entry.total_amount > 0 ? "text-dark" : "text-danger"}
+          >
             {formatNumber(entry.total_amount)}
           </span>
         </div>
@@ -56,7 +72,11 @@ class EntriesTable extends Component {
       classes: "min-width-entries-column-1",
       content: (entry) => <span>{entry.created_by.name}</span>,
     },
-    { path: "entry_date", label: "Fecha (m/d/a)", classes: "min-width-entries-column-1" },
+    {
+      path: "entry_date",
+      label: "Fecha (m/d/a)",
+      classes: "min-width-entries-column-1",
+    },
   ];
 
   deleteColumn = {
@@ -81,7 +101,7 @@ class EntriesTable extends Component {
 
   render() {
     const { entries, sortColumn, onSort } = this.props;
-
+    console.log("entires:", entries);
     return (
       <Table
         columns={this.columns}

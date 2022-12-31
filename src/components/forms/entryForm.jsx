@@ -731,7 +731,7 @@ class EntryForm extends Form {
           >
             <form onSubmit={this.handleSubmit}>
               <div className="row">
-                <div className="col-8">
+                <div className="col-6">
                   <SearchChurch
                     onSelect={this.handleSelectChurch}
                     onFocus={() => this.handleFocusChurch(false)}
@@ -764,7 +764,7 @@ class EntryForm extends Form {
                   )}
                 </div>
 
-                <div className="col-2">
+                <div className="col-2 col-md-3 col-sm-3">
                   <label className="mr-1">Fecha</label>
                   <div
                     className="mr-3"
@@ -784,7 +784,7 @@ class EntryForm extends Form {
               </div>
 
               <div className="row">
-                <div className="col-8">
+                <div className="col-6">
                   <SearchPerson
                     onSelect={this.handleSelectPerson}
                     onFocus={() => this.handleFocusPerson(false)}
@@ -817,7 +817,7 @@ class EntryForm extends Form {
                   )}
                 </div>
 
-                <div className="col-2">
+                <div className="col-2 col-md-3 col-sm-3">
                   {this.renderInput(
                     "note",
                     "Monto",
@@ -826,10 +826,10 @@ class EntryForm extends Form {
                     "Monto del Diezmo"
                   )}
                 </div>
-                <div className="col-2">
+                <div className="col-2 col-md-3 col-sm-3">
                   <button
                     className="btn btn-warning text-black btn-sm"
-                    style={{ marginTop: "2.3em" }}
+                    style={{ marginTop: "2.3em", marginLeft: "-25px" }}
                     onClick={this.handleAddDetailDiezmo}
                     disabled={
                       !this.state.data.person_id || !this.state.data.note
@@ -893,7 +893,7 @@ class EntryForm extends Form {
                     error={null}
                   />
                 </div>
-                <div className="col-1 mr-0 ml-0 pr-0 pl-0">
+                {/* <div className="col-1 mr-0 ml-0 pr-0 pl-0">
                   <Select
                     name="period_month"
                     value={this.state.line.period_month}
@@ -911,7 +911,7 @@ class EntryForm extends Form {
                     label="Año"
                     onChange={this.handleChangeEntryLine}
                   />
-                </div>
+                </div> */}
                 <div className="col-2 mr-0 ml-0 pr-0 pl-0">
                   <Input
                     type="text"
@@ -939,6 +939,7 @@ class EntryForm extends Form {
                 >
                   <button
                     className="btn btn-info btn-sm ml-1 pl-3 pr-3"
+                    style={{minWidth: "120px"}}
                     onClick={this.handleAddDetail}
                     disabled={this.validateLine()}
                   >

@@ -215,7 +215,7 @@ class DetailedByConcept extends Component {
               Reporte Detallado por Concepto
             </h2>
             <div className="d-flex flex-row">
-              <div className="col-2">
+              <div className="col-2 col-sm-3 col-md-3">
                 <div className="mr-3">
                   <Select
                     name="period_month"
@@ -253,7 +253,7 @@ class DetailedByConcept extends Component {
             )}
 
             {!this.state.loading && (
-              <section className="w-50">
+              <section className="col-6 col-sm-12 col-md-12">
                 <DetailedByConceptTable
                   items={items}
                   sortColumn={this.state.sortColumn}
