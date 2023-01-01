@@ -15,30 +15,6 @@ class EntriesTable extends Component {
         </div>
       ),
     },
-    // {
-    //   path: "church",
-    //   label: "Iglesia",
-    //   content: (entry) => (
-    //     <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
-    //       {entry.church && `${entry.church.global_title}`}
-    //     </span>
-    //   ),
-    // },
-    // {
-    //   path: "person",
-    //   label: "Obrero",
-    //   content: (entry) => (
-    //     <div>
-    //       <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
-    //         {entry.person &&
-    //           `${entry.person.first_name} ${entry.person.last_name}`}
-    //       </span>
-    //       <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
-    //         {!entry.church && !entry.person && `Nota: ${entry.note}`}
-    //       </span>
-    //     </div>
-    //   ),
-    // },
     {
       path: "detail",
       label: "Detalle",
@@ -48,7 +24,7 @@ class EntriesTable extends Component {
             <span style={{ fontSize: "12px" }}>
               {item.concept.description}{" "}
               {item.reference && <span>({item.reference})</span>}:{" "}
-              <strong>{formatNumber(item.amount)}</strong>
+              <strong> <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>{formatNumber(item.amount)}</span></strong>
             </span>
           </div>
         )),
