@@ -626,9 +626,9 @@ class EntryForm extends Form {
 
       this.setState({ disabledSave: true });
 
-      const { data } = { ...this.state };
-      data.period_month = this.state.details[0].period_month;
-      data.period_year = this.state.details[0].period_year;
+      const { data, entryDate } = { ...this.state };
+      data.period_month = entryDate.getMonth() + 1; //this.state.details[0].period_month;
+      data.period_year = entryDate.getFullYear(); //this.state.details[0].period_year;
 
       const { data: entryHeader } = await saveEntryHeader(
         data,
@@ -644,8 +644,8 @@ class EntryForm extends Form {
           reference: item.reference,
           type: item.type,
           method: item.method,
-          period_year: item.period_year,
-          period_month: item.period_month,
+          period_year: entryDate.getFullYear(), //item.period_year,
+          period_month: entryDate.getMonth() + 1, //item.period_month,
           created_date: new Date().toISOString(),
         };
 
