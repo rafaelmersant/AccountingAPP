@@ -26,6 +26,7 @@ class DetailedByConcept extends Component {
     totalDiezmos: 0,
     totalOfrendas: 0,
     totalSalidas: 0,
+    totalSalidasLimpio: 0,
     ofrendaMisionera: 0,
     adelantoPastor: 0,
     adelantoCopastor: 0,
@@ -120,6 +121,7 @@ class DetailedByConcept extends Component {
     let totalEgresos = 0;
     let totalAmount = 0;
     let totalSalidas = 0;
+    let totalSalidasLimpio = 0;
     let totalDiezmos = 0;
     let totalOfrendas = 0;
     let ofrendaMisionera = 0;
@@ -151,6 +153,7 @@ class DetailedByConcept extends Component {
           if (item.concept.id === 2) totalDiezmos += amount;
 
           if (item.type === "S") totalSalidas += amount;
+          if (item.type === "S" && item.concept.id !== 7 && item.concept.id !== 12 && item.concept.id !== 14) totalSalidasLimpio += amount;
 
           if (item.concept.id === 1) totalOfrendas += amount;
 
@@ -184,6 +187,7 @@ class DetailedByConcept extends Component {
       items,
       totalDiezmos,
       totalSalidas,
+      totalSalidasLimpio,
       totalOfrendas,
       ofrendaMisionera,
       adelantoPastor,
@@ -200,6 +204,7 @@ class DetailedByConcept extends Component {
       items,
       totalDiezmos,
       totalSalidas,
+      totalSalidasLimpio,
       totalOfrendas,
       ofrendaMisionera,
       adelantoPastor,
@@ -262,6 +267,7 @@ class DetailedByConcept extends Component {
                   totalEgresos={totalEgresos}
                   totalDiezmos={totalDiezmos}
                   totalSalidas={totalSalidas}
+                  totalSalidasLimpio={totalSalidasLimpio}
                   totalOfrendas={totalOfrendas}
                   ofrendaMisionera={ofrendaMisionera}
                   adelantoPastor={adelantoPastor}

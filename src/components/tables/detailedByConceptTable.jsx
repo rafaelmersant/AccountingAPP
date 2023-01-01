@@ -37,6 +37,7 @@ class DetailedByConceptTable extends Component {
       totalEgresos,
       totalDiezmos,
       totalSalidas,
+      totalSalidasLimpio,
       totalOfrendas,
       ofrendaMisionera,
       adelantoPastor,
@@ -71,6 +72,12 @@ class DetailedByConceptTable extends Component {
                 </td>
                 <td className="bg-dark text-white h6 text-right">
                   {formatNumber(totalEgresos)}
+                </td>
+              </tr>
+              <tr>
+                <td className="bg-dark text-white h6">Total de Salidas (Limpio):</td>
+                <td colSpan={3} className="bg-dark text-white h6 text-right">
+                  {formatNumber(totalSalidasLimpio)}
                 </td>
               </tr>
               <tr>
