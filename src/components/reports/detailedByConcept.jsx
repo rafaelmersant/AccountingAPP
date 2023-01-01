@@ -253,7 +253,7 @@ class DetailedByConcept extends Component {
             )}
 
             {!this.state.loading && (
-              <section className="col-6 col-sm-12 col-md-12">
+              <section className="col-lg-6 col-sm-12 col-md-12">
                 <DetailedByConceptTable
                   items={items}
                   sortColumn={this.state.sortColumn}
