@@ -24,7 +24,7 @@ class EntriesTable extends Component {
             <span style={{ fontSize: "12px" }}>
               {item.concept.description}{" "}
               {item.reference && <span>({item.reference})</span>}:{" "}
-              <strong> <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>{formatNumber(item.amount)}</span></strong>
+              <strong> <span className={entry.amount > 0 ? "text-dark" : "text-danger"}>{formatNumber(item.amount)}</span></strong>
             </span>
           </div>
         )),
