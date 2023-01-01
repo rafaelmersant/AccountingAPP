@@ -45,7 +45,7 @@ class DetailedByConceptTable extends Component {
       adelantoConcilio
     } = this.props;
 
-    const totalDiezmosResiduo = totalDiezmos + totalSalidas;
+    const totalDiezmosResiduo = totalDiezmos + totalSalidasLimpio;
     const totalOfrendaResiduo = totalOfrendas - ofrendaMisionera;
 
     return (
