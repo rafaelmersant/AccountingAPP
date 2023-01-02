@@ -75,8 +75,8 @@ class DetailedByConceptTable extends Component {
                 </td>
               </tr>
               <tr>
-                <td className="bg-dark text-white h6">Total de Salidas (Limpio):</td>
-                <td colSpan={3} className="bg-dark text-white h6 text-right">
+                <td colSpan={3} className="bg-dark text-warning h6">Total de Salidas (Limpio):</td>
+                <td className="bg-dark text-warning h6 text-right">
                   {formatNumber(totalSalidasLimpio)}
                 </td>
               </tr>
