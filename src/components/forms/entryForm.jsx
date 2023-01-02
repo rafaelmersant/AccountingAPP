@@ -832,7 +832,7 @@ class EntryForm extends Form {
                     style={{ marginTop: "2.3em", marginLeft: "-25px" }}
                     onClick={this.handleAddDetailDiezmo}
                     disabled={
-                      !this.state.data.person_id || !this.state.data.note
+                      !this.state.searchPersonText || !this.state.data.note
                     }
                   >
                     Agregar Diezmo
