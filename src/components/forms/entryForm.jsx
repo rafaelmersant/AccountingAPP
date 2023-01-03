@@ -296,6 +296,10 @@ class EntryForm extends Form {
     }
   }
 
+  handleTypingPerson = (value) => {
+    this.setState({ searchPersonText: value });
+  };
+
   handleChangeEntryDate = (date) => {
     const data = { ...this.state.data };
     data.entry_date = date.toISOString();
@@ -470,6 +474,7 @@ class EntryForm extends Form {
       line.concept_id = diezmo[0].id;
       line.amount = Math.round(parseFloat(this.state.data.note) * 100) / 100;
       line.reference = this.state.searchPersonText;
+      console.log('this.state', this.state);
       console.log('line x:', line)
 
       if (this.state.line.concept_id) details.push(line);
@@ -789,6 +794,7 @@ class EntryForm extends Form {
                     onSelect={this.handleSelectPerson}
                     onFocus={() => this.handleFocusPerson(false)}
                     onBlur={() => this.handleFocusPerson(true)}
+                    onTyping={(value) => this.handleTypingPerson(value)}
                     clearSearchPerson={this.state.clearSearchPerson}
                     hide={this.state.hideSearchPerson}
                     value={this.state.searchPersonText}
@@ -831,9 +837,7 @@ class EntryForm extends Form {
                     className="btn btn-warning text-black btn-sm"
                     style={{ marginTop: "2.3em", marginLeft: "-25px" }}
                     onClick={this.handleAddDetailDiezmo}
-                    disabled={
-                      !this.state.searchPersonText || !this.state.data.note
-                    }
+                    disabled={this.state.searchPersonText.length === 0 && this.state.data.note.length === 0}
                   >
                     Agregar Diezmo
                   </button>

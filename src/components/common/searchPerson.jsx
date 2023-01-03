@@ -56,6 +56,7 @@ const SearchPerson = (props) => {
   const handleChange = (event) => {
     const value = event.target.value;
     setPersonName(value);
+    props.onTyping(value);
 
     debounced(value);
   };
