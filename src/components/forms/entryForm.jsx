@@ -76,7 +76,7 @@ class EntryForm extends Form {
       type: "",
       method: "E",
       period_year: new Date().getFullYear(),
-      period_month: new Date().getMonth(),
+      period_month: new Date().getMonth() + 1,
       created_date: new Date().toISOString(),
       editing: false
     },
@@ -145,7 +145,7 @@ class EntryForm extends Form {
     line.type = "";
     line.method = "E";
     line.period_year = new Date().getFullYear();
-    line.period_month = new Date().getMonth();
+    line.period_month = new Date().getMonth() + 1;
     line.created_date = new Date().toISOString();
     line.editing = false;
 
