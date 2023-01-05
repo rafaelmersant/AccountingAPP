@@ -19,7 +19,7 @@ class EntryDetailTable extends Component {
       label: "Metodo",
       content: (item) => (
         <span>
-          {`${item.method.replace("E", "Efectivo").replace("D", "Deposito").replace("R", "Retenido")}`}
+          {`${item.method.replace("C", "Cheque").replace("E", "Efectivo").replace("D", "Deposito")}`}
         </span>
       ),
     },    
