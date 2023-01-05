@@ -83,6 +83,7 @@ class EntryForm extends Form {
     methods: [
       { id: "E", name: "Efectivo" },
       { id: "D", name: "Deposito" },
+      { id: "C", name: "Cheque" },
       // { id: "R", name: "Retenido" },
     ],
     months: [
