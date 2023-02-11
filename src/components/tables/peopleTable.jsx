@@ -46,7 +46,18 @@ class PeopleTable extends Component {
         );
       },
     },
-    { path: "created_date", label: "Creado (m/d/a)" },
+    {
+      path: "created_date",
+      label: "Creado (m/d/a)",
+      content: (person) => {
+        return (
+          <span>
+            {new Date(person.created_date).toLocaleDateString()}
+          </span>
+        );
+      },
+    },
+    // { path: "created_date", label: "Creado (m/d/a)" },
   ];
 
   deleteColumn = {
