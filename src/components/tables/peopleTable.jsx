@@ -25,7 +25,8 @@ class PeopleTable extends Component {
       label: "Credencial",
       content: (person) => (
         <span>
-          `${person.credential} desde ${person.credential_start}`
+          {`${person.credential}`}
+          {person.credential_start && ` - ${person.credential_start}`}
       </span>
       ),
     },
