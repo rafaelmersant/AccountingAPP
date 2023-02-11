@@ -12,7 +12,7 @@ class People extends Component {
     loading: true,
     people: [],
     currentPage: 1,
-    pageSize: 15,
+    pageSize: 2000,
     searchQuery: "",
     totalPeople: 0,
     sortColumn: { path: "created_date", order: "desc" },
