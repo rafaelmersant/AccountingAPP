@@ -20,7 +20,15 @@ class PeopleTable extends Component {
         <Link to={`/obrero/${person.id}`}> {person.last_name} </Link>
       ),
     },
-    { path: "credential", label: "Credencial" },
+    {
+      path: "credential",
+      label: "Credencial",
+      content: (person) => (
+        <span>
+          `${person.credential} desde ${person.credential_start}`
+      </span>
+      ),
+    },
     { path: "identification", label: "Cédula" },
     {
       path: "church_id",
