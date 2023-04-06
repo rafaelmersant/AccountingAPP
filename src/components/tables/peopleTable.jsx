@@ -27,7 +27,7 @@ class PeopleTable extends Component {
         <span>
           {`${person.credential}`}
           {person.credential_start && ` - ${person.credential_start}`}
-      </span>
+        </span>
       ),
     },
     { path: "identification", label: "Cédula" },
@@ -35,12 +35,7 @@ class PeopleTable extends Component {
       path: "church_id",
       label: "Iglesia",
       content: (person) => {
-        return (
-          <span>
-            {person.church &&
-              `${person.church.global_title}`}
-          </span>
-        );
+        return <span>{person.church && `${person.church.global_title}`}</span>;
       },
     },
     {
@@ -49,8 +44,7 @@ class PeopleTable extends Component {
       content: (person) => {
         return (
           <span>
-            {(person.church && person.church.zone &&
-              `${person.church.zone}`)}
+            {person.church && person.church.zone && `${person.church.zone}`}
           </span>
         );
       },
@@ -60,9 +54,7 @@ class PeopleTable extends Component {
       label: "Creado (m/d/a)",
       content: (person) => {
         return (
-          <span>
-            {new Date(person.created_date).toLocaleDateString()}
-          </span>
+          <span>{new Date(person.created_date).toLocaleDateString()}</span>
         );
       },
     },
@@ -81,13 +73,34 @@ class PeopleTable extends Component {
     ),
   };
 
+  attendanceColumn = {
+    key: "attendance",
+    content: (person) => (
+      <>
+        {!person.attendance && (
+          <div className="text-center">
+            <span
+              onClick={() => this.props.onAttendance(person)}
+              className="fa fa-user text-success cursor-pointer trash-size"
+            ></span>
+          </div>
+        )}
+        {person.attendance && (
+          <span className="fa fa-user text-secondary trash-size"></span>
+        )}
+       
+      </>
+    ),
+  };
+
   constructor() {
     super();
     const user = auth.getCurrentUser().email;
     const role = auth.getCurrentUser().role;
 
-    if (user && role === "Owner")
-      this.columns.push(this.deleteColumn);
+    this.columns.push(this.attendanceColumn);
+
+    if (user && role === "Owner") this.columns.push(this.deleteColumn);
   }
 
   render() {

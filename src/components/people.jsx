@@ -4,7 +4,7 @@ import Pagination from "react-js-pagination";
 import SearchBox from "./common/searchBox";
 //import NewButton from "./common/newButton";
 import Loading from "./common/loading";
-import { getPeople, deletePerson } from "../services/personService";
+import { getPeople, deletePerson, savePerson } from "../services/personService";
 import PeopleTable from "./tables/peopleTable";
 
 class People extends Component {
@@ -15,7 +15,7 @@ class People extends Component {
     pageSize: 2000,
     searchQuery: "",
     totalPeople: 0,
-    sortColumn: { path: "created_date", order: "desc" },
+    sortColumn: { path: "id", order: "asc" },
   };
 
   async componentDidMount() {
@@ -76,6 +76,24 @@ class People extends Component {
     }
   };
 
+  handleAttendance = async (person) => {
+    
+      try {
+        if (!person.attendance) {
+          person.attendance = new Date().toISOString();
+          console.log('person to update:', person);
+          await savePerson(person);
+          toast.success(
+            `Asistencia registrada para el obrero ${person.first_name} ${person.last_name}`
+          );
+        }
+        
+      } catch (ex) {
+        if (ex.response && ex.response.status === 404)
+          toast.error("Error tratando de guardar el registro de asistencia.");
+      }
+  };
+
   handlePageChange = async (page) => {
     this.setState({ currentPage: page });
 
@@ -128,6 +146,7 @@ class People extends Component {
                 user={user}
                 sortColumn={sortColumn}
                 onDelete={this.handleDelete}
+                onAttendance={this.handleAttendance}
                 onSort={this.handleSort}
               />
             )}
