@@ -18,7 +18,7 @@ const SearchConcept = (props) => {
     } else {
       setSearching(false);
       console.log('CLEAN concept')
-      setConceptName('`');
+      setConceptName('');
       props.onClearSearchConcept();
     }
   }, [props.value, props.searching]);
