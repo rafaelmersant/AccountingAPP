@@ -173,7 +173,7 @@ class EntryForm extends Form {
     console.log("line", line);
     const amount = line.amount === "" ? 0 : line.amount;
 
-    if (line.type === "S" && line.concept_id !== 7) {
+    if (line.type === "S") {
       line.amount = Math.abs(parseFloat(amount)) * -1;
       totalSalidas += Math.abs(amount);
     }
