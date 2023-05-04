@@ -103,13 +103,12 @@ class EntryForm extends Form {
     errors: {},
     currentConcept: {},
     action: "Nuevo Registro",
-    // clearSearchConcept: false,
+    clearSearchConcept: false,
     clearSearchPerson: false,
     clearSearchChurch: false,
     hideSearchConcept: false,
     hideSearchChurch: false,
     hideSearchPerson: false,
-    searchingConcept: true,
     searchConceptText: "",
     searchChurchText: "ALMIRANTE II",
     searchPersonText: "",
@@ -173,7 +172,7 @@ class EntryForm extends Form {
     console.log("line", line);
     const amount = line.amount === "" ? 0 : line.amount;
 
-    if (line.type === "S") {
+    if (line.type === "S" && line.concept_id !== 7) {
       line.amount = Math.abs(parseFloat(amount)) * -1;
       totalSalidas += Math.abs(amount);
     }
@@ -446,11 +445,10 @@ class EntryForm extends Form {
         details,
         currentConcept: {},
         searchConceptText: "",
-        searchingConcept: false
         // clearSearchConcept: true,
       });
 
-      // this.handleSearchConcept(true);
+      this.handleSearchConcept(true);
       this.updateTotals();
       this.resetLineValues();
     }, 150);
@@ -715,9 +713,9 @@ class EntryForm extends Form {
     this.setState({ data, searchPersonText: "" });
   };
 
-  // handleSearchConcept = async (value) => {
-  //   this.setState({ clearSearchConcept: value });
-  // };
+  handleSearchConcept = async (value) => {
+    this.setState({ clearSearchConcept: value });
+  };
 
   render() {
     const { user } = this.props;
@@ -852,12 +850,10 @@ class EntryForm extends Form {
                     onSelect={this.handleSelectConcept}
                     onFocus={() => this.handleFocusConcept(false)}
                     onBlur={() => this.handleFocusConcept(true)}
-                    // onClearSearchConcept={(value) => this.handleSearchConcept(value)}
-                    // clearSearchConcept={this.state.clearSearchConcept}
-                    onClearSearchConcept={() => this.handleCleanConcept()}
+                    onClearSearchConcept={() => this.handleSearchConcept}
+                    clearSearchConcept={this.state.clearSearchConcept}
                     hide={this.state.hideSearchConcept}
                     value={this.state.searchConceptText}
-                    searching={this.state.searchingConcept}
                     label="Concepto"
                     allConcepts={this.state.concepts}
                   />

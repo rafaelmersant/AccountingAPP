@@ -1,46 +1,31 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import _ from "lodash";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 
 const SearchConcept = (props) => {
-  const [searching, setSearching] = useState(true);
+  const [concepts, setConcepts] = useState([]);
   const [conceptName, setConceptName] = useState(props.value);
-  const search = useRef("");
 
   useEffect(() => {
-    console.log('SEARCHING useEffect state:', searching)
-    console.log('SEARCHING prop useEffect state:', props.searching)
-
-    if (searching && props.searching)  {
-      setConceptName(props.value);
-        console.log('EFFECT called:', props.value, conceptName)
-        setSearching(true);
-    } else {
-      setSearching(false);
-      console.log('CLEAN concept')
-      setConceptName('');
-      props.onClearSearchConcept();
+    if (props.value) setConceptName(props.value);
+console.log('clearSearchConcept:', props.clearSearchConcept);
+    if (props.clearSearchConcept) {
+      setConceptName("");
+      props.onClearSearchConcept(false);
     }
-  }, [props.value, props.searching]);
+  }, [props.clearSearchConcept]);
+
   
   const handleOnSearch = async (string, results) => {
     // onSearch will have as the first callback parameter
     // the string searched and for the second the results.
-    // props.onClearSearchConcept(true);
-    if (string === "") results = [];
-
+    props.onClearSearchConcept(true);
     console.log('searching:', string)
-    // console.log('searching results:', results)
-    console.log('SEARCHING state:', searching)
+    console.log('searching results:', results)
   };
 
   const handleOnSelect = (concept) => {
-    setSearching(false);
     props.onSelect(concept);
-    props.onClearSearchConcept();
-
-    console.log('SEARCHING select state:', searching)
-
     // console.log(concept);
   };
 
@@ -58,11 +43,12 @@ const SearchConcept = (props) => {
     );
   };
 
+  const { onFocus, onBlur, hide, label = "" } = props;
+
   return (
     <div>
       <label htmlFor="">Concepto</label>
       <ReactSearchAutocomplete
-        autoFocus
         items={props.allConcepts}
         onSearch={handleOnSearch}
         onSelect={handleOnSelect}
