@@ -33,7 +33,7 @@ class UserForm extends Form {
     id: Joi.number(),
     email: Joi.string().required().email().label("Email"),
     username: Joi.string().required().label("Usuario"),
-    password: Joi.string().required().min(8).max(30).label("Password"),
+    password: Joi.string().required().min(8).max(150).label("Password"),
     name: Joi.string().required().min(5).label("Nombre"),
     user_role: Joi.string().required().label("Rol"),
     user_hash: Joi.string().optional(),
