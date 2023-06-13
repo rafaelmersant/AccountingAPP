@@ -76,6 +76,7 @@ const SearchChurch = (props) => {
         onBlur={onBlur}
         value={churchName}
         label={label}
+        disabled={true}
       />
 
       {churches.length > 0 && !hide && (

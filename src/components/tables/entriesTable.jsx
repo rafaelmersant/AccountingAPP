@@ -32,6 +32,7 @@ class EntriesTable extends Component {
     {
       path: "total_amount",
       label: "Monto",
+      classes: "hidden-on-small",
       content: (entry) => (
         <div className="text-right">
           <span
@@ -45,7 +46,7 @@ class EntriesTable extends Component {
     {
       path: "created_by",
       label: "Creado por",
-      classes: "min-width-entries-column-1",
+      classes: "min-width-entries-column-1 hidden-on-small",
       content: (entry) => <span>{entry.created_by.name}</span>,
     },
     {
@@ -77,7 +78,7 @@ class EntriesTable extends Component {
 
   render() {
     const { entries, sortColumn, onSort } = this.props;
-    console.log("entires:", entries);
+    
     return (
       <Table
         columns={this.columns}

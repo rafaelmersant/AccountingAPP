@@ -1,5 +1,4 @@
 import React from "react";
-import _ from "lodash";
 import * as Sentry from "@sentry/react";
 import { NavLink } from "react-router-dom";
 import Joi from "joi-browser";
@@ -25,7 +24,6 @@ import {
   getEntryHeader,
   getEntryDetail,
   deleteEntryDetail,
-  getEntryHeaderByRangeChurchesReport,
 } from "../../services/entryServices";
 
 import EntryDetailTable from "../tables/entryDetailTable";
@@ -37,8 +35,9 @@ import {
 import ChurchModal from "../modals/churchModal";
 import PersonModal from "../modals/personModal";
 import ConceptModal from "../modals/conceptModal";
-import { getConcept, getConcepts, getConceptsByName } from "../../services/conceptService";
+import { getConcept, getConcepts } from "../../services/conceptService";
 import Select from "../common/select";
+import { getPeople } from "../../services/personService";
 
 registerLocale("es", es);
 
@@ -64,6 +63,7 @@ class EntryForm extends Form {
     disabledSave: false,
     entryDate: new Date(),
     concepts: [],
+    people: [],
     details: [],
     detailsOriginal: [],
     detailsToDelete: [],
@@ -84,7 +84,6 @@ class EntryForm extends Form {
     methods: [
       { id: "E", name: "Efectivo" },
       { id: "D", name: "Deposito" },
-      // { id: "R", name: "Retenido" },
     ],
     months: [
       { id: "1", name: "Enero" },
@@ -106,12 +105,11 @@ class EntryForm extends Form {
     clearSearchConcept: false,
     clearSearchPerson: false,
     clearSearchChurch: false,
-    hideSearchConcept: false,
     hideSearchChurch: false,
-    hideSearchPerson: false,
     searchConceptText: "",
     searchChurchText: "ALMIRANTE II",
     searchPersonText: "",
+    searchPersonTextType: "",
     serializedEntryHeader: {},
     serializedEntryDetail: [],
     totalEntradas: 0,
@@ -140,6 +138,11 @@ class EntryForm extends Form {
     this.setState({ concepts: concepts.results });
   }
 
+  async populatePeople() {
+    const { data: people } = await getPeople();
+    this.setState({ people: people.results });
+  }
+
   resetLineValues() {
     const line = { ...this.state.line };
     line.id = 0;
@@ -161,58 +164,68 @@ class EntryForm extends Form {
     window.location = `/registro/new`;
   };
 
-  updateLine = (concept) => {
-    const line = { ...this.state.line };
+  updateLine = async (concept) => {
+    let line = { ...this.state.line };
     let { totalEntradas, totalSalidas, totalDiezmos } = { ...this.state };
 
     line.concept_id = concept.id;
     line.concept = concept.description;
     line.type = concept.type;
+    line.amount = line.amount !== "" ? parseFloat(line.amount) : "";
 
-    console.log("line", line);
-    const amount = line.amount === "" ? 0 : line.amount;
+    let amount = line.amount !== "" ? Math.abs(line.amount) : 0;
 
-    if (line.type === "S") {
-      line.amount = Math.abs(parseFloat(amount)) * -1;
+    if (line.type === "S" && amount !== 0) {
+      line.amount = -1 * Math.abs(amount);
       totalSalidas += Math.abs(amount);
     }
 
     if (line.type === "E") totalEntradas += parseFloat(amount);
 
-    if (line.concept_id === 2) totalDiezmos += parseFloat(amount);
+    if (line.concept_id === 2) {
+      const diezmo =
+        line.amount !== ""
+          ? Math.abs(line.amount)
+          : parseFloat(this.state.data.note);
+      totalDiezmos += parseFloat(diezmo);
+    }
 
     this.setState({ line, totalEntradas, totalSalidas, totalDiezmos });
     this.updateTotals();
+
+    return line;
   };
 
   updateTotals = () => {
-    const data = { ...this.state.data };
-    let totalEntradas = 0;
-    let totalSalidas = 0;
-    let totalDiezmos = 0;
+    setTimeout(() => {
+      const data = { ...this.state.data };
+      let totalEntradas = 0;
+      let totalSalidas = 0;
+      let totalDiezmos = 0;
 
-    data.total_amount = 0;
+      data.total_amount = 0;
 
-    this.state.details.forEach((item) => {
-      data.total_amount += Math.round(parseFloat(item.amount) * 100) / 100;
-    });
+      for (const item of this.state.details) {
+        data.total_amount += Math.round(parseFloat(item.amount) * 100) / 100;
+      }
 
-    //Total Entradas/Salidas
-    this.state.details.forEach((item) => {
-      if (item.type === "S" && item.concept.id !== 7)
-        totalSalidas += Math.abs(
-          Math.round(parseFloat(item.amount) * 100) / 100
-        );
+      //Total Entradas/Salidas
+      for (const item of this.state.details) {
+        if (item.type === "S" && item.concept.id !== 7)
+          totalSalidas += Math.abs(
+            Math.round(parseFloat(item.amount) * 100) / 100
+          );
 
-      if (item.type === "E")
-        totalEntradas += Math.round(parseFloat(item.amount) * 100) / 100;
+        if (item.type === "E")
+          totalEntradas += Math.round(parseFloat(item.amount) * 100) / 100;
 
-      if (item.concept.id === 2)
-        totalDiezmos += Math.round(parseFloat(item.amount) * 100) / 100;
-    });
+        if (item.concept.id === 2)
+          totalDiezmos += Math.round(parseFloat(item.amount) * 100) / 100;
+      }
 
-    data.total_amount = Math.round(data.total_amount * 100) / 100;
-    this.setState({ data, totalEntradas, totalSalidas, totalDiezmos });
+      data.total_amount = Math.round(parseFloat(data.total_amount) * 100) / 100;
+      this.setState({ data, totalEntradas, totalSalidas, totalDiezmos });
+    }, 200);
   };
 
   async populateEntry() {
@@ -262,7 +275,6 @@ class EntryForm extends Form {
         searchChurchText: searchChurchText,
         searchPersonText: searchPersonText,
         hideSearchChurch: true,
-        hideSearchPerson: true,
         action: "Detalle de registro No. ",
         serializedEntryHeader: entryHeader,
         serializedEntryDetail: entryDetail,
@@ -297,7 +309,7 @@ class EntryForm extends Form {
   }
 
   handleTypingPerson = (value) => {
-    this.setState({ searchPersonText: value });
+    this.setState({ searchPersonTextType: value });
   };
 
   handleChangeEntryDate = (date) => {
@@ -318,6 +330,11 @@ class EntryForm extends Form {
   handleSelectConcept = async (concept) => {
     const handler = (e) => {
       e.preventDefault();
+      if (e.type !== "keydown" && e.type !== "mousedown") {
+        this.setState({
+          searchConceptText: concept.description,
+        });
+      }
     };
     handler(window.event);
 
@@ -326,29 +343,13 @@ class EntryForm extends Form {
       return false;
     }
 
-    // const concept_found = _.find(this.state.details, function (item) {
-    //   return item.concept_id === concept.id;
-    // });
-
-    // if (concept_found !== undefined) {
-    //   toast.error("Este concepto ya fue agregado.");
-    //   return false;
-    // }
-
     this.setState({
-      // hideSearchConcept: true,
-      // clearSearchConcept: false,
       currentConcept: concept,
-      searchConceptText: concept.description,
     });
 
     this.updateLine(concept);
-  };
 
-  handleFocusConcept = (value) => {
-    setTimeout(() => {
-      this.setState({ hideSearchConcept: value });
-    }, 200);
+    document.getElementById("amount").focus();
   };
 
   handleSelectChurch = async (church) => {
@@ -382,114 +383,86 @@ class EntryForm extends Form {
   handleSelectPerson = async (person) => {
     const handler = (e) => {
       e.preventDefault();
+      if (e.type !== "keydown" && e.type !== "mousedown") {
+        this.setState({
+          searchPersonText: `${person.first_name} ${person.last_name}`,
+        });
+      }
     };
     handler(window.event);
 
-    if (person.id === 0) {
-      this.raisePersonModal.click();
-      return false;
-    }
+    document.getElementById("note").focus();
 
-    const data = { ...this.state.data };
-    data.person_id = person.id;
+    // const data = { ...this.state.data };
+    // data.person_id = person.id;
 
     this.setState({
-      data,
-      hideSearchPerson: true,
-      clearSearchPerson: false,
-      searchPersonText: `${person.first_name} ${person.last_name}`,
+      searchPersonTextType: person.full_name,
     });
   };
 
-  handleFocusPerson = (value) => {
-    setTimeout(() => {
-      this.setState({ hideSearchPerson: value });
-    }, 200);
-  };
-
-  validateDuplicity = async (line) => {
-    if (line.editing) return false;
-
-    // const { data: record } = await getEntryHeaderByRangeChurchesReport(
-    //   line.period_month,
-    //   line.period_year,
-    //   this.state.data.church_id
-    // );
-
-    // const percent_concilio = record.reduce((acc, item) => acc + parseInt(item.percent_concilio), 0);
-    // const ofrenda_misionera = record.reduce((acc, item) => acc + parseInt(item.ofrenda_misionera), 0);
-
-    // if (line.concept_id === 1 && record.length && percent_concilio) return true;
-    // if (line.concept_id === 2 && record.length && ofrenda_misionera)
-    //   return true;
-
-    return false;
-  };
-
-  handleAddDetail = () => {
+  handleAddDetail = async () => {
     const handler = (e) => {
       e.preventDefault();
     };
     handler(window.event);
 
     setTimeout(async () => {
-      this.updateLine(this.state.currentConcept);
+      const line = await this.updateLine(this.state.currentConcept);
       const details = [...this.state.details];
-      const line = { ...this.state.line };
-      line.amount = Math.round(line.amount * 100) / 100;
+      //const line = { ...this.state.line };
+      // line.amount = Math.round(parseFloat(line.amount) * 100) / 100;
 
-      const duplicity = await this.validateDuplicity(line);
       if (this.state.line.concept_id) details.push(line);
 
       this.setState({
         details,
         currentConcept: {},
         searchConceptText: "",
-        // clearSearchConcept: true,
+        clearSearchConcept: true,
       });
 
-      this.handleSearchConcept(true);
-      this.updateTotals();
+      // this.updateTotals();
       this.resetLineValues();
     }, 150);
+
+    document.querySelector("div#divDetail input").focus();
   };
 
-  handleAddDetailDiezmo = () => {
+  handleAddDetailDiezmo = async () => {
     const handler = (e) => {
       e.preventDefault();
     };
     handler(window.event);
+    const diezmo = this.state.concepts.filter((item) => item.id === 2);
 
-    setTimeout(async () => {
-      const diezmo = this.state.concepts.filter(item => item.id === 2);
-      
-      this.setState({currentConcept: diezmo[0]});
-      this.updateLine(diezmo[0]);
-      
-      const details = [...this.state.details];
-      const line = { ...this.state.line };
-      const data = { ...this.state.data };
-      
-      line.concept = diezmo[0].description;
-      line.concept_id = diezmo[0].id;
-      line.amount = Math.round(parseFloat(this.state.data.note) * 100) / 100;
-      line.reference = this.state.searchPersonText;
-      console.log('this.state', this.state);
-      console.log('line x:', line)
+    this.setState({ currentConcept: diezmo[0] });
+    const line = await this.updateLine(diezmo[0]);
 
-      if (this.state.line.concept_id) details.push(line);
-      data.note = "";
-    
-      this.setState({
-        details,
-        data,
-        currentConcept: {},
-      });
+    const details = [...this.state.details];
+    //const line = { ...this.state.line };
+    const data = { ...this.state.data };
 
-      this.handleSearchConcept(true);
-      this.updateTotals();
-      this.resetLineValues();
-    }, 150);
+    line.concept = diezmo[0].description;
+    line.concept_id = diezmo[0].id;
+    line.amount = Math.round(parseFloat(this.state.data.note) * 100) / 100;
+    line.type = "E";
+    line.reference = this.state.searchPersonTextType;
+
+    if (line.concept_id) details.push(line);
+    data.note = "";
+
+    this.updateTotals();
+    this.resetLineValues();
+
+    this.setState({
+      details,
+      data,
+      currentConcept: {},
+      clearSearchPerson: true,
+    });
+
+    document.querySelector("div#divDiezmo input").focus();
   };
 
   handleDeleteDetail = (detail, soft = false) => {
@@ -514,7 +487,7 @@ class EntryForm extends Form {
 
       setTimeout(() => {
         this.updateTotals();
-      });
+      }, 150);
     }
   };
 
@@ -523,21 +496,30 @@ class EntryForm extends Form {
       e.preventDefault();
     };
     handler(window.event);
-    console.log("Edit Detail:", detail);
+
+    if (Object.keys(this.state.currentConcept).length !== 0) {
+      toast.error(
+        "Esta editando una linea actualmente, favor agregarla antes de hacer otro cambio."
+      );
+      return false;
+    }
 
     const line = { ...detail };
     const { data: concept } = await getConcept(detail.concept_id);
-
+    line.amount = parseFloat(line.amount);
     line.editing = true;
 
     this.setState({
       line,
       currentConcept: concept.results[0],
-      hideSearchConcept: true,
       searchConceptText: line.concept,
     });
 
     this.handleDeleteDetail(detail, true);
+
+    setTimeout(() => {
+      document.getElementById("amount").focus();
+    }, 300);
   };
 
   handleSetNewChurch = (e) => {
@@ -567,6 +549,7 @@ class EntryForm extends Form {
 
     try {
       await this.populateConcepts();
+      await this.populatePeople();
       await this.populateEntry(false);
     } catch (ex) {
       try {
@@ -588,38 +571,15 @@ class EntryForm extends Form {
     if (parseFloat(this.state.line.amount) === 0) return false;
   }
 
-  validateRelatedConcepts() {
-    const requiredPerson = [4, 7, 8];
-    // const requiredChurch = [1, 2, 10, 11];
-
-    // const anyChurch = this.state.details.filter((item) =>
-    //   requiredChurch.includes(item.concept_id)
-    // );
-
-    const anyPerson = this.state.details.filter((item) =>
-      requiredPerson.includes(item.concept_id)
-    );
-
-    // if (anyChurch.length && !this.state.data.church_id) {
-    //   toast.error("Debe agregar el nombre de la iglesia.");
-    //   return false;
-    // }
-
-    // if (
-    //   anyPerson.length &&
-    //   !this.state.data.person_id
-    // ) {
-    //   toast.error(
-    //     "Debe agregar el nombre del miembro."
-    //   );
-    //   return false;
-    // }
-
-    return true;
-  }
-
   doSubmit = async () => {
     try {
+      if (Object.keys(this.state.currentConcept).length !== 0) {
+        toast.error(
+          "Esta editando una linea actualmente, favor agregarla antes de guardar los cambios."
+        );
+        return false;
+      }
+
       if (this.state.disabledSave) return false;
 
       if (this.state.details.length === 0) {
@@ -627,14 +587,12 @@ class EntryForm extends Form {
         return false;
       }
 
-      if (!this.validateRelatedConcepts()) return false;
-
       this.setState({ disabledSave: true });
 
       const { data, entryDate } = { ...this.state };
-      data.period_month = entryDate.getMonth() + 1; //this.state.details[0].period_month;
-      data.period_year = entryDate.getFullYear(); //this.state.details[0].period_year;
-
+      data.period_month = entryDate.getMonth() + 1;
+      data.period_year = entryDate.getFullYear();
+      
       const { data: entryHeader } = await saveEntryHeader(
         data,
         this.state.details[0].concept
@@ -649,8 +607,8 @@ class EntryForm extends Form {
           reference: item.reference,
           type: item.type,
           method: item.method,
-          period_year: entryDate.getFullYear(), //item.period_year,
-          period_month: entryDate.getMonth() + 1, //item.period_month,
+          period_year: entryDate.getFullYear(),
+          period_month: entryDate.getMonth() + 1,
           created_date: new Date().toISOString(),
         };
 
@@ -710,11 +668,15 @@ class EntryForm extends Form {
   handleCleanPerson = async () => {
     const { data } = { ...this.state };
     data.person_id = 0;
-    this.setState({ data, searchPersonText: "" });
+    this.setState({ data, searchPersonText: "", searchPersonTextType: "" });
   };
 
   handleSearchConcept = async (value) => {
     this.setState({ clearSearchConcept: value });
+  };
+
+  handleSearchPerson = async (value) => {
+    this.setState({ clearSearchPerson: value });
   };
 
   render() {
@@ -747,7 +709,7 @@ class EntryForm extends Form {
                     label="Iglesia"
                   />
                 </div>
-                <div>
+                {/* <div>
                   {this.state.data.church_id > 0 && (
                     <div
                       style={{
@@ -767,7 +729,7 @@ class EntryForm extends Form {
                       ></span>
                     </div>
                   )}
-                </div>
+                </div> */}
 
                 <div className="col-2 col-md-3 col-sm-3">
                   <label className="mr-1">Fecha</label>
@@ -788,19 +750,21 @@ class EntryForm extends Form {
                 </div>
               </div>
 
-              <div className="row">
+              <div
+                className="row bg-secondary text-light mt-2 mb-2 pt-1 pb-1"
+                id="divDiezmo"
+              >
                 <div className="col-6">
                   <SearchPerson
                     onSelect={this.handleSelectPerson}
-                    onFocus={() => this.handleFocusPerson(false)}
-                    onBlur={() => this.handleFocusPerson(true)}
-                    onTyping={(value) => this.handleTypingPerson(value)}
+                    onTyping={this.handleTypingPerson}
+                    onClearSearchPerson={this.handleSearchPerson}
                     clearSearchPerson={this.state.clearSearchPerson}
-                    hide={this.state.hideSearchPerson}
                     value={this.state.searchPersonText}
-                    label="Diezmo de Miembro"
+                    data={this.state.people}
                   />
                 </div>
+
                 <div>
                   {this.state.data.person_id > 0 && (
                     <div
@@ -834,10 +798,14 @@ class EntryForm extends Form {
                 </div>
                 <div className="col-2 col-md-3 col-sm-3">
                   <button
-                    className="btn btn-warning text-black btn-sm"
+                    type="button"
+                    className="btn btn-light text-black btn-sm"
                     style={{ marginTop: "2.3em", marginLeft: "-25px" }}
                     onClick={this.handleAddDetailDiezmo}
-                    disabled={this.state.searchPersonText.length === 0 && this.state.data.note.length === 0}
+                    disabled={
+                      this.state.searchPersonTextType.length === 0 &&
+                      this.state.data.note.length === 0
+                    }
                   >
                     Agregar Diezmo
                   </button>
@@ -845,17 +813,14 @@ class EntryForm extends Form {
               </div>
 
               <div className="row mr-0 ml-0 pr-0 pl-0">
-                <div className="col-4 mr-0 ml-0 pr-0 pl-0">
+                <div className="col-4 mr-0 ml-0 pr-0 pl-0" id="divDetail">
                   <SearchConcept
                     onSelect={this.handleSelectConcept}
-                    onFocus={() => this.handleFocusConcept(false)}
-                    onBlur={() => this.handleFocusConcept(true)}
-                    onClearSearchConcept={() => this.handleSearchConcept}
+                    onClearSearchConcept={this.handleSearchConcept}
                     clearSearchConcept={this.state.clearSearchConcept}
-                    hide={this.state.hideSearchConcept}
                     value={this.state.searchConceptText}
-                    label="Concepto"
-                    allConcepts={this.state.concepts}
+                    data={this.state.concepts}
+                    selectedItem={this.state.currentConcept}
                   />
                 </div>
                 {Object.keys(this.state.currentConcept).length > 0 && (
@@ -887,7 +852,7 @@ class EntryForm extends Form {
                     onChange={this.handleChangeEntryLine}
                   />
                 </div>
-                <div className="col-1 mr-0 ml-0 pr-0 pl-0">
+                <div className="col-1 mr-0 ml-0 pr-0 pl-0 hidden-on-small">
                   <Select
                     name="method"
                     value={this.state.line.method}
@@ -943,7 +908,7 @@ class EntryForm extends Form {
                 >
                   <button
                     className="btn btn-info btn-sm ml-1 pl-3 pr-3"
-                    style={{minWidth: "120px"}}
+                    style={{ minWidth: "120px" }}
                     onClick={this.handleAddDetail}
                     disabled={this.validateLine()}
                   >

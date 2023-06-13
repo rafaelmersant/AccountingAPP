@@ -1,107 +1,76 @@
-import React, { useCallback, useEffect, useState } from "react";
-import Input from "./input";
-import { getPeopleByName } from "../../services/personService";
-import { debounce } from "throttle-debounce";
+import React, { useEffect, useState } from "react";
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
 
-const SearchPerson = (props) => {
-  const [people, setPeople] = useState([]);
-  const [personName, setPersonName] = useState(props.value);
+const SearchPerson = ({
+  clearSearchPerson,
+  onSelect,
+  onTyping,
+  onClearSearchPerson,
+  data,
+  value
+}) => {
+  const [personName, setPersonName] = useState(value);
+  
+  const handleOnSelect = (person) => {
+    onSelect(person);
+  };
+
+  const handleOnSearch = (string, results) => {
+    onTyping(string);
+    
+    results = results.filter(e => e.full_name.includes(string));
+  }
 
   useEffect(() => {
-    if (props.value) setPersonName(props.value);
-
-    if (props.hide && props.clearSearchPerson) {
-      setPersonName("");
-      handleSearchPerson("");
+    if (clearSearchPerson) {
+      setPersonName(" ");
+      onClearSearchPerson(false);
     }
-  }, [personName, props]);
+  }, [onClearSearchPerson, clearSearchPerson]);
 
-  const debounced = useCallback(
-    debounce(400, (nextValue) => {
-      handleSearchPerson(nextValue);
-    }),
-    []
-  );
-
-  const handleSelectPerson = (person) => {
-    setPersonName(person.first_name + " " + person.last_name);
-    props.onSelect(person);
-  };
-
-  const handleSearchPerson = async (value) => {
-    if (value.length >= 0) {
-      const personNameQuery = value.toUpperCase().split(" ").join("%20");
-
-      let { data: _people } = await getPeopleByName(personNameQuery);
-
-      _people = _people.results;
-
-      if (value === "" || value.length < 1) _people = [];
-
-      if (value.length > 0 && _people.length === 0) {
-        _people = [
-          {
-            id: 0,
-            first_name: "No hay registros con este nombre, desea crearlo?",
-          },
-        ];
-      }
-
-      setPeople(_people);
-    } else {
-      setPeople([]);
+  useEffect(() => {
+    if (personName !== value) {
+      setPersonName(value);
     }
+  }, [value, personName]);
+
+  const formatResult = (person) => {
+    return (
+      <div style={{ cursor: "pointer" }}>
+        <span className="d-block">
+          {person.first_name} {person.last_name}
+        </span>
+      </div>
+    );
   };
-
-  const handleChange = (event) => {
-    const value = event.target.value;
-    setPersonName(value);
-    props.onTyping(value);
-
-    debounced(value);
-  };
-
-  const { onFocus, onBlur, hide, label = "" } = props;
 
   return (
     <div>
-      <Input
-        type="text"
-        id="searchPersonId"
-        name="query"
-        className="form-control form-control-sm"
-        placeholder="Buscar miembro..."
-        autoComplete="Off"
-        onChange={(e) => handleChange(e)}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        value={personName}
-        label={label}
+      <label htmlFor="">Diezmo de Miembro</label>
+      <ReactSearchAutocomplete
+        items={data}
+        onSelect={handleOnSelect}
+        formatResult={formatResult}
+        onSearch={handleOnSearch}
+        inputSearchString={personName}
+        placeholder="Nombre del miembro"
+        fuseOptions={{ keys: ["full_name"] }} // Search on both fields
+        resultStringKeyName="full_name" // String to display in the results
+        showIcon={false}
+        showNoResultsText="No existe ningún miembro con dicho nombre."
+        styling={{
+          height: "30px",
+          borderRadius: "4px",
+          backgroundColor: "white",
+          boxShadow: "none",
+          hoverBackgroundColor: "#f6f6f6",
+          color: "#495057",
+          cursor: "Pointer",
+          fontFamily: "Inherit",
+          clearIconMargin: "-2px 3px 0 0",
+          zIndex: 2,
+        }}
       />
-
-      {people.length > 0 && !hide && (
-        <div
-          className="list-group col-12 shadow bg-white position-absolute p-0"
-          style={{ marginTop: "-15px", zIndex: "999", maxWidth: "600px" }}
-        >
-          {people.map((person) => (
-            <button
-              key={person.id}
-              onClick={() => handleSelectPerson(person)}
-              className="list-group-item list-group-item-action w-100 py-2"
-            >
-              <span className="d-block">
-                {person.first_name} {person.last_name}
-              </span>
-              <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
-                {person.church && (
-                  <em>{"Iglesia: " + person.church.global_title}</em>
-                )}
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 };

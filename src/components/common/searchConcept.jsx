@@ -1,37 +1,35 @@
 import React, { useEffect, useState } from "react";
-import _ from "lodash";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 
-const SearchConcept = (props) => {
-  const [concepts, setConcepts] = useState([]);
-  const [conceptName, setConceptName] = useState(props.value);
+const SearchConcept = ({
+  clearSearchConcept,
+  onSelect,
+  onClearSearchConcept,
+  data,
+  value
+}) => {
+  const [conceptName, setConceptName] = useState(value);
+  
+  const handleOnSelect = (concept) => {
+    onSelect(concept);
+  };
 
   useEffect(() => {
-    if (props.value) setConceptName(props.value);
-console.log('clearSearchConcept:', props.clearSearchConcept);
-    if (props.clearSearchConcept) {
-      setConceptName("");
-      props.onClearSearchConcept(false);
+    if (clearSearchConcept) {
+      setConceptName(" ");
+      onClearSearchConcept(false);
     }
-  }, [props.clearSearchConcept]);
+  }, [onClearSearchConcept, clearSearchConcept]);
 
-  
-  const handleOnSearch = async (string, results) => {
-    // onSearch will have as the first callback parameter
-    // the string searched and for the second the results.
-    props.onClearSearchConcept(true);
-    console.log('searching:', string)
-    console.log('searching results:', results)
-  };
-
-  const handleOnSelect = (concept) => {
-    props.onSelect(concept);
-    // console.log(concept);
-  };
+  useEffect(() => {
+    if (conceptName !== value) {
+      setConceptName(value);
+    }
+  }, [value, conceptName, data]);
 
   const formatResult = (concept) => {
     return (
-      <div>
+      <div style={{ cursor: "pointer" }}>
         <span className="d-block">{concept.description}</span>
         <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
           <em>
@@ -43,37 +41,29 @@ console.log('clearSearchConcept:', props.clearSearchConcept);
     );
   };
 
-  const { onFocus, onBlur, hide, label = "" } = props;
-
   return (
     <div>
       <label htmlFor="">Concepto</label>
       <ReactSearchAutocomplete
-        items={props.allConcepts}
-        onSearch={handleOnSearch}
+        items={data}
         onSelect={handleOnSelect}
-        inputSearchString={conceptName}
         formatResult={formatResult}
+        inputSearchString={conceptName}
         fuseOptions={{ keys: ["description"] }} // Search on both fields
         resultStringKeyName="description" // String to display in the results
         showIcon={false}
         showNoResultsText="No existe el concepto."
         styling={{
           height: "30px",
-          // border: "1px solid darkgreen",
           borderRadius: "4px",
           backgroundColor: "white",
           boxShadow: "none",
           hoverBackgroundColor: "#f6f6f6",
           color: "#495057",
           cursor: "Pointer",
-          // fontSize: "12px",
           fontFamily: "Inherit",
-          // iconColor: "green",
-          // lineColor: "lightgreen",
-          // placeholderColor: "darkgreen",
           clearIconMargin: "-2px 3px 0 0",
-          zIndex: 2,
+          // zIndex: 2,
         }}
       />
     </div>

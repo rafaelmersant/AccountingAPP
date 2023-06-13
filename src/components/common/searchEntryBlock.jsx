@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { toast } from "react-toastify";
 import SearchChurch from "./searchChurch";
 import Input from "./input";
-import SearchPerson from "./searchPerson";
 
 class SearchEntryBlock extends Component {
   state = {
@@ -13,7 +12,6 @@ class SearchEntryBlock extends Component {
     hideSearchChurch: false,
     searchChurchText: "",
 
-    hideSearchPerson: false,
     searchPersonText: "",
   };
 
@@ -37,12 +35,6 @@ class SearchEntryBlock extends Component {
   handleFocusChurch = (value) => {
     setTimeout(() => {
       this.setState({ hideSearchChurch: value });
-    }, 200);
-  };
-
-  handleFocusPerson = (value) => {
-    setTimeout(() => {
-      this.setState({ hideSearchPerson: value });
     }, 200);
   };
 
@@ -161,15 +153,14 @@ class SearchEntryBlock extends Component {
             )}
           </div>
 
-          <div className="ml-4 w-25">
+          {/* <div className="ml-4 w-25">
             <SearchPerson
               onSelect={this.handleSelectPerson}
-              onFocus={() => this.handleFocusPerson(false)}
-              onBlur={() => this.handleFocusPerson(true)}
-              hide={this.state.hideSearchPerson}
+              onTyping={this.handleTypingPerson}
+              onClearSearchPerson={this.handleSearchPerson}
+              clearSearchPerson={this.state.clearSearchPerson}
               value={this.state.searchPersonText}
-              label="Miembro"
-              name="searchPerson"
+              data={this.state.people}
             />
           </div>
           <div className="col">
@@ -192,7 +183,7 @@ class SearchEntryBlock extends Component {
                 ></span>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </React.Fragment>
     );

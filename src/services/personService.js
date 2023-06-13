@@ -10,7 +10,7 @@ function personUrl(id) {
 export function getPeople(sortColumn, currentPage, searchQuery) {
   const order = sortColumn && sortColumn.order === "desc" ? "-" : "";
   const column =
-    sortColumn && sortColumn.path ? sortColumn.path : "created_date";
+    sortColumn && sortColumn.path ? sortColumn.path : "first_name";
   const page = currentPage ? currentPage : 1;
 
   let urlQuery = `${apiEndpoint}/?ordering=${order}${column}&page=${page}`;

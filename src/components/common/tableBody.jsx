@@ -57,7 +57,7 @@ class TableBody extends Component {
           // <tr key={item.product_id || item.id || index}>
           <tr key={ index }>
             {columns.map((column) => (
-              <td key={this.createKey(item, column)} className="py-1">
+              <td key={this.createKey(item, column)} className={"py-1 " + column.align + " " + column.classes}>
                 {this.renderCell(item, column)}
               </td>
             ))}

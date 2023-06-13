@@ -36,10 +36,8 @@ class DetailedByConceptTable extends Component {
       totalIngresos,
       totalEgresos,
       totalDiezmos,
-      totalSalidas,
       totalSalidasLimpio,
       totalOfrendas,
-      ofrendaMisionera,
       adelantoPastor,
       adelantoCopastor,
       adelantoConcilio

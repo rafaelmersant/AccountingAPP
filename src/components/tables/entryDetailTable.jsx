@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import TableBody from "../common/tableBody";
-import { formatNumber, getMonthName } from "../../utils/custom";
+import { formatNumber } from "../../utils/custom";
 
 class EntryDetailTable extends Component {
   columns = [
@@ -8,6 +8,7 @@ class EntryDetailTable extends Component {
     {
       path: "type",
       label: "Tipo",
+      classes: "hidden-on-small",
       content: (item) => (
         <span>
           {`${item.type.replace("S", "Salida").replace("E", "Entrada")}`}
@@ -17,6 +18,7 @@ class EntryDetailTable extends Component {
     {
       path: "method",
       label: "Metodo",
+      classes: "hidden-on-small",
       content: (item) => (
         <span>
           {`${item.method.replace("E", "Efectivo").replace("D", "Deposito").replace("R", "Retenido")}`}
@@ -76,7 +78,7 @@ class EntryDetailTable extends Component {
           <thead className="thead-dark">
             <tr>
               {this.columns.map(column => (
-                <th key={column.path || column.key} className="py-2">{column.label}</th>
+                <th key={column.path || column.key} className={"py-2 " + column.classes}>{column.label}</th>
               ))}
             </tr>
           </thead>
@@ -90,7 +92,7 @@ class EntryDetailTable extends Component {
                 <th className="text-right">Total Salidas: {formatNumber(totalSalidas)}</th>
                 <th className="text-right">Total Diezmos: {formatNumber(totalDiezmos)}</th>
                 <th className="text-right">Total: {formatNumber(entryHeader.total_amount)}</th>
-                <th colSpan={2} className="text-right"></th>
+                <th colSpan={2} className="text-right hidden-on-small"></th>
               </tr>
             </tfoot>
           )}

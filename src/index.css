@@ -148,3 +148,9 @@ table.table-fit tbody td, table.table-fit tfoot td {
   width: auto !important;
   padding: 0.4rem !important;
 }
+
+@media (max-width: 766px) {
+  .hidden-on-small {
+    display: none !important;
+  }
+}
