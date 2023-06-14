@@ -2,9 +2,14 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const NavBarTop = ({ user }) => {
+  const handleToggleMenu = (e) => {
+    const menu = document.getElementById('sidebar-wrapper');
+    menu.style.display = menu.style.display === 'none' ? '' : 'none';
+  }
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-      <button className="btn btn-light" id="menu-toggle">
+      <button className="btn btn-light" id="menu-toggle" onClick={handleToggleMenu}>
         ...
       </button>
 
