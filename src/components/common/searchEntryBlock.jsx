@@ -120,7 +120,7 @@ class SearchEntryBlock extends Component {
             />
           </div>
 
-          <div className="ml-4 w-25">
+          {/* <div className="ml-4 w-25">
             <SearchChurch
               onSelect={this.handleSelectChurch}
               onFocus={() => this.handleFocusChurch(false)}
@@ -151,7 +151,7 @@ class SearchEntryBlock extends Component {
                 ></span>
               </div>
             )}
-          </div>
+          </div> */}
 
           {/* <div className="ml-4 w-25">
             <SearchPerson
