@@ -6,11 +6,16 @@ const NavBarSide = ({ user }) => {
     <div className="border-right" id="sidebar-wrapper">
       <div className="sidebar-heading text-center mb-3">
         <NavLink className="" to="/home">
-          <img
+          <p className="mt-2">
+            <b>IGLESIA</b>
+            <br/>
+            <b>Amor del Calvario III</b>
+          </p>
+          {/* <img
             style={{ width: "100px", padding: "5px", margin: "0" }}
             src={process.env.PUBLIC_URL + "/images/logoEmanuel.jpg"}
             alt="CEPAS"
-          />
+          /> */}
         </NavLink>
       </div>
       <div className="list-group list-group-flush">

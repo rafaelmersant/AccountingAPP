@@ -8,9 +8,12 @@ class HomePage extends Component {
           <h2>Concilio Evangelico Pentecostal <strong>Arca de Salvación</strong>, INC.</h2>
         </div>
         <div className="d-flex justify-content-center">
+          <h3>Iglesia Amor del Calvario III</h3>           
+        </div>
+        <div className="d-flex justify-content-center">
           <img
-            style={{ width: "40%", padding: "5px", margin: "0" }}
-            src={process.env.PUBLIC_URL + "/images/logoEmanuel.jpg"}
+            style={{ width: "30%", padding: "5px", margin: "0" }}
+            src={process.env.PUBLIC_URL + "/images/logocepasH50_home.png"}
             alt="CEPAS"
           />
         </div>

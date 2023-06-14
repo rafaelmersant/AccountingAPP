@@ -107,7 +107,7 @@ class EntryForm extends Form {
     clearSearchChurch: false,
     hideSearchChurch: false,
     searchConceptText: "",
-    searchChurchText: "ALMIRANTE II",
+    searchChurchText: "AMOR DEL CALVARIO III",
     searchPersonText: "",
     searchPersonTextType: "",
     serializedEntryHeader: {},
@@ -981,7 +981,7 @@ class EntryForm extends Form {
             </button>
           </div>
 
-          <div className="d-flex justify-content-end w-100 pr-3 mb-3">
+          {/* <div className="d-flex justify-content-end w-100 pr-3 mb-3">
             {this.state.data.id > 0 &&
               (role === "Admin" || role === "Owner") && (
                 <ReactToPrint
@@ -1005,7 +1005,7 @@ class EntryForm extends Form {
               entryHeader={this.state.serializedEntryHeader}
               entryDetail={this.state.serializedEntryDetail}
             />
-          </div>
+          </div> */}
         </div>
       </React.Fragment>
     );
