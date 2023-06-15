@@ -55,7 +55,7 @@ class People extends Component {
     // }
 
     const answer = window.confirm(
-      "Esta seguro de eliminar este obrero? \nNo podrá deshacer esta acción"
+      "Esta seguro de eliminar este miembro? \nNo podrá deshacer esta acción"
     );
     if (answer) {
       const originalPeople = this.state.people;
@@ -65,11 +65,11 @@ class People extends Component {
       try {
         await deletePerson(person.id);
         toast.success(
-          `El obrero ${person.first_name} ${person.last_name} fue eliminado!`
+          `El miembro ${person.first_name} ${person.last_name} fue eliminado!`
         );
       } catch (ex) {
         if (ex.response && ex.response.status === 404)
-          toast.error("Este obrero ya fue eliminado");
+          toast.error("Este miembro ya fue eliminado");
 
         this.setState({ people: originalPeople });
       }
@@ -107,7 +107,7 @@ class People extends Component {
             <h5 className="pull-left text-info mt-2">Listado de Miembros</h5>
 
             <div className="mb-4">
-              <NewButton label="Nuevo Miembro" to="/obrero/new" />
+              <NewButton label="Nuevo Miembro" to="/miembro/new" />
             </div>
 
             <SearchBox

@@ -28,7 +28,7 @@ class PersonForm extends Form {
       created_date: new Date().toISOString(),
     },
     errors: {},
-    action: "Nuevo Obrero",
+    action: "Nuevo Miembro",
     hideSearchChurch: false,
     clearSearchChurch: false,
     searchChurchText: "",
@@ -62,7 +62,7 @@ class PersonForm extends Form {
 
       this.setState({
         data: this.mapToViewModel(person.results),
-        action: "Editar Obrero",
+        action: "Editar Miembro",
         searchChurchText: church,
       });
     } catch (ex) {
@@ -146,7 +146,7 @@ class PersonForm extends Form {
     );
 
     if (_person.length > 0 && this.state.data.id === 0) {
-      toast.error("Este obrero ya existe!");
+      toast.error("Este miembro ya existe!");
       return false;
     }
 
@@ -156,7 +156,7 @@ class PersonForm extends Form {
 
     const { data: person } = await savePerson(data);
 
-    if (!this.props.popUp) this.props.history.push("/obreros");
+    if (!this.props.popUp) this.props.history.push("/miembros");
     else this.props.closeMe(person);
   };
 
@@ -181,7 +181,7 @@ class PersonForm extends Form {
                 {this.renderInput("last_name", "Apellidos")}
               </div>
             </div>
-            <div className="row">
+            {/* <div className="row">
               <div className="col">
                 {this.renderInput("identification", "Identificación")}
               </div>
@@ -237,7 +237,7 @@ class PersonForm extends Form {
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
 
             {this.renderButton("Guardar")}
           </form>
