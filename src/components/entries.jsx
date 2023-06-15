@@ -53,7 +53,7 @@ class Entries extends Component {
     );
 
     const pageSize = churchId || personId ? entries.count : this.state.pageSize;
-
+    console.log(entries.results)
     this.setState({
       entries: entries.results,
       totalEntries: entries.count,
