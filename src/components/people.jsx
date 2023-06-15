@@ -107,7 +107,7 @@ class People extends Component {
             <h5 className="pull-left text-info mt-2">Listado de Miembros</h5>
 
             <div className="mb-4">
-              <NewButton label="Nuevo Miembro" to="/obrero/new" />
+              <NewButton label="Nuevo Miembro" to="/miembro/new" />
             </div>
 
             <SearchBox
@@ -147,7 +147,7 @@ class People extends Component {
                 </div>
                 <p className="text-muted ml-3 mt-2">
                   <em>
-                    Mostrando {total} obreros de {totalPeople}
+                    Mostrando {total} miembros de {totalPeople}
                   </em>
                 </p>
               </div>

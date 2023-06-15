@@ -85,9 +85,9 @@ class App extends Component {
                   <ProtectedRoute path="/registros" component={Entries} />
                   <ProtectedRoute path="/registro/:id" component={EntryForm} />
 
-                  <ProtectedRoute path="/obreros" component={People} />
+                  <ProtectedRoute path="/miembros" component={People} />
                   <ProtectedRoute
-                    path="/obrero/:id"
+                    path="/miembro/:id"
                     component={PersonForm}
                   />
                   
