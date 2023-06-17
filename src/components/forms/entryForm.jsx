@@ -71,7 +71,7 @@ class EntryForm extends Form {
       entry_id: 0,
       concept_id: 0,
       concept: "",
-      amount: 0,
+      amount: "",
       reference: "",
       type: "",
       method: "E",
@@ -106,7 +106,6 @@ class EntryForm extends Form {
     clearSearchConcept: false,
     clearSearchPerson: false,
     clearSearchChurch: false,
-    hideSearchConcept: false,
     hideSearchChurch: false,
     hideSearchPerson: false,
     searchConceptText: "",
@@ -141,7 +140,7 @@ class EntryForm extends Form {
     line.id = 0;
     line.concept_id = 0;
     line.concept = "";
-    line.amount = 0;
+    line.amount = "";
     line.reference = "";
     line.type = "";
     line.method = "E";
@@ -157,24 +156,33 @@ class EntryForm extends Form {
     window.location = `/registro/new`;
   };
 
-  updateLine = (concept) => {
+  updateLine = async (concept) => {
     const line = { ...this.state.line };
 
     line.concept_id = concept.id;
     line.concept = concept.description;
     line.type = concept.type;
-    line.amount = line.type === "S" ? Math.abs(line.amount) * -1 : line.amount;
-
+    line.amount = line.amount !== "" ? parseFloat(line.amount) : "";
+    
+    let amount = line.amount !== "" ? Math.abs(line.amount) : 0;
+    
+    if (line.type === "S" && amount !== 0) 
+      line.amount = -1 * Math.abs(amount);
+    
     this.setState({ line });
+
+    // this.updateTotals();
+
+    return line;
   };
 
   updateTotals = () => {
     const data = { ...this.state.data };
     data.total_amount = 0;
 
-    this.state.details.forEach((item) => {
+    for (const item of this.state.details) {
       data.total_amount += Math.round(parseFloat(item.amount) * 100) / 100;
-    });
+    }
 
     data.total_amount = Math.round(data.total_amount * 100) / 100;
 
@@ -259,6 +267,11 @@ class EntryForm extends Form {
   handleSelectConcept = async (concept) => {
     const handler = (e) => {
       e.preventDefault();
+      if (e.type !== "keydown" && e.type !== "mousedown") {
+        this.setState({
+          searchConceptText: concept.description,
+        });
+      }
     };
     handler(window.event);
 
@@ -278,26 +291,19 @@ class EntryForm extends Form {
 
     //default Cuota Obrero amount
     const { line } = { ...this.state };
-    const defaultAmount = concept.id === 4 ? 100 : 0;
-    // const defaultMonth = concept.id === 4 ? new Date().getMonth() + 1 : new Date().getMonth();
+    const defaultAmount = concept.id === 4 ? 100 : "";
+    
     line.amount = defaultAmount;
     line.period_month = new Date().getMonth() + 1;
 
     this.setState({
       line,
-      hideSearchConcept: true,
-      clearSearchConcept: false,
-      currentConcept: concept,
-      searchConceptText: concept.description,
+      currentConcept: concept
     });
 
     this.updateLine(concept);
-  };
 
-  handleFocusConcept = (value) => {
-    setTimeout(() => {
-      this.setState({ hideSearchConcept: value });
-    }, 200);
+    document.getElementById("amount").focus();
   };
 
   handleSelectChurch = async (church) => {
@@ -383,11 +389,9 @@ class EntryForm extends Form {
     handler(window.event);
 
     setTimeout(async () => {
-      this.updateLine(this.state.currentConcept);
+      const line = await this.updateLine(this.state.currentConcept); 
       const details = [...this.state.details];
-      const line = { ...this.state.line };
-      line.amount = Math.round(line.amount * 100) / 100;
-
+      
       const duplicity = await this.validateDuplicity(line);
 
       if (duplicity) {
@@ -408,6 +412,8 @@ class EntryForm extends Form {
 
       this.updateTotals();
       this.resetLineValues();
+
+      document.querySelector("div#divDetail input").focus();
     }, 150);
   };
 
@@ -442,19 +448,29 @@ class EntryForm extends Form {
     };
     handler(window.event);
 
+    if (Object.keys(this.state.currentConcept).length !== 0) {
+      toast.error(
+        "Esta editando una linea actualmente, favor agregarla antes de hacer otro cambio."
+      );
+      return false;
+    }
+
     const line = { ...detail };
     const { data: concept } = await getConcept(detail.concept_id);
-
+    line.amount = parseFloat(line.amount);
     line.editing = true;
 
     this.setState({
       line,
       currentConcept: concept.results[0],
-      hideSearchConcept: true,
       searchConceptText: line.concept,
     });
 
     this.handleDeleteDetail(detail, true);
+
+    setTimeout(() => {
+      document.getElementById("amount").focus();
+    }, 300);
   };
 
   handleSetNewChurch = (e) => {
@@ -538,6 +554,13 @@ class EntryForm extends Form {
 
   doSubmit = async () => {
     try {
+      if (Object.keys(this.state.currentConcept).length !== 0) {
+        toast.error(
+          "Esta editando una linea actualmente, favor agregarla antes de guardar los cambios."
+        );
+        return false;
+      }
+      
       if (this.state.disabledSave) return false;
 
       if (this.state.details.length === 0) {
@@ -548,6 +571,8 @@ class EntryForm extends Form {
       if (!this.validateRelatedConcepts()) return false;
 
       this.setState({ disabledSave: true });
+      
+      document.getElementsByClassName("btn-Save")[0].classList.add("disabled");
 
       const { data } = { ...this.state };
       data.period_month = this.state.details[0].period_month;
@@ -587,9 +612,13 @@ class EntryForm extends Form {
 
       this.setState({ disabledSave: false });
 
+      document.getElementsByClassName("btn-Save")[0].classList.remove("disabled");
+
       sessionStorage["newEntry"] = "y";
       window.location = `/registro/${entryHeader.id}`;
     } catch (ex) {
+      document.getElementsByClassName("btn-Save")[0].classList.remove("disabled");
+      
       try {
         Sentry.captureException(ex);
       } catch (_ex) {
@@ -626,6 +655,10 @@ class EntryForm extends Form {
     const { data } = { ...this.state };
     data.person_id = 0;
     this.setState({ data, searchPersonText: "" });
+  };
+
+  handleSearchConcept = async (value) => {
+    this.setState({ clearSearchConcept: value });
   };
 
   render() {
@@ -680,7 +713,7 @@ class EntryForm extends Form {
                   )}
                 </div>
 
-                <div className="col-2">
+                <div className="col-2 col-sm-4 col-md-4">
                   <label className="mr-1">Fecha</label>
                   <div
                     className="mr-3"
@@ -740,15 +773,14 @@ class EntryForm extends Form {
               </div>
 
               <div className="row mr-0 ml-0 pr-0 pl-0">
-                <div className="col-4 mr-0 ml-0 pr-0 pl-0">
+                <div className="col-4 mr-0 ml-0 pr-0 pl-0" id="divDetail">
                   <SearchConcept
                     onSelect={this.handleSelectConcept}
-                    onFocus={() => this.handleFocusConcept(false)}
-                    onBlur={() => this.handleFocusConcept(true)}
+                    onClearSearchConcept={this.handleSearchConcept}
                     clearSearchConcept={this.state.clearSearchConcept}
-                    hide={this.state.hideSearchConcept}
                     value={this.state.searchConceptText}
-                    label="Concepto"
+                    data={this.state.concepts}
+                    selectedItem={this.state.currentConcept}
                   />
                 </div>
                 {Object.keys(this.state.currentConcept).length > 0 && (
@@ -780,7 +812,7 @@ class EntryForm extends Form {
                     onChange={this.handleChangeEntryLine}
                   />
                 </div>
-                <div className="col-1 mr-0 ml-0 pr-0 pl-0">
+                <div className="col-1 mr-0 ml-0 pr-0 pl-0 hidden-on-small">
                   <Select
                     name="method"
                     value={this.state.line.method}
@@ -790,7 +822,7 @@ class EntryForm extends Form {
                     error={null}
                   />
                 </div>
-                <div className="col-1 mr-0 ml-0 pr-0 pl-0">
+                <div className="col-lg-1 col-md-2 col-sm-2 mr-0 ml-0 pr-0 pl-0">
                   <Select
                     name="period_month"
                     value={this.state.line.period_month}
@@ -809,7 +841,7 @@ class EntryForm extends Form {
                     onChange={this.handleChangeEntryLine}
                   />
                 </div>
-                <div className="col-2 mr-0 ml-0 pr-0 pl-0">
+                <div className="col-2 col-md-1 col-sm-1 mr-0 ml-0 pr-0 pl-0">
                   <Input
                     type="text"
                     name="reference"
@@ -860,7 +892,15 @@ class EntryForm extends Form {
                 />
               )}
 
-              {this.isEntryEditable() && this.renderButton("Guardar")}
+              <div className="center-content">
+                {this.isEntryEditable() &&
+                  this.renderButton("Guardar", " btn-Save")}
+                {this.state.disabledSave && <span
+                  className="spinner-border text-secondary"
+                  style={{ width: "2rem", height: "2rem" }}
+                  role="status"
+                />}
+              </div>
             </form>
           </div>
 
@@ -906,20 +946,21 @@ class EntryForm extends Form {
           </div>
 
           <div className="d-flex justify-content-end w-100 pr-3 mb-3">
-            {this.state.data.id > 0 && (role === "Admin" || role === "Owner") && (
-              <ReactToPrint
-                trigger={() => (
-                  <span
-                    ref={(button) => (this.printButton = button)}
-                    className="fa fa-print text-success cursor-pointer"
-                    style={{ fontSize: "35px" }}
-                  ></span>
-                )}
-                content={() => this.componentRef}
-                // onAfterPrint={() => this.quotationPrinted()}
-                //onBeforePrint={() => this.quotationPrinted()}
-              />
-            )}
+            {this.state.data.id > 0 &&
+              (role === "Admin" || role === "Owner") && (
+                <ReactToPrint
+                  trigger={() => (
+                    <span
+                      ref={(button) => (this.printButton = button)}
+                      className="fa fa-print text-success cursor-pointer"
+                      style={{ fontSize: "35px" }}
+                    ></span>
+                  )}
+                  content={() => this.componentRef}
+                  // onAfterPrint={() => this.quotationPrinted()}
+                  //onBeforePrint={() => this.quotationPrinted()}
+                />
+              )}
           </div>
 
           <div hidden="hidden">

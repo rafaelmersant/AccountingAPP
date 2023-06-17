@@ -51,12 +51,12 @@ class Form extends Component {
     this.setState({ data, errors });
   };
 
-  renderButton(label) {
+  renderButton(label, classes = "") {
     return (
       <button
         disabled={this.validate()}
         ref={label}
-        className="btn button-local pl-5 pr-5"
+        className={"btn button-local pl-5 pr-5 " + classes}
       >
         {label}
       </button>

@@ -27,6 +27,7 @@ class EntriesTable extends Component {
     {
       path: "person",
       label: "Obrero",
+      classes: "hidden-on-small",
       content: (entry) => (
         <div>
           <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
@@ -53,7 +54,7 @@ class EntriesTable extends Component {
     {
       path: "created_by",
       label: "Creado por",
-      classes: "min-width-entries-column-1",
+      classes: "min-width-entries-column-1 hidden-on-small",
       content: (entry) => <span>{entry.created_by.name}</span>,
     },
     { path: "created_date", label: "Fecha (m/d/a)", classes: "min-width-entries-column-1" },

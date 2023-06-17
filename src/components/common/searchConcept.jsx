@@ -1,111 +1,71 @@
-import React, { useCallback, useEffect, useState } from "react";
-import Input from "./input";
-import { getConceptsByName } from "../../services/conceptService";
-import _ from "lodash";
-import { debounce } from "throttle-debounce";
+import React, { useEffect, useState } from "react";
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
 
-const SearchConcept = (props) => {
-  const [concepts, setConcepts] = useState([]);
-  const [conceptName, setConceptName] = useState(props.value);
+const SearchConcept = ({
+  clearSearchConcept,
+  onSelect,
+  onClearSearchConcept,
+  data,
+  value
+}) => {
+  const [conceptName, setConceptName] = useState(value);
+  
+  const handleOnSelect = (concept) => {
+    onSelect(concept);
+  };
 
   useEffect(() => {
-    if (props.value) setConceptName(props.value);
-
-    if (props.hide && props.clearSearchConcept) {
-      setConceptName("");
-      handleSearchConcept("");
+    if (clearSearchConcept) {
+      setConceptName(" ");
+      onClearSearchConcept(false);
     }
-  }, [conceptName, props]);
+  }, [onClearSearchConcept, clearSearchConcept]);
 
-  const debounced = useCallback(
-    debounce(400, (nextValue) => {
-      handleSearchConcept(nextValue);
-    }),
-    []
-  );
-
-  const handleSelectConcept = (concept) => {
-    setConceptName(concept.description);
-    props.onSelect(concept);
-  };
-
-  const handleSearchConcept = async (value) => {
-    if (value.length >= 0) {
-      const conceptNameQuery = value.toUpperCase().split(" ").join("%20");
-
-      let { data: _concepts } = await getConceptsByName(conceptNameQuery);
-
-      _concepts = _concepts.results;
-
-      if (value === "" || value.length < 1) _concepts = [];
-
-      if (value.length > 0 && _concepts.length === 0) {
-        _concepts = [
-          {
-            id: 0,
-            description: "No existe el concepto, desea crearlo?",
-            type: "E",
-          },
-        ];
-      }
-
-      _concepts = _concepts.length
-        ? _.orderBy(_concepts, ["ocurrences"], ["desc"])
-        : _concepts;
-
-      setConcepts(_concepts);
-    } else {
-      setConcepts([]);
+  useEffect(() => {
+    if (conceptName !== value) {
+      setConceptName(value);
     }
+  }, [value, conceptName, data]);
+
+  const formatResult = (concept) => {
+    return (
+      <div style={{ cursor: "pointer" }}>
+        <span className="d-block">{concept.description}</span>
+        <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
+          <em>
+            {"Tipo: " +
+              concept.type.replace("S", "Salida").replace("E", "Entrada")}
+          </em>
+        </span>
+      </div>
+    );
   };
-
-  const handleChange = (event) => {
-    const value = event.target.value;
-    setConceptName(value);
-
-    debounced(value);
-  };
-
-  const { onFocus, onBlur, hide, label = "" } = props;
 
   return (
     <div>
-      <Input
-        type="text"
-        id="searchConceptId"
-        name="query"
-        className="form-control form-control-sm"
-        placeholder="Buscar concepto..."
-        autoComplete="Off"
-        onChange={(e) => handleChange(e)}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        value={conceptName}
-        label={label}
+      <label htmlFor="">Concepto</label>
+      <ReactSearchAutocomplete
+        items={data}
+        onSelect={handleOnSelect}
+        formatResult={formatResult}
+        inputSearchString={conceptName}
+        fuseOptions={{ keys: ["description"] }} // Search on both fields
+        resultStringKeyName="description" // String to display in the results
+        showIcon={false}
+        showNoResultsText="No existe el concepto."
+        styling={{
+          height: "30px",
+          borderRadius: "4px",
+          backgroundColor: "white",
+          boxShadow: "none",
+          hoverBackgroundColor: "#f6f6f6",
+          color: "#495057",
+          cursor: "Pointer",
+          fontFamily: "Inherit",
+          clearIconMargin: "-2px 3px 0 0",
+          // zIndex: 2,
+        }}
       />
-
-      {concepts.length > 0 && !hide && (
-        <div
-          className="list-group col-12 shadow bg-white position-absolute p-0"
-          style={{ marginTop: "-15px", zIndex: "999", maxWidth: "600px" }}
-        >
-          {concepts.map((concept) => (
-            <button
-              key={concept.id}
-              onClick={() => handleSelectConcept(concept)}
-              className="list-group-item list-group-item-action w-100 py-2"
-            >
-              <span className="d-block">{concept.description}</span>
-              <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
-                <em>
-                  {"Tipo: " +
-                    concept.type.replace("S", "Salida").replace("E", "Entrada")}
-                </em>
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 };

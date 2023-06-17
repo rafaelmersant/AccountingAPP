@@ -17,6 +17,7 @@ class EntryDetailTable extends Component {
     {
       path: "method",
       label: "Metodo",
+      classes: "hidden-on-small",
       content: (item) => (
         <span>
           {`${item.method.replace("C", "Cheque").replace("E", "Efectivo").replace("D", "Deposito")}`}
@@ -86,7 +87,7 @@ class EntryDetailTable extends Component {
           <thead className="thead-dark">
             <tr>
               {this.columns.map(column => (
-                <th key={column.path || column.key} className="py-2">{column.label}</th>
+                <th key={column.path || column.key} className={"py-2 " + column.classes}>{column.label}</th>
               ))}
             </tr>
           </thead>
@@ -103,8 +104,7 @@ class EntryDetailTable extends Component {
                 <th></th>
                 <th></th>
                 <th className="text-right">{formatNumber(entryHeader.total_amount)}</th>
-                <th></th>
-                {/* {(!entryHeader.id) && <th></th>} */}
+                <th className="hidden-on-small"></th>
               </tr>
             </tfoot>
           )}

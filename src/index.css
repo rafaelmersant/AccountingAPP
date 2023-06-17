@@ -80,6 +80,11 @@ div[disabled] {
   cursor: not-allowed;
 }
 
+.disabled {
+  pointer-events: none;
+  background-color: lightgray !important;
+}
+
 .button-local {
   background-color: #4682B4 !important;
   border-color: #4682B4 !important;
@@ -147,4 +152,18 @@ table.table-fit thead th, table.table-fit tfoot th {
 table.table-fit tbody td, table.table-fit tfoot td {
   width: auto !important;
   padding: 0.4rem !important;
+}
+
+.center-content {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 766px) {
+  .hidden-on-small {
+    display: none !important;
+  }
 }
