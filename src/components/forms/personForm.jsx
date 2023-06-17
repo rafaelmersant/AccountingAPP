@@ -10,6 +10,7 @@ import {
 import { getCurrentUser } from "../../services/authService";
 import SearchChurch from "../common/searchChurch";
 import ChurchModal from "../modals/churchModal";
+import { getChurches } from "../../services/churchService";
 
 class PersonForm extends Form {
   state = {
@@ -29,7 +30,6 @@ class PersonForm extends Form {
     },
     errors: {},
     action: "Nuevo Obrero",
-    hideSearchChurch: false,
     clearSearchChurch: false,
     searchChurchText: "",
   };
@@ -71,8 +71,14 @@ class PersonForm extends Form {
     }
   }
 
+  async populateChurches() {
+    const { data: churches } = await getChurches();
+    this.setState({ churches: churches.results });
+  }
+
   async componentDidMount() {
     await this.populatePerson();
+    await this.populateChurches();
 
     if (this.props.person_name && this.props.person_name.length) {
       const data = { ...this.state.data };
@@ -88,11 +94,6 @@ class PersonForm extends Form {
     };
     handler(window.event);
 
-    if (church.id === 0) {
-      this.raiseChurchModal.click();
-      return false;
-    }
-
     const data = { ...this.state.data };
     data.church_id = church.id;
 
@@ -104,12 +105,6 @@ class PersonForm extends Form {
     });
   };
 
-  handleFocusChurch = (value) => {
-    setTimeout(() => {
-      this.setState({ hideSearchChurch: value });
-    }, 200);
-  };
-
   handleCleanChurch = async () => {
     const { data } = { ...this.state };
     data.church_id = 0;
@@ -118,6 +113,14 @@ class PersonForm extends Form {
 
   handleSetNewChurch = (e) => {
     this.handleSelectChurch(e);
+  };
+
+  handleTypingChurch = (value) => {
+    this.setState({ searchChurchTextType: value });
+  };
+
+  handleSearchChurch = async (value) => {
+    this.setState({ clearSearchChurch: value });
   };
 
   mapToViewModel(person) {
@@ -191,29 +194,28 @@ class PersonForm extends Form {
                 {this.renderInput("obrero_inicial", "Obrero Inicial")}
               </div>
               <div className="col">
-              {this.renderInput("obrero_exhortador", "Obrero Exhortador")}  
+                {this.renderInput("obrero_exhortador", "Obrero Exhortador")}
               </div>
               <div className="col">
-              {this.renderInput("obrero_licenciado", "Obrero Licenciado")}
+                {this.renderInput("obrero_licenciado", "Obrero Licenciado")}
               </div>
               <div className="col">
-              {this.renderInput("min_licenciado", "Ministro Licenciado")}
+                {this.renderInput("min_licenciado", "Ministro Licenciado")}
               </div>
               <div className="col">
-              {this.renderInput("min_ordenado", "Ministro Ordenado")}
-              </div>              
+                {this.renderInput("min_ordenado", "Ministro Ordenado")}
+              </div>
             </div>
 
             <div className="row">
               <div className="col">
                 <SearchChurch
                   onSelect={this.handleSelectChurch}
-                  onFocus={() => this.handleFocusChurch(false)}
-                  onBlur={() => this.handleFocusChurch(true)}
+                  onTyping={this.handleTypingChurch}
+                  onClearSearchChurch={this.handleSearchChurch}
                   clearSearchChurch={this.state.clearSearchChurch}
-                  hide={this.state.hideSearchChurch}
                   value={this.state.searchChurchText}
-                  label="Iglesia"
+                  data={this.state.churches}
                 />
               </div>
               <div>
@@ -230,6 +232,7 @@ class PersonForm extends Form {
                         position: "absolute",
                         marginLeft: "-39px",
                         cursor: "pointer",
+                        zIndex: 3,
                       }}
                       title="Limpiar filtro de iglesia"
                       onClick={this.handleCleanChurch}
@@ -239,7 +242,7 @@ class PersonForm extends Form {
               </div>
             </div>
 
-            {this.renderButton("Guardar")}
+            <div className="mt-3">{this.renderButton("Guardar")}</div>
           </form>
         </div>
 

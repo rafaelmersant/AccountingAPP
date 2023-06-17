@@ -1,95 +1,42 @@
-import React, { useCallback, useEffect, useState } from "react";
-import Input from "./input";
-import { getChurchesByName } from "../../services/churchService";
-import { debounce } from "throttle-debounce";
+import React, { useEffect, useState } from "react";
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
 
-const SearchChurch = (props) => {
-  const [churches, setChurches] = useState([]);
-  const [churchName, setChurchName] = useState(props.value);
+const SearchChurch = ({
+  clearSearchChurch,
+  onSelect,
+  onTyping,
+  onClearSearchChurch,
+  data,
+  value
+}) => {
+  const [churchName, setChurchName] = useState(value);
+  const [valueSearch, setValueSearch] = useState(value);
+  
+  const handleOnSelect = (church) => {
+    onSelect(church);
+  };
+
+  const handleOnSearch = (string, results) => {
+    onTyping(string);
+    
+    results = results.filter(e => e.global_title.includes(string));
+  }
 
   useEffect(() => {
-    if (props.value) setChurchName(props.value);
-
-    if (props.hide && props.clearSearchChurch) {
-      setChurchName("");
-      handleSearchChurch("");
+    if (clearSearchChurch) {
+      setChurchName(" ");
+      onClearSearchChurch(false);
     }
-  }, [churchName, props]);
 
-  const debounced = useCallback(
-    debounce(400, (nextValue) => {
-      handleSearchChurch(nextValue);
-    }),
-    []
-  );
-
-  const handleSelectChurch = (church) => {
-    setChurchName(church.globa_title);
-    props.onSelect(church);
-  };
-
-  const handleSearchChurch = async (value) => {
-    if (value.length >= 0) {
-      const churchNameQuery = value.toUpperCase().split(" ").join("%20");
-
-      let { data: _churches } = await getChurchesByName(churchNameQuery);
-
-      _churches = _churches.results;
-
-      if (value === "" || value.length < 1) _churches = [];
-
-      if (value.length > 0 && _churches.length === 0) {
-        _churches = [
-          {
-            id: 0,
-            global_title: "No existe esta iglesia, desea crearla?",
-          },
-        ];
-      }
-
-      setChurches(_churches);
-    } else {
-      setChurches([]);
+    if (!clearSearchChurch) {
+      setValueSearch(value);
     }
-  };
+  }, [onClearSearchChurch, clearSearchChurch, value]);
 
-  const handleChange = (event) => {
-    const value = event.target.value;
-    setChurchName(value);
-
-    debounced(value);
-  };
-
-  const { onFocus, onBlur, hide, label = "" } = props;
-
-  return (
-    <div>
-      <Input
-        type="text"
-        id="searchChurchId"
-        name="query"
-        className="form-control form-control-sm"
-        placeholder="Buscar iglesia..."
-        autoComplete="Off"
-        onChange={(e) => handleChange(e)}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        value={churchName}
-        label={label}
-      />
-
-      {churches.length > 0 && !hide && (
-        <div
-          className="list-group col-12 shadow bg-white position-absolute p-0"
-          style={{ marginTop: "-15px", zIndex: "999", maxWidth: "600px" }}
-        >
-          {churches.map((church) => (
-            <button
-              key={church.id}
-              onClick={() => handleSelectChurch(church)}
-              className="list-group-item list-group-item-action w-100 py-2"
-            >
-              <span className="d-block">{church.global_title}</span>
+  const formatResult = (church) => {
+    return (
+      <div style={{ cursor: "pointer" }}>
+         <span className="d-block">{church.global_title}</span>
               <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
                 {church.shepherd && (
                   <em>
@@ -100,10 +47,38 @@ const SearchChurch = (props) => {
                   </em>
                 )}
               </span>
-            </button>
-          ))}
-        </div>
-      )}
+              <hr style={{margin: "0", padding: "0", marginTop: "5px"}}/>
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <label htmlFor="">Iglesia</label>
+      <ReactSearchAutocomplete
+        items={data}
+        onSelect={handleOnSelect}
+        formatResult={formatResult}
+        onSearch={handleOnSearch}
+        inputSearchString={churchName}
+        placeholder={valueSearch ? valueSearch : "Digitar iglesia o pastor"}
+        fuseOptions={{ keys: ["global_title", "shepherd_full_name"] }} // Search on both fields
+        resultStringKeyName="global_title" // String to display in the results
+        showIcon={false}
+        showNoResultsText="No existe ninguna iglesia con dicho nombre."
+        styling={{
+          height: "30px",
+          borderRadius: "4px",
+          backgroundColor: "white",
+          boxShadow: "none",
+          hoverBackgroundColor: "#f6f6f6",
+          color: "#495057",
+          cursor: "Pointer",
+          fontFamily: "Inherit",
+          clearIconMargin: "-2px 3px 0 0",
+          zIndex: 3,
+        }}
+      />
     </div>
   );
 };

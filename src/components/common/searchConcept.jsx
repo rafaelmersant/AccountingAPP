@@ -9,7 +9,8 @@ const SearchConcept = ({
   value
 }) => {
   const [conceptName, setConceptName] = useState(value);
-  
+  const [valueSearch, setValueSearch] = useState(value);
+
   const handleOnSelect = (concept) => {
     onSelect(concept);
   };
@@ -19,7 +20,11 @@ const SearchConcept = ({
       setConceptName(" ");
       onClearSearchConcept(false);
     }
-  }, [onClearSearchConcept, clearSearchConcept]);
+
+    if (!clearSearchConcept) {
+      setValueSearch(value);
+    }
+  }, [onClearSearchConcept, clearSearchConcept, value]);
 
   useEffect(() => {
     if (conceptName !== value) {
@@ -49,6 +54,7 @@ const SearchConcept = ({
         onSelect={handleOnSelect}
         formatResult={formatResult}
         inputSearchString={conceptName}
+        placeholder={valueSearch ? valueSearch : "Digitar concepto"}
         fuseOptions={{ keys: ["description"] }} // Search on both fields
         resultStringKeyName="description" // String to display in the results
         showIcon={false}

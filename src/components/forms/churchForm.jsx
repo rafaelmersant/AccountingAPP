@@ -6,6 +6,7 @@ import { getChurch, saveChurch } from "../../services/churchService";
 import SearchPerson from "../common/searchPerson";
 import PersonModal from "../modals/personModal";
 import Select from "../common/select";
+import { getPeople } from "../../services/personService";
 
 class ChurchForm extends Form {
   state = {
@@ -21,8 +22,8 @@ class ChurchForm extends Form {
     },
     errors: {},
     action: "Nueva Iglesia",
-    hideSearchPerson: false,
     searchPersonText: "",
+    searchPersonTextType: "",
     clearSearchPerson: false,
     zones: [
       { id: "Cibao Central", name: "Cibao Central" },
@@ -84,8 +85,14 @@ class ChurchForm extends Form {
     }
   }
 
+  async populatePeople() {
+    const { data: people } = await getPeople();
+    this.setState({ people: people.results });
+  }
+
   async componentDidMount() {
     await this.populateChurch();
+    await this.populatePeople();
   }
 
   handleSelectPerson = async (person) => {
@@ -94,26 +101,14 @@ class ChurchForm extends Form {
     };
     handler(window.event);
 
-    if (person.id === 0) {
-      this.raisePersonModal.click();
-      return false;
-    }
-
     const data = { ...this.state.data };
     data.shepherd_id = person.id;
 
     this.setState({
       data,
-      hideSearchPerson: true,
       clearSearchPerson: false,
       searchPersonText: `${person.first_name} ${person.last_name}`,
     });
-  };
-
-  handleFocusPerson = (value) => {
-    setTimeout(() => {
-      this.setState({ hideSearchPerson: value });
-    }, 200);
   };
 
   handleCleanPerson = async () => {
@@ -124,6 +119,14 @@ class ChurchForm extends Form {
 
   handleSetNewPerson = (e) => {
     this.handleSelectPerson(e);
+  };
+
+  handleTypingPerson = (value) => {
+    this.setState({ searchPersonTextType: value });
+  };
+
+  handleSearchPerson = async (value) => {
+    this.setState({ clearSearchPerson: value });
   };
 
   mapToViewModel(church) {
@@ -171,12 +174,11 @@ class ChurchForm extends Form {
               <div className="col-7">
                 <SearchPerson
                   onSelect={this.handleSelectPerson}
-                  onFocus={() => this.handleFocusPerson(false)}
-                  onBlur={() => this.handleFocusPerson(true)}
+                  onTyping={this.handleTypingPerson}
+                  onClearSearchPerson={this.handleSearchPerson}
                   clearSearchPerson={this.state.clearSearchPerson}
-                  hide={this.state.hideSearchPerson}
                   value={this.state.searchPersonText}
-                  label="Pastor"
+                  data={this.state.people}
                 />
               </div>
               <div>
@@ -193,6 +195,7 @@ class ChurchForm extends Form {
                         position: "absolute",
                         marginLeft: "-39px",
                         cursor: "pointer",
+                        zIndex: 3
                       }}
                       title="Limpiar filtro de pastor"
                       onClick={this.handleCleanPerson}

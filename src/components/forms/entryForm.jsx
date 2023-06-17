@@ -39,6 +39,8 @@ import PersonModal from "../modals/personModal";
 import ConceptModal from "../modals/conceptModal";
 import { getConcept, getConcepts } from "../../services/conceptService";
 import Select from "../common/select";
+import { getPeople } from "../../services/personService";
+import { getChurches } from "../../services/churchService";
 
 registerLocale("es", es);
 
@@ -63,6 +65,8 @@ class EntryForm extends Form {
     disabledSave: false,
     entryDate: new Date(),
     concepts: [],
+    people: [],
+    churches: [],
     details: [],
     detailsOriginal: [],
     detailsToDelete: [],
@@ -106,11 +110,11 @@ class EntryForm extends Form {
     clearSearchConcept: false,
     clearSearchPerson: false,
     clearSearchChurch: false,
-    hideSearchChurch: false,
-    hideSearchPerson: false,
     searchConceptText: "",
-    searchChurchText: "",
     searchPersonText: "",
+    searchChurchText: "",
+    searchPersonTextType: "",
+    searchChurchTextType: "",
     serializedEntryHeader: {},
     serializedEntryDetail: [],
   };
@@ -133,6 +137,16 @@ class EntryForm extends Form {
   async populateConcepts() {
     const { data: concepts } = await getConcepts();
     this.setState({ concepts: concepts.results });
+  }
+
+  async populatePeople() {
+    const { data: people } = await getPeople();
+    this.setState({ people: people.results });
+  }
+
+  async populateChurches() {
+    const { data: churches } = await getChurches();
+    this.setState({ churches: churches.results });
   }
 
   resetLineValues() {
@@ -217,8 +231,6 @@ class EntryForm extends Form {
         entryDate: new Date(entryHeader.created_date),
         searchChurchText: searchChurchText,
         searchPersonText: searchPersonText,
-        hideSearchChurch: true,
-        hideSearchPerson: true,
         action: "Detalle de registro No. ",
         serializedEntryHeader: entryHeader,
         serializedEntryDetail: entryDetail,
@@ -248,7 +260,7 @@ class EntryForm extends Form {
         return this.props.history.replace("/not-found");
     }
   }
-
+  
   handleChangeEntryDate = (date) => {
     const data = { ...this.state.data };
     data.creationDate = date.toISOString();
@@ -274,11 +286,6 @@ class EntryForm extends Form {
       }
     };
     handler(window.event);
-
-    if (concept.id === 0) {
-      this.raiseConceptModal.click();
-      return false;
-    }
 
     const concept_found = _.find(this.state.details, function (item) {
       return item.concept_id === concept.id;
@@ -312,55 +319,42 @@ class EntryForm extends Form {
     };
     handler(window.event);
 
-    if (church.id === 0) {
-      this.raiseChurchModal.click();
-      return false;
-    }
-
     const data = { ...this.state.data };
     data.church_id = church.id;
 
     this.setState({
       data,
-      hideSearchChurch: true,
       clearSearchChurch: false,
       searchChurchText: `${church.global_title}`,
     });
   };
 
-  handleFocusChurch = (value) => {
-    setTimeout(() => {
-      this.setState({ hideSearchChurch: value });
-    }, 200);
-  };
-
   handleSelectPerson = async (person) => {
     const handler = (e) => {
       e.preventDefault();
+      if (e.type !== "keydown" && e.type !== "mousedown") {
+        this.setState({
+          searchPersonText: `${person.first_name} ${person.last_name}`,
+        });
+      }
     };
     handler(window.event);
-
-    if (person.id === 0) {
-      // this.raisePersonModal.click();
-      toast.error("Los obreros estan siendo agregados desde el sistema de huellas digitales.");
-      return false;
-    }
 
     const data = { ...this.state.data };
     data.person_id = person.id;
 
     this.setState({
       data,
-      hideSearchPerson: true,
-      clearSearchPerson: false,
-      searchPersonText: `${person.first_name} ${person.last_name}`,
+      searchPersonTextType: person.full_name
     });
   };
 
-  handleFocusPerson = (value) => {
-    setTimeout(() => {
-      this.setState({ hideSearchPerson: value });
-    }, 200);
+  handleTypingPerson = (value) => {
+    this.setState({ searchPersonTextType: value });
+  };
+
+  handleTypingChurch = (value) => {
+    this.setState({ searchChurchTextType: value });
   };
 
   validateDuplicity = async (line) => {
@@ -407,7 +401,7 @@ class EntryForm extends Form {
         details,
         currentConcept: {},
         searchConceptText: "",
-        clearSearchConcept: true,
+        clearSearchConcept: true
       });
 
       this.updateTotals();
@@ -438,7 +432,7 @@ class EntryForm extends Form {
 
       setTimeout(() => {
         this.updateTotals();
-      });
+      }, 150);
     }
   };
 
@@ -468,9 +462,8 @@ class EntryForm extends Form {
 
     this.handleDeleteDetail(detail, true);
 
-    setTimeout(() => {
-      document.getElementById("amount").focus();
-    }, 300);
+    setTimeout(() => document.getElementById("amount").focus(), 200);
+    setTimeout(() => document.getElementById("amount").click(), 100);
   };
 
   handleSetNewChurch = (e) => {
@@ -500,6 +493,8 @@ class EntryForm extends Form {
 
     try {
       await this.populateConcepts();
+      await this.populatePeople();
+      await this.populateChurches();
       await this.populateEntry(false);
     } catch (ex) {
       try {
@@ -654,12 +649,21 @@ class EntryForm extends Form {
   handleCleanPerson = async () => {
     const { data } = { ...this.state };
     data.person_id = 0;
-    this.setState({ data, searchPersonText: "" });
+    this.setState({ data, searchPersonText: "", searchPersonTextType: "" });
+  };
+
+  handleSearchPerson = async (value) => {
+    this.setState({ clearSearchPerson: value });
+  };
+
+  handleSearchChurch = async (value) => {
+    this.setState({ clearSearchChurch: value });
   };
 
   handleSearchConcept = async (value) => {
     this.setState({ clearSearchConcept: value });
   };
+
 
   render() {
     const { user } = this.props;
@@ -681,14 +685,13 @@ class EntryForm extends Form {
             <form onSubmit={this.handleSubmit}>
               <div className="row">
                 <div className="col-8">
-                  <SearchChurch
+                <SearchChurch
                     onSelect={this.handleSelectChurch}
-                    onFocus={() => this.handleFocusChurch(false)}
-                    onBlur={() => this.handleFocusChurch(true)}
+                    onTyping={this.handleTypingChurch}
+                    onClearSearchChurch={this.handleSearchChurch}
                     clearSearchChurch={this.state.clearSearchChurch}
-                    hide={this.state.hideSearchChurch}
                     value={this.state.searchChurchText}
-                    label="Iglesia"
+                    data={this.state.churches}
                   />
                 </div>
                 <div>
@@ -705,6 +708,7 @@ class EntryForm extends Form {
                           position: "absolute",
                           marginLeft: "-39px",
                           cursor: "pointer",
+                          zIndex: 99
                         }}
                         title="Limpiar filtro de iglesia"
                         onClick={this.handleCleanChurch}
@@ -735,14 +739,13 @@ class EntryForm extends Form {
 
               <div className="row">
                 <div className="col-8">
-                  <SearchPerson
+                <SearchPerson
                     onSelect={this.handleSelectPerson}
-                    onFocus={() => this.handleFocusPerson(false)}
-                    onBlur={() => this.handleFocusPerson(true)}
+                    onTyping={this.handleTypingPerson}
+                    onClearSearchPerson={this.handleSearchPerson}
                     clearSearchPerson={this.state.clearSearchPerson}
-                    hide={this.state.hideSearchPerson}
                     value={this.state.searchPersonText}
-                    label="Obrero"
+                    data={this.state.people}
                   />
                 </div>
                 <div>
@@ -759,6 +762,7 @@ class EntryForm extends Form {
                           position: "absolute",
                           marginLeft: "-39px",
                           cursor: "pointer",
+                          zIndex: 99
                         }}
                         title="Limpiar filtro de obrero"
                         onClick={this.handleCleanPerson}

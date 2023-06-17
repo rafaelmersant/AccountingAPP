@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { toast } from "react-toastify";
 import SearchChurch from "./searchChurch";
 import Input from "./input";
 import SearchPerson from "./searchPerson";
+import { getPeople } from "../../services/personService";
+import { getChurches } from "../../services/churchService";
 
 class SearchEntryBlock extends Component {
   state = {
@@ -10,12 +11,28 @@ class SearchEntryBlock extends Component {
       entry: "",
     },
 
-    hideSearchChurch: false,
     searchChurchText: "",
-
-    hideSearchPerson: false,
     searchPersonText: "",
+    searchChurchTextType: "",
+    searchCPersonTextType: "",
+    clearSearchChurch: false,
+    clearSearchPerson: false,
   };
+
+  async populatePeople() {
+    const { data: people } = await getPeople();
+    this.setState({ people: people.results });
+  }
+
+  async populateChurches() {
+    const { data: churches } = await getChurches();
+    this.setState({ churches: churches.results });
+  }
+
+  async componentDidMount() {
+    await this.populatePeople();
+    await this.populateChurches();
+  }
 
   handleChange = async ({ currentTarget: input }) => {
     let { data, searchChurchText, searchPersonText } = { ...this.state };
@@ -26,24 +43,10 @@ class SearchEntryBlock extends Component {
       searchChurchText = "";
       searchPersonText = "";
 
-      this.handleFocusChurch(true);
-      this.handleFocusPerson(true);
       this.props.onEntryChange(input.value);
     }
 
     this.setState({ data, searchChurchText, searchPersonText });
-  };
-
-  handleFocusChurch = (value) => {
-    setTimeout(() => {
-      this.setState({ hideSearchChurch: value });
-    }, 200);
-  };
-
-  handleFocusPerson = (value) => {
-    setTimeout(() => {
-      this.setState({ hideSearchPerson: value });
-    }, 200);
   };
 
   handleSelectChurch = async (church) => {
@@ -52,18 +55,13 @@ class SearchEntryBlock extends Component {
     };
     handler(window.event);
 
-    if (church.id === 0) {
-      toast.error("Lo sentimos, no puede crear una nueva iglesia desde aqui.");
-      return false;
-    }
-
     const data = { ...this.state.data };
     data.church_id = church.id;
     data.entry = "";
 
     this.setState({
       data,
-      hideSearchChurch: true,
+      clearSearchChurch: false,
       searchChurchText: `${church.global_title}`,
     });
 
@@ -75,11 +73,6 @@ class SearchEntryBlock extends Component {
       e.preventDefault();
     };
     handler(window.event);
-
-    if (person.id === 0) {
-      toast.error("Lo sentimos, no puede crear un nuevo obrero desde aqui.");
-      return false;
-    }
 
     const data = { ...this.state.data };
     data.person_id = person.id;
@@ -114,6 +107,22 @@ class SearchEntryBlock extends Component {
     this.setState({ searchPersonText: "" });
   };
 
+  handleTypingChurch = (value) => {
+    this.setState({ searchChurchTextType: value });
+  };
+
+  handleSearchChurch = async (value) => {
+    this.setState({ clearSearchChurch: value });
+  };
+
+  handleTypingPerson = (value) => {
+    this.setState({ searchPersonTextType: value });
+  };
+
+  handleSearchPerson = async (value) => {
+    this.setState({ clearSearchPerson: value });
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -131,12 +140,11 @@ class SearchEntryBlock extends Component {
           <div className="ml-4 w-25">
             <SearchChurch
               onSelect={this.handleSelectChurch}
-              onFocus={() => this.handleFocusChurch(false)}
-              onBlur={() => this.handleFocusChurch(true)}
-              hide={this.state.hideSearchChurch}
+              onTyping={this.handleTypingChurch}
+              onClearSearchChurch={this.handleSearchChurch}
+              clearSearchChurch={this.state.clearSearchChurch}
               value={this.state.searchChurchText}
-              label="Iglesia"
-              name="searchChurch"
+              data={this.state.churches}
             />
           </div>
           <div>
@@ -153,6 +161,7 @@ class SearchEntryBlock extends Component {
                     position: "absolute",
                     marginLeft: "-21px",
                     cursor: "pointer",
+                    zIndex: 3,
                   }}
                   title="Limpiar filtro de iglesia"
                   onClick={this.handleClearChurchSelection}
@@ -164,12 +173,11 @@ class SearchEntryBlock extends Component {
           <div className="ml-4 w-25">
             <SearchPerson
               onSelect={this.handleSelectPerson}
-              onFocus={() => this.handleFocusPerson(false)}
-              onBlur={() => this.handleFocusPerson(true)}
-              hide={this.state.hideSearchPerson}
+              onTyping={this.handleTypingPerson}
+              onClearSearchPerson={this.handleSearchPerson}
+              clearSearchPerson={this.state.clearSearchPerson}
               value={this.state.searchPersonText}
-              label="Obrero"
-              name="searchPerson"
+              data={this.state.people}
             />
           </div>
           <div className="col">
@@ -186,6 +194,7 @@ class SearchEntryBlock extends Component {
                     position: "absolute",
                     marginLeft: "-36px",
                     cursor: "pointer",
+                    zIndex: 3
                   }}
                   title="Limpiar filtro de obrero"
                   onClick={this.handleClearPersonSelection}
