@@ -517,9 +517,8 @@ class EntryForm extends Form {
 
     this.handleDeleteDetail(detail, true);
 
-    setTimeout(() => {
-      document.getElementById("amount").focus();
-    }, 300);
+    setTimeout(() => document.getElementById("amount").focus(), 200);
+    setTimeout(() => document.getElementById("amount").click(), 100);
   };
 
   handleSetNewChurch = (e) => {
