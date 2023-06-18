@@ -20,24 +20,6 @@ class PeopleTable extends Component {
         <Link to={`/estudiante/${person.id}`}> {person.last_name} </Link>
       ),
     },
-    // {
-    //   path: "credential",
-    //   label: "Credencial",
-    //   content: (person) => (
-    //     <span>
-    //       {`${person.credential}`}
-    //       {person.credential_start && ` - ${person.credential_start}`}
-    //     </span>
-    //   ),
-    // },
-    // { path: "identification", label: "Cédula" },
-    // {
-    //   path: "church_id",
-    //   label: "Iglesia",
-    //   content: (person) => {
-    //     return <span>{person.church && `${person.church.global_title}`}</span>;
-    //   },
-    // },
     {
       path: "course",
       label: "Curso",

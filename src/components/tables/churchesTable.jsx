@@ -22,7 +22,7 @@ class ChurchesTable extends Component {
       ),
     },
   
-    { path: "created_date", label: "Creada (m/d/a)" },
+    { path: "created_date", label: "Creado (m/d/a)" },
   ];
 
   deleteColumn = {
