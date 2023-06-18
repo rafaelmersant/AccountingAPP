@@ -96,7 +96,7 @@ class Churches extends Component {
             <div className="mb-4"></div>
             {getCurrentUser().role === "Owner" && (
               <div className="mb-4">
-                <NewButton label="Nueva Iglesia" to="/iglesia/new" />
+                <NewButton label="Nuevo Curso" to="/curso/new" />
               </div>
             )}
 
