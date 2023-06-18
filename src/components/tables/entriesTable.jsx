@@ -40,6 +40,20 @@ class EntriesTable extends Component {
       ),
     },
     {
+      path: "detail",
+      label: "Detalle",
+      content: (entry) =>
+        entry.item_set.map((item) => (
+          <div className="text-left" key={item.id}>
+            <span style={{ fontSize: "12px" }}>
+              {item.concept.description}{" "}
+              {item.reference && <span>({item.reference})</span>}:{" "}
+              <strong> <span className={item.amount > 0 ? "text-dark" : "text-danger"}>{formatNumber(item.amount)}</span></strong>
+            </span>
+          </div>
+        )),
+    },
+    {
       path: "total_amount",
       label: "Monto",
       content: (entry) => (
