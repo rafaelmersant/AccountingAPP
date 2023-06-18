@@ -130,7 +130,7 @@ class Churches extends Component {
                   onPageChange={this.handlePageChange}
                 />
                 <p className="text-muted ml-3 mt-2">
-                  Mostrando {totalCount} iglesias
+                  Mostrando {totalCount} cursos
                 </p>
               </div>
             )}
