@@ -41,7 +41,7 @@ const SearchPerson = ({
               </span>
               <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
                 {person.church && (
-                  <em>{"Iglesia: " + person.church.global_title}</em>
+                  <em>{"Curso: " + person.church.global_title}</em>
                 )}
               </span>
               <hr style={{margin: "0", padding: "0", marginTop: "5px"}}/>
