@@ -93,7 +93,6 @@ class Churches extends Component {
         <div className="row">
           <div className="col">
             <h5 className="pull-left text-info mt-2">Listado de Cursos</h5>
-            <div className="mb-4"></div>
             {getCurrentUser().role === "Owner" && (
               <div className="mb-4">
                 <NewButton label="Nuevo Curso" to="/curso/new" />
