@@ -49,7 +49,7 @@ class EntryForm extends Form {
   state = {
     data: {
       id: 0,
-      church_id: 1,
+      church_id: "",
       church: {},
       person_id: "",
       person: {},
