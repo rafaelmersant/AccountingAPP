@@ -132,7 +132,7 @@ class EntryForm extends Form {
     created_date: Joi.string(),
     entry_date: Joi.string(),
   };
-
+  
   async populateConcepts() {
     const { data: concepts } = await getConcepts();
     this.setState({ concepts: concepts.results });
@@ -517,9 +517,8 @@ class EntryForm extends Form {
 
     this.handleDeleteDetail(detail, true);
 
-    setTimeout(() => {
-      document.getElementById("amount").focus();
-    }, 300);
+    setTimeout(() => document.getElementById("amount").focus(), 200);
+    setTimeout(() => document.getElementById("amount").click(), 100);
   };
 
   handleSetNewChurch = (e) => {

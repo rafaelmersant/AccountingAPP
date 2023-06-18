@@ -10,7 +10,7 @@ const SearchPerson = ({
   value
 }) => {
   const [personName, setPersonName] = useState(value);
-  
+    
   const handleOnSelect = (person) => {
     onSelect(person);
   };
