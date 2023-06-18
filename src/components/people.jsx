@@ -166,7 +166,7 @@ class People extends Component {
                 </div>
                 <p className="text-muted ml-3 mt-2">
                   <em>
-                    Mostrando {total} obreros de {totalPeople}
+                    Mostrando {total} estudiantes de {totalPeople}
                   </em>
                 </p>
               </div>
