@@ -79,15 +79,15 @@ class App extends Component {
                   <ProtectedRoute path="/conceptos" component={Concepts} />
                   <ProtectedRoute path="/concepto/:id" component={ConceptForm} />
 
-                  <ProtectedRoute path="/iglesias" component={Churchs} />
-                  <ProtectedRoute path="/iglesia/:id" component={ChurchForm} />
+                  <ProtectedRoute path="/cursos" component={Churchs} />
+                  <ProtectedRoute path="/curso/:id" component={ChurchForm} />
 
                   <ProtectedRoute path="/registros" component={Entries} />
                   <ProtectedRoute path="/registro/:id" component={EntryForm} />
 
-                  <ProtectedRoute path="/obreros" component={People} />
+                  <ProtectedRoute path="/estudiantes" component={People} />
                   <ProtectedRoute
-                    path="/obrero/:id"
+                    path="/estudiante/:id"
                     component={PersonForm}
                   />
                   

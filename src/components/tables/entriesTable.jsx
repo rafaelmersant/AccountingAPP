@@ -15,19 +15,18 @@ class EntriesTable extends Component {
         </div>
       ),
     },
-    {
-      path: "church",
-      label: "Iglesia",
-      content: (entry) => (
-        <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
-          {entry.church && `${entry.church.global_title}`}
-        </span>
-      ),
-    },
+    // {
+    //   path: "church",
+    //   label: "Iglesia",
+    //   content: (entry) => (
+    //     <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>
+    //       {entry.church && `${entry.church.global_title}`}
+    //     </span>
+    //   ),
+    // },
     {
       path: "person",
-      label: "Obrero",
-      classes: "hidden-on-small",
+      label: "Estudiante",
       content: (entry) => (
         <div>
           <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>

@@ -37,7 +37,7 @@ const SearchChurch = ({
     return (
       <div style={{ cursor: "pointer" }}>
          <span className="d-block">{church.global_title}</span>
-              <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
+              {/* <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
                 {church.shepherd && (
                   <em>
                     {"Pastor(a): " +
@@ -46,7 +46,7 @@ const SearchChurch = ({
                       church.shepherd.last_name}
                   </em>
                 )}
-              </span>
+              </span> */}
               <hr style={{margin: "0", padding: "0", marginTop: "5px"}}/>
       </div>
     );
@@ -54,18 +54,18 @@ const SearchChurch = ({
 
   return (
     <div>
-      <label htmlFor="">Iglesia</label>
+      <label htmlFor="">Cursos</label>
       <ReactSearchAutocomplete
         items={data}
         onSelect={handleOnSelect}
         formatResult={formatResult}
         onSearch={handleOnSearch}
         inputSearchString={churchName}
-        placeholder={valueSearch ? valueSearch : "Digitar iglesia o pastor"}
+        placeholder={valueSearch ? valueSearch : "Digitar Curso"}
         fuseOptions={{ keys: ["global_title", "shepherd_full_name"] }} // Search on both fields
         resultStringKeyName="global_title" // String to display in the results
         showIcon={false}
-        showNoResultsText="No existe ninguna iglesia con dicho nombre."
+        showNoResultsText="No existe ningún curso con dicho nombre."
         styling={{
           height: "30px",
           borderRadius: "4px",

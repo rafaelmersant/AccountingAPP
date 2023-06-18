@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import SearchChurch from "./searchChurch";
 import Input from "./input";
 import SearchPerson from "./searchPerson";
 import { getPeople } from "../../services/personService";
@@ -135,39 +134,6 @@ class SearchEntryBlock extends Component {
               placeholder="Número de Transacción"
               label="Transacción No."
             />
-          </div>
-
-          <div className="ml-4 w-25">
-            <SearchChurch
-              onSelect={this.handleSelectChurch}
-              onTyping={this.handleTypingChurch}
-              onClearSearchChurch={this.handleSearchChurch}
-              clearSearchChurch={this.state.clearSearchChurch}
-              value={this.state.searchChurchText}
-              data={this.state.churches}
-            />
-          </div>
-          <div>
-            {this.state.searchChurchText && (
-              <div
-                style={{
-                  marginTop: "36px",
-                }}
-              >
-                <span
-                  className="fa fa-trash text-danger"
-                  style={{
-                    fontSize: "20px",
-                    position: "absolute",
-                    marginLeft: "-21px",
-                    cursor: "pointer",
-                    zIndex: 3,
-                  }}
-                  title="Limpiar filtro de iglesia"
-                  onClick={this.handleClearChurchSelection}
-                ></span>
-              </div>
-            )}
           </div>
 
           <div className="ml-4 w-25">

@@ -51,18 +51,18 @@ const SearchPerson = ({
 
   return (
     <div>
-      <label htmlFor="">Obrero</label>
+      <label htmlFor="">Estudiante</label>
       <ReactSearchAutocomplete
         items={data}
         onSelect={handleOnSelect}
         formatResult={formatResult}
         onSearch={handleOnSearch}
         inputSearchString={personName}
-        placeholder={valueSearch ? valueSearch : "Digitar obrero"}
+        placeholder={valueSearch ? valueSearch : "Digitar estudiante"}
         fuseOptions={{ keys: ["full_name"] }} // Search on both fields
         resultStringKeyName="full_name" // String to display in the results
         showIcon={false}
-        showNoResultsText="No existe ningún obrero con dicho nombre."
+        showNoResultsText="No existe ningún estudiante con dicho nombre."
         styling={{
           height: "30px",
           borderRadius: "4px",

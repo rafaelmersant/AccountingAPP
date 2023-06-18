@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import ReactToPrint from "react-to-print";
 import Form from "../common/form";
 import Input from "../common/input";
-import SearchChurch from "../common/searchChurch";
 import SearchPerson from "../common/searchPerson";
 import SearchConcept from "../common/searchConcept";
 
@@ -50,7 +49,7 @@ class EntryForm extends Form {
   state = {
     data: {
       id: 0,
-      church_id: "",
+      church_id: 1,
       church: {},
       person_id: "",
       person: {},
@@ -529,7 +528,7 @@ class EntryForm extends Form {
     );
 
     if (anyChurch.length && !this.state.data.church_id) {
-      toast.error("Debe agregar el nombre de la iglesia.");
+      toast.error("Debe agregar el nombre del colegio.");
       return false;
     }
 
@@ -539,7 +538,7 @@ class EntryForm extends Form {
       !this.state.data.person_id
     ) {
       toast.error(
-        "Debe agregar el nombre de la iglesia o el nombre del obrero."
+        "Debe agregar el nombre del colegio o el nombre del estudiante."
       );
       return false;
     }
@@ -685,39 +684,11 @@ class EntryForm extends Form {
             <form onSubmit={this.handleSubmit}>
               <div className="row">
                 <div className="col-8">
-                <SearchChurch
-                    onSelect={this.handleSelectChurch}
-                    onTyping={this.handleTypingChurch}
-                    onClearSearchChurch={this.handleSearchChurch}
-                    clearSearchChurch={this.state.clearSearchChurch}
-                    value={this.state.searchChurchText}
-                    data={this.state.churches}
-                  />
+                  <label htmlFor="">Colegio</label>
+                  <input className="form-control form-control-sm" type="text" value={"Colegio YIREH"} />
                 </div>
-                <div>
-                  {this.state.data.church_id > 0 && (
-                    <div
-                      style={{
-                        marginTop: "36px",
-                      }}
-                    >
-                      <span
-                        className="fa fa-trash text-danger"
-                        style={{
-                          fontSize: "24px",
-                          position: "absolute",
-                          marginLeft: "-39px",
-                          cursor: "pointer",
-                          zIndex: 99
-                        }}
-                        title="Limpiar filtro de iglesia"
-                        onClick={this.handleCleanChurch}
-                      ></span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="col-2 col-sm-4 col-md-4">
+              
+                <div className="col-2 col-sm-4 col-md-4 mt-2">
                   <label className="mr-1">Fecha</label>
                   <div
                     className="mr-3"

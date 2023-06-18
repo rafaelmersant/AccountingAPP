@@ -10,41 +10,41 @@ class PeopleTable extends Component {
       path: "first_name",
       label: "Nombre",
       content: (person) => (
-        <Link to={`/obrero/${person.id}`}> {person.first_name} </Link>
+        <Link to={`/estudiante/${person.id}`}> {person.first_name} </Link>
       ),
     },
     {
       path: "last_name",
       label: "Apellidos",
       content: (person) => (
-        <Link to={`/obrero/${person.id}`}> {person.last_name} </Link>
+        <Link to={`/estudiante/${person.id}`}> {person.last_name} </Link>
       ),
     },
+    // {
+    //   path: "credential",
+    //   label: "Credencial",
+    //   content: (person) => (
+    //     <span>
+    //       {`${person.credential}`}
+    //       {person.credential_start && ` - ${person.credential_start}`}
+    //     </span>
+    //   ),
+    // },
+    // { path: "identification", label: "Cédula" },
+    // {
+    //   path: "church_id",
+    //   label: "Iglesia",
+    //   content: (person) => {
+    //     return <span>{person.church && `${person.church.global_title}`}</span>;
+    //   },
+    // },
     {
-      path: "credential",
-      label: "Credencial",
-      content: (person) => (
-        <span>
-          {`${person.credential}`}
-          {person.credential_start && ` - ${person.credential_start}`}
-        </span>
-      ),
-    },
-    { path: "identification", label: "Cédula" },
-    {
-      path: "church_id",
-      label: "Iglesia",
-      content: (person) => {
-        return <span>{person.church && `${person.church.global_title}`}</span>;
-      },
-    },
-    {
-      path: "zone",
-      label: "Presbiterio",
+      path: "course",
+      label: "Curso",
       content: (person) => {
         return (
           <span>
-            {person.church && person.church.zone && `${person.church.zone}`}
+            {person.church && person.church.global_title && `${person.church.global_title}`}
           </span>
         );
       },
@@ -58,7 +58,6 @@ class PeopleTable extends Component {
         );
       },
     },
-    // { path: "created_date", label: "Creado (m/d/a)" },
   ];
 
   deleteColumn = {
@@ -73,32 +72,10 @@ class PeopleTable extends Component {
     ),
   };
 
-  attendanceColumn = {
-    key: "attendance",
-    content: (person) => (
-      <>
-        {!person.attendance && (
-          <div className="text-center">
-            <span
-              onClick={() => this.props.onAttendance(person)}
-              className="fa fa-user text-success cursor-pointer trash-size"
-            ></span>
-          </div>
-        )}
-        {person.attendance && (
-          <span className="fa fa-user text-secondary trash-size"></span>
-        )}
-       
-      </>
-    ),
-  };
-
   constructor() {
     super();
     const user = auth.getCurrentUser().email;
     const role = auth.getCurrentUser().role;
-
-    this.columns.push(this.attendanceColumn);
 
     if (user && role === "Owner") this.columns.push(this.deleteColumn);
   }

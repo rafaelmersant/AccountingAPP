@@ -20,8 +20,8 @@ class PrintEntry extends Component {
             <div className="text-center">
               <img
                 width="140px"
-                src={process.env.PUBLIC_URL + "/images/logocepasH50_small.png"}
-                alt="CEPAS"
+                src={process.env.PUBLIC_URL + "/images/yireh_logo.jpeg"}
+                alt="YIREH"
               />
             </div>
             <div className="text-center">
@@ -32,7 +32,7 @@ class PrintEntry extends Component {
                   fontWeight: "normal",
                 }}
               >
-                Concilio Evangélico Pentecostal
+                Colegio Evangélico Arca de Salvación
               </span>
             </div>
             <div className="text-center">
@@ -43,41 +43,29 @@ class PrintEntry extends Component {
                   fontWeight: "bold",
                 }}
               >
-                Arca de Salvación, INC.
+                YIREH
               </span>
             </div>
             <div className="text-center">
-              <span
-                style={{
-                  fontFamily: "Calisto MT",
-                  fontSize: "1.0em",
-                  fontWeight: "normal",
-                }}
-              >
-                DECRETO 313-2000
+              <span className="font-receipt font-receipt-small-invoice">
+                C/Juan de los reyes #5 • Sto. Dgo. Oeste
               </span>
             </div>
 
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                C/Baltazar de los reyes #5 • Sto. Dgo.
-              </span>
-            </div>
-
-            <div className="text-center">
-              <span className="font-receipt font-receipt-small-invoice">
-                Tel. 809-688-7461
+                Tel. 809-000-5555
               </span>
             </div>
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                concilioarcadesalvacion@gmail.com
+                colegioyareh@gmail.com
               </span>
             </div>
 
             <div className="text-center mb-3">
               <span className="font-receipt font-receipt-small-invoice">
-                RNC: 4-01-51549-2
+                RNC: 9-99-99999-9
               </span>
             </div>
 
@@ -88,41 +76,41 @@ class PrintEntry extends Component {
               </span>
             </span>
 
-            {entryHeader.church && (
+            {/* {entryHeader.church && (
               <span className="font-receipt font-receipt-small-invoice d-block">
                 Iglesia: {entryHeader.church.global_title}
               </span>
-            )}
+            )} */}
 
-            {entryHeader.church && entryHeader.church.shepherd && (
+            {/* {entryHeader.church && entryHeader.church.shepherd && (
               <span className="font-receipt font-receipt-small-invoice d-block">
                 Pastor(a): {entryHeader.church.shepherd.first_name}{" "}
                 {entryHeader.church.shepherd.last_name}
               </span>
-            )}
+            )} */}
 
             {entryHeader.person && (
               <span className="font-receipt font-receipt-small-invoice d-block">
-                Obrero: {entryHeader.person.first_name}{" "}
+                Estudiante: {entryHeader.person.first_name}{" "}
                 {entryHeader.person.last_name}
               </span>
             )}
 
-            {entryHeader.person &&
+            {/* {entryHeader.person &&
               !entryHeader.church &&
               entryHeader.person.church && (
                 <span className="font-receipt font-receipt-small-invoice d-block">
                   iglesia: {entryHeader.person.church.global_title}
                 </span>
-              )}
+              )} */}
 
-            {entryHeader.person && entryHeader.person.identification &&
+            {/* {entryHeader.person && entryHeader.person.identification &&
               entryHeader.person.identification.trim().length > 0 && (
                 <span className="font-receipt font-receipt-small-invoice d-block">
                   Cédula:{" "}
                   {entryHeader.person && entryHeader.person.identification}
                 </span>
-              )}
+              )} */}
           </div>
         )}
 

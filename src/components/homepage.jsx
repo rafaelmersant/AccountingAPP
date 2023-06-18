@@ -5,12 +5,12 @@ class HomePage extends Component {
     return (
       <React.Fragment>
         <div className="d-flex justify-content-center">
-          <h2>Concilio Evangelico Pentecostal <strong>Arca de Salvación</strong>, INC.</h2>
+          <h2>Colegio Evangélico Arca de Salvación <strong>YIREH</strong></h2>
         </div>
         <div className="d-flex justify-content-center">
           <img
             style={{ width: "40%", padding: "5px", margin: "0" }}
-            src={process.env.PUBLIC_URL + "/images/logocepasH50_home.png"}
+            src={process.env.PUBLIC_URL + "/images/yireh_logo.jpeg"}
             alt="CEPAS"
           />
         </div>

@@ -7,8 +7,8 @@ const NavBarSide = ({ user }) => {
       <div className="sidebar-heading text-center mb-3">
         <NavLink className="" to="/home">
           <img
-            style={{ width: "100px", padding: "5px", margin: "0" }}
-            src={process.env.PUBLIC_URL + "/images/logocepasH50_small.png"}
+            style={{ width: "65px", padding: "5px", margin: "0" }}
+            src={process.env.PUBLIC_URL + "/images/yireh_logo.jpeg"}
             alt="CEPAS"
           />
         </NavLink>
@@ -36,21 +36,21 @@ const NavBarSide = ({ user }) => {
                   Conceptos
                 </NavLink>
 
-                <NavLink
+                {/* <NavLink
                   className="list-group-item list-group-item-action border-none"
                   to="/cuadre"
                 >
                   <span className="fa fa-book mr-2 color-local" />
                   Cuadre (reporte)
-                </NavLink>
+                </NavLink> */}
 
-                <NavLink
+                {/* <NavLink
                   className="list-group-item list-group-item-action border-none"
                   to="/dashboard"
                 >
                   <span className="fa fa-book mr-2 color-local" />
                   Dashboard
-                </NavLink>
+                </NavLink> */}
 
                 <NavLink
                   className="list-group-item list-group-item-action border-none"
@@ -62,10 +62,10 @@ const NavBarSide = ({ user }) => {
 
                 <NavLink
                   className="list-group-item list-group-item-action border-none"
-                  to="/iglesias"
+                  to="/cursos"
                 >
                   <span className="fa fa-home mr-2 color-local" />
-                  Iglesias
+                  Cursos
                 </NavLink>
               </div>
             )}
@@ -78,10 +78,10 @@ const NavBarSide = ({ user }) => {
               <div>
                 <NavLink
                   className="list-group-item list-group-item-action border-none"
-                  to="/obreros"
+                  to="/estudiantes"
                 >
                   <span className="fa fa-users mr-2 color-local" />
-                  Obreros
+                  Estudiantes
                 </NavLink>
               </div>
             )}

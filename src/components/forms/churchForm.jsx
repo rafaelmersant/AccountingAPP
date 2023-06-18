@@ -3,9 +3,7 @@ import Form from "../common/form";
 import Joi from "joi-browser";
 import { getCurrentUser } from "../../services/authService";
 import { getChurch, saveChurch } from "../../services/churchService";
-import SearchPerson from "../common/searchPerson";
 import PersonModal from "../modals/personModal";
-import Select from "../common/select";
 import { getPeople } from "../../services/personService";
 
 class ChurchForm extends Form {
@@ -21,7 +19,7 @@ class ChurchForm extends Form {
       created_date: new Date().toISOString(),
     },
     errors: {},
-    action: "Nueva Iglesia",
+    action: "Nuevo Curso",
     searchPersonText: "",
     searchPersonTextType: "",
     clearSearchPerson: false,
@@ -53,7 +51,7 @@ class ChurchForm extends Form {
 
   schema = {
     id: Joi.number(),
-    global_title: Joi.optional().label("Titulo Conciliar"),
+    global_title: Joi.optional().label("Descripción"),
     local_title: Joi.optional().label("Titulo Local"),
     location: Joi.optional().label("Ubicación"),
     shepherd_id: Joi.optional().label("Pastor"),
@@ -76,7 +74,7 @@ class ChurchForm extends Form {
 
       this.setState({
         data: this.mapToViewModel(church.results),
-        action: "Editar iglesia",
+        action: "Editar curso",
         searchPersonText: shepherd,
       });
     } catch (ex) {
@@ -148,7 +146,7 @@ class ChurchForm extends Form {
     const { data } = { ...this.state };
     const { data: church } = await saveChurch(data);
 
-    if (!this.props.popUp) this.props.history.push("/iglesias");
+    if (!this.props.popUp) this.props.history.push("/cursos");
     else this.props.closeMe(church);
   };
 
@@ -162,66 +160,10 @@ class ChurchForm extends Form {
           <form onSubmit={this.handleSubmit}>
             <div className="row">
               <div className="col-7">
-                {this.renderInput("global_title", "Titulo Conciliar")}
+                {this.renderInput("global_title", "Descripción")}
               </div>
             </div>
-            <div className="row">
-              <div className="col-7">
-                {this.renderInput("local_title", "Titulo Local")}
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-7">
-                <SearchPerson
-                  onSelect={this.handleSelectPerson}
-                  onTyping={this.handleTypingPerson}
-                  onClearSearchPerson={this.handleSearchPerson}
-                  clearSearchPerson={this.state.clearSearchPerson}
-                  value={this.state.searchPersonText}
-                  data={this.state.people}
-                />
-              </div>
-              <div>
-                {this.state.data.shepherd_id > 0 && (
-                  <div
-                    style={{
-                      marginTop: "36px",
-                    }}
-                  >
-                    <span
-                      className="fa fa-trash text-danger"
-                      style={{
-                        fontSize: "24px",
-                        position: "absolute",
-                        marginLeft: "-39px",
-                        cursor: "pointer",
-                        zIndex: 3
-                      }}
-                      title="Limpiar filtro de pastor"
-                      onClick={this.handleCleanPerson}
-                    ></span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-7">
-                <Select
-                  name="zone"
-                  value={this.state.data.zone}
-                  label="Presbiterio"
-                  options={this.state.zones}
-                  onChange={this.handleChange}
-                  error={null}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-7">
-                {this.renderInput("location", "Ubicación")}
-              </div>
-            </div>
+          
             {this.renderButton("Guardar")}
           </form>
         </div>

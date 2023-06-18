@@ -29,7 +29,7 @@ class PersonForm extends Form {
       created_date: new Date().toISOString(),
     },
     errors: {},
-    action: "Nuevo Obrero",
+    action: "Nuevo Estudiante",
     clearSearchChurch: false,
     searchChurchText: "",
   };
@@ -62,7 +62,7 @@ class PersonForm extends Form {
 
       this.setState({
         data: this.mapToViewModel(person.results),
-        action: "Editar Obrero",
+        action: "Editar Estudiante",
         searchChurchText: church,
       });
     } catch (ex) {
@@ -159,7 +159,7 @@ class PersonForm extends Form {
 
     const { data: person } = await savePerson(data);
 
-    if (!this.props.popUp) this.props.history.push("/obreros");
+    if (!this.props.popUp) this.props.history.push("/estudiantes");
     else this.props.closeMe(person);
   };
 
@@ -184,7 +184,7 @@ class PersonForm extends Form {
                 {this.renderInput("last_name", "Apellidos")}
               </div>
             </div>
-            <div className="row">
+            {/* <div className="row">
               <div className="col">
                 {this.renderInput("identification", "Identificación")}
               </div>
@@ -205,7 +205,7 @@ class PersonForm extends Form {
               <div className="col">
                 {this.renderInput("min_ordenado", "Ministro Ordenado")}
               </div>
-            </div>
+            </div> */}
 
             <div className="row">
               <div className="col">

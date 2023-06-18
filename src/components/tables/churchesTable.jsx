@@ -10,36 +10,18 @@ class ChurchesTable extends Component {
       label: "ID",
       content: (church) => (
         <div className="text-center">
-          <Link to={`/iglesia/${church.id}`}>{church.id}</Link>
+          <Link to={`/curso/${church.id}`}>{church.id}</Link>
         </div>
       ),
     },
     {
       path: "global_title",
-      label: "Titulo Conciliar",
+      label: "Descripción",
       content: (church) => (
-        <Link to={`/iglesia/${church.id}`}>{church.global_title}</Link>
+        <Link to={`/curso/${church.id}`}>{church.global_title}</Link>
       ),
     },
-    {
-      path: "local_title",
-      label: "Titulo Local",
-      content: (church) => <span>{`${church.local_title ? church.local_title : ""}`}</span>,
-    },
-    {
-      path: "shepherd",
-      label: "Pastor",
-      content: (church) => {
-        return (
-          <span>
-            {church.shepherd &&
-              `${church.shepherd.first_name} ${church.shepherd.last_name}`}
-          </span>
-        );
-      },
-    },
-    { path: "zone", label: "Presbiterio" },
-    { path: "location", label: "Ubicación" },
+  
     { path: "created_date", label: "Creada (m/d/a)" },
   ];
 
