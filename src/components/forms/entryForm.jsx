@@ -685,10 +685,10 @@ class EntryForm extends Form {
               <div className="row">
                 <div className="col-8">
                   <label htmlFor="">Colegio</label>
-                  <input className="form-control form-control-sm" type="text" value={"Colegio YIREH"} />
+                  <input className="form-control form-control-sm" type="text" value={"Colegio YIREH"} disabled={true} />
                 </div>
               
-                <div className="col-2 col-sm-4 col-md-4 mt-2">
+                <div className="col-2 col-sm-4 col-md-4">
                   <label className="mr-1">Fecha</label>
                   <div
                     className="mr-3"
@@ -709,7 +709,7 @@ class EntryForm extends Form {
               </div>
 
               <div className="row">
-                <div className="col-8">
+                <div className="col-8 mt-2">
                 <SearchPerson
                     onSelect={this.handleSelectPerson}
                     onTyping={this.handleTypingPerson}
@@ -742,7 +742,7 @@ class EntryForm extends Form {
                   )}
                 </div>
 
-                <div className="col-4">
+                <div className="col-4 mt-2">
                   {this.renderInput("note", "Nota", "text", "", "Opcional")}
                 </div>
               </div>
