@@ -14,14 +14,14 @@ class PrintEntry extends Component {
     console.log("entryDetail", entryDetail);
 
     return (
-      <div style={{ width: "378px" }}>
+      <div style={{ width: "378px", marginTop: "10px" }}>
         {entryHeader && (
           <div>
             <div className="text-center">
               <img
                 width="140px"
-                src={process.env.PUBLIC_URL + "/images/yireh_logo.jpeg"}
-                alt="YIREH"
+                src={process.env.PUBLIC_URL + "/images/raisi_logo.jpeg"}
+                alt="DENTAL"
               />
             </div>
             <div className="text-center">
@@ -32,7 +32,7 @@ class PrintEntry extends Component {
                   fontWeight: "normal",
                 }}
               >
-                Colegio Evangélico Arca de Salvación
+                Clínica Dental
               </span>
             </div>
             <div className="text-center">
@@ -43,31 +43,36 @@ class PrintEntry extends Component {
                   fontWeight: "bold",
                 }}
               >
-                YIREH
+                Dra. Raisi Valdez
               </span>
             </div>
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                C/Juan de los reyes #5 • Sto. Dgo. Oeste
+              C/Duarte #26 Juan Barón, Palenque.
+              </span>
+            </div>
+            <div className="text-center">
+              <span className="font-receipt font-receipt-small-invoice">
+              Frente al parque.
               </span>
             </div>
 
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                Tel. 809-000-5555
+                Tel. 829-786-9791
               </span>
             </div>
-            <div className="text-center">
+            {/* <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                colegioyareh@gmail.com
+                clinicaRaisi@gmail.com
               </span>
-            </div>
+            </div> */}
 
-            <div className="text-center mb-3">
+            {/* <div className="text-center mb-3">
               <span className="font-receipt font-receipt-small-invoice">
                 RNC: 9-99-99999-9
               </span>
-            </div>
+            </div> */}
 
             <span className="font-receipt font-receipt-small-invoice d-block">
               Fecha: {entryDate.toLocaleDateString("en-GB")}
@@ -91,7 +96,7 @@ class PrintEntry extends Component {
 
             {entryHeader.person && (
               <span className="font-receipt font-receipt-small-invoice d-block">
-                Estudiante: {entryHeader.person.first_name}{" "}
+                Paciente: {entryHeader.person.first_name}{" "}
                 {entryHeader.person.last_name}
               </span>
             )}
