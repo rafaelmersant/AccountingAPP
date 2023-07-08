@@ -580,6 +580,7 @@ class EntryForm extends Form {
       }
 
       if (this.state.disabledSave) return false;
+      document.getElementsByClassName("btn-Save")[0].classList.remove("disabled");
 
       if (this.state.details.length === 0) {
         toast.error("Debe agregar al menos una linea en el detalle.");
@@ -587,6 +588,7 @@ class EntryForm extends Form {
       }
 
       this.setState({ disabledSave: true });
+      document.getElementsByClassName("btn-Save")[0].classList.add("disabled");
 
       const { data, entryDate } = { ...this.state };
       data.period_month = entryDate.getMonth() + 1;
@@ -632,6 +634,8 @@ class EntryForm extends Form {
       sessionStorage["newEntry"] = "y";
       window.location = `/registro/${entryHeader.id}`;
     } catch (ex) {
+      document.getElementsByClassName("btn-Save")[0].classList.remove("disabled");
+
       try {
         Sentry.captureException(ex);
       } catch (_ex) {
@@ -935,7 +939,17 @@ class EntryForm extends Form {
                 />
               )}
 
-              {this.isEntryEditable() && this.renderButton("Guardar")}
+              <div className="center-content">
+                {this.isEntryEditable() &&
+                  this.renderButton("Guardar", " btn-Save")}
+                {this.state.disabledSave && (
+                  <span
+                    className="spinner-border text-secondary"
+                    style={{ width: "2rem", height: "2rem" }}
+                    role="status"
+                  />
+                )}
+              </div>
             </form>
           </div>
 

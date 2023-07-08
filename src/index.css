@@ -149,6 +149,14 @@ table.table-fit tbody td, table.table-fit tfoot td {
   padding: 0.4rem !important;
 }
 
+.center-content {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
+}
+
 @media (max-width: 766px) {
   .hidden-on-small {
     display: none !important;
