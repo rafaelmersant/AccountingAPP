@@ -8,7 +8,6 @@ import {
   getPersonByFirstLastName,
 } from "../../services/personService";
 import { getCurrentUser } from "../../services/authService";
-import SearchChurch from "../common/searchChurch";
 import ChurchModal from "../modals/churchModal";
 import { getChurches } from "../../services/churchService";
 
@@ -18,6 +17,7 @@ class PersonForm extends Form {
       id: 0,
       first_name: "",
       last_name: "",
+      reference: "",
       identification: "",
       obrero_inicial: "",
       obrero_exhortador: "",
@@ -38,6 +38,7 @@ class PersonForm extends Form {
     id: Joi.number(),
     first_name: Joi.string().required().max(100).min(3).label("Nombre"),
     last_name: Joi.string().required().min(3).max(100).label("Apellidos"),
+    reference: Joi.optional(),
     identification: Joi.optional(),
     obrero_inicial: Joi.optional(),
     obrero_exhortador: Joi.optional(),
@@ -62,7 +63,7 @@ class PersonForm extends Form {
 
       this.setState({
         data: this.mapToViewModel(person.results),
-        action: "Editar Estudiante",
+        action: "Editar Paciente",
         searchChurchText: church,
       });
     } catch (ex) {
@@ -71,14 +72,8 @@ class PersonForm extends Form {
     }
   }
 
-  async populateChurches() {
-    const { data: churches } = await getChurches();
-    this.setState({ churches: churches.results });
-  }
-
   async componentDidMount() {
     await this.populatePerson();
-    await this.populateChurches();
 
     if (this.props.person_name && this.props.person_name.length) {
       const data = { ...this.state.data };
@@ -128,6 +123,7 @@ class PersonForm extends Form {
       id: person[0].id,
       first_name: person[0].first_name,
       last_name: person[0].last_name,
+      reference: person[0].reference ? person[0].reference : "",
       identification: person[0].identification ? person[0].identification : "",
       obrero_inicial: person[0].obrero_inicial ? person[0].obrero_inicial : "",
       obrero_exhortador: person[0].obrero_exhortador ? person[0].obrero_exhortador : "",
@@ -184,6 +180,13 @@ class PersonForm extends Form {
                 {this.renderInput("last_name", "Apellidos")}
               </div>
             </div>
+
+            <div className="row">
+            <div className="col">
+                {this.renderInput("reference", "Referencia")}
+              </div>
+            </div>
+
             {/* <div className="row">
               <div className="col">
                 {this.renderInput("identification", "Identificación")}
@@ -207,7 +210,7 @@ class PersonForm extends Form {
               </div>
             </div> */}
 
-            <div className="row">
+            {/* <div className="row">
               <div className="col">
                 <SearchChurch
                   onSelect={this.handleSelectChurch}
@@ -240,7 +243,7 @@ class PersonForm extends Form {
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
 
             <div className="mt-3">{this.renderButton("Guardar")}</div>
           </form>
