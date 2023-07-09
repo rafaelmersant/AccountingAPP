@@ -32,7 +32,7 @@ class PrintEntry extends Component {
                   fontWeight: "normal",
                 }}
               >
-                Colegio Evangélico Arca de Salvación
+                Colegio Evangélico
               </span>
             </div>
             <div className="text-center">
@@ -48,26 +48,31 @@ class PrintEntry extends Component {
             </div>
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                C/Juan de los reyes #5 • Sto. Dgo. Oeste
+                C/Martin Lopez #61 Quita Sueño • Sto. Dgo.
               </span>
             </div>
 
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                Tel. 809-000-5555
+                Tel. 809-916-6723
               </span>
             </div>
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                colegioyareh@gmail.com
+                Tel. 829-701-7949
+              </span>
+            </div>
+            <div className="text-center">
+              <span className="font-receipt font-receipt-small-invoice">
+                robertolaralorenzo2@gmail.com
               </span>
             </div>
 
-            <div className="text-center mb-3">
+            {/* <div className="text-center mb-3">
               <span className="font-receipt font-receipt-small-invoice">
                 RNC: 9-99-99999-9
               </span>
-            </div>
+            </div> */}
 
             <span className="font-receipt font-receipt-small-invoice d-block">
               Fecha: {entryDate.toLocaleDateString("en-GB")}
