@@ -48,7 +48,7 @@ class PrintEntry extends Component {
             </div>
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                C/Martin Lopez #61 Quita Sueño • Sto. Dgo.
+                C/Martin Lopez #61 Quita Sueño
               </span>
             </div>
 
