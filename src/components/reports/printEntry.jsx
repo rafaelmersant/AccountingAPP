@@ -68,13 +68,13 @@ class PrintEntry extends Component {
               </span>
             </div>
 
-            {/* <div className="text-center mb-3">
+            {/* <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
                 RNC: 9-99-99999-9
               </span>
             </div> */}
 
-            <span className="font-receipt font-receipt-small-invoice d-block">
+            <span className="font-receipt font-receipt-small-invoice d-block mt-3">
               Fecha: {entryDate.toLocaleDateString("en-GB")}
               <span className="ml-2">
                 Hora: {entryDate.toLocaleTimeString()}
