@@ -26,7 +26,7 @@ class EntriesTable extends Component {
     // },
     {
       path: "person",
-      label: "Estudiante",
+      label: "Paciente",
       content: (entry) => (
         <div>
           <span className={entry.total_amount > 0 ? "text-dark" : "text-danger"}>

@@ -538,7 +538,7 @@ class EntryForm extends Form {
       !this.state.data.person_id
     ) {
       toast.error(
-        "Debe agregar el nombre del colegio o el nombre del estudiante."
+        "Debe agregar el nombre del colegio o el nombre del paciente."
       );
       return false;
     }
