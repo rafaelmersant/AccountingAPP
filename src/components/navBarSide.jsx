@@ -59,14 +59,14 @@ const NavBarSide = ({ user }) => {
                   <span className="fa fa-book mr-2 color-local" />
                   Reporte detallado
                 </NavLink>
-
+{/* 
                 <NavLink
                   className="list-group-item list-group-item-action border-none"
                   to="/cursos"
                 >
                   <span className="fa fa-home mr-2 color-local" />
                   Cursos
-                </NavLink>
+                </NavLink> */}
               </div>
             )}
 
@@ -78,10 +78,10 @@ const NavBarSide = ({ user }) => {
               <div>
                 <NavLink
                   className="list-group-item list-group-item-action border-none"
-                  to="/estudiantes"
+                  to="/pacientes"
                 >
                   <span className="fa fa-users mr-2 color-local" />
-                  Estudiantes
+                  Pacientes
                 </NavLink>
               </div>
             )}

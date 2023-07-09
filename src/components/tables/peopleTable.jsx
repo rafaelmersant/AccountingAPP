@@ -20,17 +20,17 @@ class PeopleTable extends Component {
         <Link to={`/estudiante/${person.id}`}> {person.last_name} </Link>
       ),
     },
-    {
-      path: "course",
-      label: "Curso",
-      content: (person) => {
-        return (
-          <span>
-            {person.church && person.church.global_title && `${person.church.global_title}`}
-          </span>
-        );
-      },
-    },
+    // {
+    //   path: "course",
+    //   label: "Curso",
+    //   content: (person) => {
+    //     return (
+    //       <span>
+    //         {person.church && person.church.global_title && `${person.church.global_title}`}
+    //       </span>
+    //     );
+    //   },
+    // },
     {
       path: "created_date",
       label: "Creado (m/d/a)",

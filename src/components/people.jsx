@@ -122,10 +122,10 @@ class People extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col">
-            <h5 className="pull-left text-info mt-2">Listado de Estudiantes</h5>
+            <h5 className="pull-left text-info mt-2">Listado de Pacientes</h5>
 
             <div className="mb-4">
-              <NewButton label="Nuevo Estudiante" to="/estudiante/new" />
+              <NewButton label="Nuevo Paciente" to="/paciente/new" />
             </div>
 
             <SearchBox
@@ -166,7 +166,7 @@ class People extends Component {
                 </div>
                 <p className="text-muted ml-3 mt-2">
                   <em>
-                    Mostrando {total} estudiantes de {totalPeople}
+                    Mostrando {total} pacientes de {totalPeople}
                   </em>
                 </p>
               </div>

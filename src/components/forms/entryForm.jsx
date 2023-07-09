@@ -684,8 +684,8 @@ class EntryForm extends Form {
             <form onSubmit={this.handleSubmit}>
               <div className="row">
                 <div className="col-8">
-                  <label htmlFor="">Colegio</label>
-                  <input className="form-control form-control-sm" type="text" value={"Colegio YIREH"} disabled={true} />
+                  <label htmlFor="">Clínica</label>
+                  <input className="form-control form-control-sm" type="text" value={"Clínica Raisi Valdez"} disabled={true} />
                 </div>
               
                 <div className="col-2 col-sm-4 col-md-4">
