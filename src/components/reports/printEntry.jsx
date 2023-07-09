@@ -150,8 +150,8 @@ class PrintEntry extends Component {
                       <span className="font-receipt font-receipt-small-invoice">
                         {item.concept.description}
                       </span>
-                      <span className="d-block">Nota: {entryHeader.note}</span>
-                      <span className="d-block">{getMonthName(item.period_month)}-{item.period_year}</span>
+                      {/* <span className="d-block">Nota: {entryHeader.note}</span>
+                      <span className="d-block">{getMonthName(item.period_month)}-{item.period_year}</span> */}
                     </td>
                     <td className="text-right">
                       <span className="font-receipt font-receipt-small-invoice">
