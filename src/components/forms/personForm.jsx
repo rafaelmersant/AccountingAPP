@@ -29,7 +29,7 @@ class PersonForm extends Form {
       created_date: new Date().toISOString(),
     },
     errors: {},
-    action: "Nuevo Estudiante",
+    action: "Nuevo Paciente",
     clearSearchChurch: false,
     searchChurchText: "",
   };
@@ -145,7 +145,7 @@ class PersonForm extends Form {
     );
 
     if (_person.length > 0 && this.state.data.id === 0) {
-      toast.error("Este obrero ya existe!");
+      toast.error("Este paciente ya existe!");
       return false;
     }
 
@@ -155,7 +155,7 @@ class PersonForm extends Form {
 
     const { data: person } = await savePerson(data);
 
-    if (!this.props.popUp) this.props.history.push("/estudiantes");
+    if (!this.props.popUp) this.props.history.push("/pacientes");
     else this.props.closeMe(person);
   };
 
