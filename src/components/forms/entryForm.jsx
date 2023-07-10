@@ -516,32 +516,32 @@ class EntryForm extends Form {
   }
 
   validateRelatedConcepts() {
-    const requiredPerson = [4, 7, 8];
-    const requiredChurch = [1, 2, 10, 11];
+    // const requiredPerson = [4, 7, 8];
+    // const requiredChurch = [1, 2, 10, 11];
 
-    const anyChurch = this.state.details.filter((item) =>
-      requiredChurch.includes(item.concept_id)
-    );
+    // const anyChurch = this.state.details.filter((item) =>
+    //   requiredChurch.includes(item.concept_id)
+    // );
 
-    const anyPerson = this.state.details.filter((item) =>
-      requiredPerson.includes(item.concept_id)
-    );
+    // const anyPerson = this.state.details.filter((item) =>
+    //   requiredPerson.includes(item.concept_id)
+    // );
 
-    if (anyChurch.length && !this.state.data.church_id) {
-      toast.error("Debe agregar el nombre del colegio.");
-      return false;
-    }
+    // if (anyChurch.length && !this.state.data.church_id) {
+    //   toast.error("Debe agregar el nombre de la clinica.");
+    //   return false;
+    // }
 
-    if (
-      anyPerson.length &&
-      !this.state.data.church_id &&
-      !this.state.data.person_id
-    ) {
-      toast.error(
-        "Debe agregar el nombre del colegio o el nombre del paciente."
-      );
-      return false;
-    }
+    // if (
+    //   anyPerson.length &&
+    //   !this.state.data.church_id &&
+    //   !this.state.data.person_id
+    // ) {
+    //   toast.error(
+    //     "Debe agregar el nombre de la clinica o el nombre del paciente."
+    //   );
+    //   return false;
+    // }
 
     return true;
   }
