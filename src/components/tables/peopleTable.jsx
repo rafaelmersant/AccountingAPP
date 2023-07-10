@@ -10,14 +10,14 @@ class PeopleTable extends Component {
       path: "first_name",
       label: "Nombre",
       content: (person) => (
-        <Link to={`/estudiante/${person.id}`}> {person.first_name} </Link>
+        <Link to={`/paciente/${person.id}`}> {person.first_name} </Link>
       ),
     },
     {
       path: "last_name",
       label: "Apellidos",
       content: (person) => (
-        <Link to={`/estudiante/${person.id}`}> {person.last_name} </Link>
+        <Link to={`/paciente/${person.id}`}> {person.last_name} </Link>
       ),
     },
     // {
