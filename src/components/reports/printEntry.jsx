@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { formatNumber, getMonthName } from "../../utils/custom";
+import { formatNumber } from "../../utils/custom";
 
 class PrintEntry extends Component {
   render() {

@@ -8,8 +8,7 @@ import {
   getPersonByFirstLastName,
 } from "../../services/personService";
 import { getCurrentUser } from "../../services/authService";
-import ChurchModal from "../modals/churchModal";
-import { getChurches } from "../../services/churchService";
+import Select from "../common/select";
 
 class PersonForm extends Form {
   state = {
@@ -17,17 +16,31 @@ class PersonForm extends Form {
       id: 0,
       first_name: "",
       last_name: "",
-      reference: "",
+      age: "",
+      gender: "",
+      date_of_birth: "",
+      ocupation: "",
+      phone: "",
+      cellphone: "",
       identification: "",
-      obrero_inicial: "",
-      obrero_exhortador: "",
-      obrero_licenciado: "",
-      min_licenciado: "",
-      min_ordenado: "",
-      church_id: "",
+      civil_status: "",
+      address: "",
+      reason_consultation: "",
+      disease: "",
+      doctor: "",
+      reference: "",
       created_by: getCurrentUser().id,
       created_date: new Date().toISOString(),
     },
+    civil_status_options: [
+      { id: "S", name: "Soltero" },
+      { id: "C", name: "Casado" },
+      { id: "U", name: "Unión libre" },
+    ],
+    gender_options: [
+      { id: "M", name: "Masculino" },
+      { id: "F", name: "Femenino" },
+    ],
     errors: {},
     action: "Nuevo Paciente",
     clearSearchChurch: false,
@@ -38,14 +51,19 @@ class PersonForm extends Form {
     id: Joi.number(),
     first_name: Joi.string().required().max(100).min(3).label("Nombre"),
     last_name: Joi.string().required().min(3).max(100).label("Apellidos"),
-    reference: Joi.optional(),
+    age: Joi.optional(),
+    gender: Joi.optional(),
+    date_of_birth: Joi.optional(),
+    ocupation: Joi.optional(),
+    phone: Joi.optional(),
+    cellphone: Joi.optional(),
     identification: Joi.optional(),
-    obrero_inicial: Joi.optional(),
-    obrero_exhortador: Joi.optional(),
-    obrero_licenciado: Joi.optional(),
-    min_licenciado: Joi.optional(),
-    min_ordenado: Joi.optional(),
-    church_id: Joi.optional(),
+    civil_status: Joi.optional(),
+    address: Joi.optional(),
+    reason_consultation: Joi.optional(),
+    disease: Joi.optional(),
+    doctor: Joi.optional(),
+    reference: Joi.optional(),
     created_by: Joi.number(),
     created_date: Joi.optional(),
   };
@@ -123,14 +141,21 @@ class PersonForm extends Form {
       id: person[0].id,
       first_name: person[0].first_name,
       last_name: person[0].last_name,
-      reference: person[0].reference ? person[0].reference : "",
+      age: person[0].age ? person[0].age : "",
+      gender: person[0].gender ? person[0].gender : "",
+      date_of_birth: person[0].date_of_birth ? person[0].date_of_birth : "",
+      ocupation: person[0].ocupation ? person[0].ocupation : "",
+      phone: person[0].phone ? person[0].phone : "",
+      cellphone: person[0].cellphone ? person[0].cellphone : "",
       identification: person[0].identification ? person[0].identification : "",
-      obrero_inicial: person[0].obrero_inicial ? person[0].obrero_inicial : "",
-      obrero_exhortador: person[0].obrero_exhortador ? person[0].obrero_exhortador : "",
-      obrero_licenciado: person[0].obrero_licenciado ? person[0].obrero_licenciado : "",
-      min_licenciado: person[0].min_licenciado ? person[0].min_licenciado : "",
-      min_ordenado: person[0].min_ordenado ? person[0].min_ordenado : "",
-      church_id: person[0].church ? person[0].church.id : "",
+      civil_status: person[0].civil_status ? person[0].civil_status : "",
+      address: person[0].address ? person[0].address : "",
+      reason_consultation: person[0].reason_consultation
+        ? person[0].reason_consultation
+        : "",
+      disease: person[0].disease ? person[0].disease : "",
+      doctor: person[0].doctor ? person[0].doctor : "",
+      reference: person[0].reference ? person[0].reference : "",
       created_by: person[0].created_by
         ? person[0].created_by
         : getCurrentUser().id,
@@ -159,6 +184,12 @@ class PersonForm extends Form {
     else this.props.closeMe(person);
   };
 
+  handleChangeOption = ({ currentTarget: input }) => {
+    const data = { ...this.state.data };
+    data[input.name] = input.value;
+    this.setState({ data });
+  };
+
   render() {
     const { popUp } = this.props;
 
@@ -182,85 +213,85 @@ class PersonForm extends Form {
             </div>
 
             <div className="row">
-            <div className="col">
+              <div className="col">
+                {this.renderInput("identification", "Cedula de Identidad")}
+              </div>
+              <div className="col">
+                <Select
+                  name="civil_status"
+                  value={this.state.data.civil_status}
+                  label="Estado Civil"
+                  options={this.state.civil_status_options}
+                  onChange={this.handleChangeOption}
+                  error={null}
+                />
+              </div>
+              <div className="col">
+                {this.renderInput("date_of_birth", "Fecha de Nacimiento", "text", "", "AAAA-MM-DD")}
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col">{this.renderInput("age", "Edad")}</div>
+              <div className="col">
+                <Select
+                  name="gender"
+                  value={this.state.data.gender}
+                  label="Sexo"
+                  options={this.state.gender_options}
+                  onChange={this.handleChangeOption}
+                  error={null}
+                />
+              </div>
+              <div className="col">{this.renderInput("phone", "Teléfono")}</div>
+
+              <div className="col">
+                {this.renderInput("cellphone", "Celular")}
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col">
+                {this.renderInput("ocupation", "Ocupación")}
+              </div>
+
+              <div className="col">
+                {this.renderInput("doctor", "Nombre del doctor")}
+              </div>
+
+
+            </div>
+
+            <div className="row">
+              <div className="col">
+                {this.renderInput("reason_consultation", "Motivo de consulta")}
+              </div>
+            </div>
+            
+            <div className="row">
+              <div className="col">
+                {this.renderInput("address", "Dirección")}
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col">
+                {this.renderInput(
+                  "disease",
+                  "Sufre alguna enfermedad de interés"
+                )}
+              </div>
+            </div>
+
+            
+            <div className="row">
+              <div className="col">
                 {this.renderInput("reference", "Referencia")}
               </div>
             </div>
-
-            {/* <div className="row">
-              <div className="col">
-                {this.renderInput("identification", "Identificación")}
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">
-                {this.renderInput("obrero_inicial", "Obrero Inicial")}
-              </div>
-              <div className="col">
-                {this.renderInput("obrero_exhortador", "Obrero Exhortador")}
-              </div>
-              <div className="col">
-                {this.renderInput("obrero_licenciado", "Obrero Licenciado")}
-              </div>
-              <div className="col">
-                {this.renderInput("min_licenciado", "Ministro Licenciado")}
-              </div>
-              <div className="col">
-                {this.renderInput("min_ordenado", "Ministro Ordenado")}
-              </div>
-            </div> */}
-
-            {/* <div className="row">
-              <div className="col">
-                <SearchChurch
-                  onSelect={this.handleSelectChurch}
-                  onTyping={this.handleTypingChurch}
-                  onClearSearchChurch={this.handleSearchChurch}
-                  clearSearchChurch={this.state.clearSearchChurch}
-                  value={this.state.searchChurchText}
-                  data={this.state.churches}
-                />
-              </div>
-              <div>
-                {this.state.data.church_id > 0 && (
-                  <div
-                    style={{
-                      marginTop: "36px",
-                    }}
-                  >
-                    <span
-                      className="fa fa-trash text-danger"
-                      style={{
-                        fontSize: "24px",
-                        position: "absolute",
-                        marginLeft: "-39px",
-                        cursor: "pointer",
-                        zIndex: 3,
-                      }}
-                      title="Limpiar filtro de iglesia"
-                      onClick={this.handleCleanChurch}
-                    ></span>
-                  </div>
-                )}
-              </div>
-            </div> */}
-
             <div className="mt-3">{this.renderButton("Guardar")}</div>
           </form>
         </div>
-
-        {!popUp && (
-          <div>
-            <button
-              type="button"
-              data-toggle="modal"
-              data-target="#churchModal"
-              hidden="hidden"
-              ref={(button) => (this.raiseChurchModal = button)}
-            ></button>
-            <ChurchModal popUp={false} setNewChurch={this.handleSetNewChurch} />
-          </div>
-        )}
       </div>
     );
   }

@@ -41,20 +41,14 @@ export function getPeopleByName(searchText) {
 
 export function savePerson(person) {
   if (!person.identification.trim()) delete person.identification;
-  if (!person.church_id) delete person.church_id;
-  if (!person.obrero_inicial) delete person.obrero_inicial;
-  if (!person.obrero_exhortador) delete person.obrero_exhortador;
-  if (!person.obrero_licenciado) delete person.obrero_licenciado;
-  if (!person.min_licenciado) delete person.min_licenciado;
-  if (!person.min_ordenado) delete person.min_ordenado;
-
+  if (!person.age) delete person.age;
+  if (!person.date_of_birth) delete person.date_of_birth;
+  
   if (person.id) {
     const body = { ...person };
     delete body.id;
     return http.put(personUrl(person.id), body);
   }
-
-  if (!person.church_id) delete person.church_id;
 
   return http.post(`${apiEndpoint}/`, person);
 }
