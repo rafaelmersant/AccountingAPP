@@ -48,7 +48,7 @@ class PrintEntry extends Component {
             </div>
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                C/Las Damas El Almirante Solares, Sto. Dgo. Este
+                C/Las Damas El Almirante Solares
               </span>
             </div>
 
