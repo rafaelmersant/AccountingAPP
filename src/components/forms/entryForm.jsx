@@ -685,7 +685,7 @@ class EntryForm extends Form {
               <div className="row">
                 <div className="col-8">
                   <label htmlFor="">Colegio</label>
-                  <input className="form-control form-control-sm" type="text" value={"Colegio YIREH"} disabled={true} />
+                  <input className="form-control form-control-sm" type="text" value={"Colegio Profeta Daniel"} disabled={true} />
                 </div>
               
                 <div className="col-2 col-sm-4 col-md-4">

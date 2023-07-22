@@ -20,8 +20,8 @@ class PrintEntry extends Component {
             <div className="text-center">
               <img
                 width="140px"
-                src={process.env.PUBLIC_URL + "/images/yireh_logo.jpeg"}
-                alt="YIREH"
+                src={process.env.PUBLIC_URL + "/images/ceepd.png"}
+                alt="CEEPD"
               />
             </div>
             <div className="text-center">
@@ -32,7 +32,7 @@ class PrintEntry extends Component {
                   fontWeight: "normal",
                 }}
               >
-                Colegio Evangélico Arca de Salvación
+                Centro Educativo Evangélico
               </span>
             </div>
             <div className="text-center">
@@ -43,23 +43,23 @@ class PrintEntry extends Component {
                   fontWeight: "bold",
                 }}
               >
-                YIREH
+                Profeta Daniel
               </span>
             </div>
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                C/Juan de los reyes #5 • Sto. Dgo. Oeste
+                C/Las Damas El Almirante Solares, Sto. Dgo. Este
               </span>
             </div>
 
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                Tel. 809-000-5555
+                Tel. 809-699-8299
               </span>
             </div>
             <div className="text-center">
               <span className="font-receipt font-receipt-small-invoice">
-                colegioyareh@gmail.com
+                correo@gmail.com
               </span>
             </div>
 
