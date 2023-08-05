@@ -36,13 +36,13 @@ const NavBarSide = ({ user }) => {
                   Conceptos
                 </NavLink>
 
-                {/* <NavLink
+                <NavLink
                   className="list-group-item list-group-item-action border-none"
                   to="/cuadre"
                 >
                   <span className="fa fa-book mr-2 color-local" />
                   Cuadre (reporte)
-                </NavLink> */}
+                </NavLink>
 
                 {/* <NavLink
                   className="list-group-item list-group-item-action border-none"

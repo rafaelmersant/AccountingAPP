@@ -6,17 +6,8 @@ class CuadreTable extends Component {
   columns = [
     { path: "created_date", label: "Fecha (m/d/a)", classes: "date-min-width" },
     {
-      path: "church",
-      label: "Iglesia",
-      content: (entry) => (
-        <div className="text-left">
-          {entry.church && <span>{entry.church.global_title}</span>}
-        </div>
-      ),
-    },
-    {
       path: "person",
-      label: "Obrero",
+      label: "Paciente",
       content: (entry) => (
         <div className="text-left">
           {entry.person && (
@@ -26,67 +17,6 @@ class CuadreTable extends Component {
           )}
           {!entry.church && !entry.person && (
             <span className="text-danger">{`Nota: ${entry.note}`}</span>
-          )}
-        </div>
-      ),
-    },
-    // {
-    //   path: "concept",
-    //   label: "Conceptos",
-    //   content: (entry) => (
-    //     <ul className="list-group" key={entry.id+entry.item_set.id}>
-    //       {entry.item_set.map(item => (
-    //         <i key={entry.item_set.id}>• {item.concept.description}</i>
-    //       ))}
-    //     </ul>
-    //   ),
-    // },
-    {
-      path: "defaultOne",
-      label: "Ofrenda Misionera",
-      content: (entry) => (
-        <div className="text-right">
-          {entry.item_set.map(
-            (item) =>
-              item.concept.id === 2 && <span>{formatNumber(item.amount)}</span>
-          )}
-        </div>
-      ),
-    },
-    {
-      path: "defaultTwo",
-      label: "20% al Concilio",
-      content: (entry) => (
-        <div className="text-right">
-          {entry.item_set.map(
-            (item) =>
-              item.concept.id === 1 && <span>{formatNumber(item.amount)}</span>
-          )}
-        </div>
-      ),
-    },
-    {
-      path: "defaultThree",
-      label: "Cuota Obrero",
-      content: (entry) => (
-        <div className="text-right">
-          {entry.item_set.map(
-            (item) =>
-              item.concept.id === 4 && <span>{formatNumber(item.amount)}</span>
-          )}
-        </div>
-      ),
-    },
-    {
-      path: "defaultFour",
-      label: "Otros Ingresos",
-      content: (entry) => (
-        <div className="text-right">
-          {entry.item_set.map(
-            (item) =>
-              item.concept.id !== 2 &&
-              item.concept.id !== 1 &&
-              item.concept.id !== 4 && <span>{formatNumber(item.amount)}</span>
           )}
         </div>
       ),
@@ -106,10 +36,6 @@ class CuadreTable extends Component {
     const {
       entries,
       totalAmount,
-      totalOfrendaMisionera,
-      total20Concilio,
-      totalCuotaObrero,
-      totalOtrosIngresos,
       sortColumn,
       onSort,
     } = this.props;
@@ -126,23 +52,11 @@ class CuadreTable extends Component {
           <table className="table col-12">
             <thead className="thead-dark">
               <tr>
-                <td colSpan={4} className="bg-dark text-white h6">
+                <td colSpan={2} className="bg-dark text-white h6">
                   Total registros: {entries.length}
                 </td>
 
-                <td className="bg-dark text-white h6">
-                  Ofrenda Misionera: {formatNumber(totalOfrendaMisionera)}
-                </td>
-                <td className="bg-dark text-white h6">
-                  20% al Concilio: {formatNumber(total20Concilio)}
-                </td>
-                <td className="bg-dark text-white h6">
-                  Cuota Obreros: {formatNumber(totalCuotaObrero)}
-                </td>
-                <td className="bg-dark text-white h6">
-                  Otros Ingresos: {formatNumber(totalOtrosIngresos)}
-                </td>
-                <td className="bg-dark text-white h6">
+                <td className="bg-dark text-white text-right h6">
                   Total: {formatNumber(totalAmount)}
                 </td>
               </tr>

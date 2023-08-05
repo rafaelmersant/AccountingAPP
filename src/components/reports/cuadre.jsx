@@ -24,11 +24,6 @@ class Cuadre extends Component {
     entriesExcel: [],
     totalCount: 0,
     totalAmount: 0,
-    totalOfrendaMisionera: 0,
-    total20Concilio: 0,
-    totalCuotaObrero: 0,
-    totalOtrosIngresos: 0,
-    totalDepositos: 0,
     start_date: new Date().toISOString().substring(0, 10),
     end_date: new Date().toISOString().substring(0, 10),
     sortColumn: { path: "created_date", order: "desc" },
@@ -100,43 +95,13 @@ class Cuadre extends Component {
   getPagedData = () => {
     const { sortColumn, entries: allEntries } = this.state;
 
-    // const totalAmount = _.sumBy(allEntries, (item) =>
-    //   parseFloat(item.total_amount)
-    // );
-
     let totalAmount = 0;
-    let totalOfrendaMisionera = 0;
-    let total20Concilio = 0;
-    let totalCuotaObrero = 0;
-    let totalOtrosIngresos = 0;
-    let totalDepositos = 0;
-    let totalEfectivo = 0;
-    //let totalSalidas = 0;
+    let totalSalidas = 0;
 
     for (const entry of allEntries) {
       for (const item of entry.item_set) {
-        if (item.concept.id === 1) total20Concilio += parseFloat(item.amount);
-        if (item.concept.id === 2)
-          totalOfrendaMisionera += parseFloat(item.amount);
-        if (item.concept.id === 4) totalCuotaObrero += parseFloat(item.amount);
-        if (
-          item.concept.id !== 1 &&
-          item.concept.id !== 2 &&
-          item.concept.id !== 4 &&
-          item.type !== "S"
-        )
-          totalOtrosIngresos += parseFloat(item.amount);
-
-        if (item.method === "D" && item.type !== "S") {
-          totalDepositos += parseFloat(item.amount);
-        }
-
-        if (item.method === "E" && item.type !== "S") {
-          totalEfectivo += parseFloat(item.amount);
-        }
-
         if (item.type === "S") {
-          //totalSalidas += parseFloat(item.amount);
+          totalSalidas += parseFloat(item.amount);
         } else {
           totalAmount += parseFloat(item.amount);
         }
@@ -149,13 +114,7 @@ class Cuadre extends Component {
     return {
       totalCount: allEntries.length,
       totalAmount,
-      totalOfrendaMisionera,
-      total20Concilio,
-      totalCuotaObrero,
-      totalOtrosIngresos,
-      totalDepositos,
-      totalEfectivo,
-      //totalSalidas,
+      totalSalidas,
       entries,
     };
   };
@@ -185,13 +144,7 @@ class Cuadre extends Component {
     const {
       entries,
       totalAmount,
-      totalOfrendaMisionera,
-      total20Concilio,
-      totalCuotaObrero,
-      totalOtrosIngresos,
-      totalDepositos,
-      totalEfectivo,
-      //totalSalidas,
+      totalSalidas,
     } = this.getPagedData();
 
     return (
@@ -251,40 +204,13 @@ class Cuadre extends Component {
             )}
 
             {!this.state.loading && (
-              <div className="col-12">
+              <div className="col-6">
                 <CuadreTable
                   entries={entries}
                   totalAmount={totalAmount}
-                  totalOfrendaMisionera={totalOfrendaMisionera}
-                  total20Concilio={total20Concilio}
-                  totalCuotaObrero={totalCuotaObrero}
-                  totalOtrosIngresos={totalOtrosIngresos}
                   user={user}
                   sortColumn={sortColumn}
                 />
-                <section>
-                  <div className="row">
-                    <div className="col">
-                      <span className="text-success h5">
-                        Monto en Deposito: {formatNumber(totalDepositos)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="row mt-2">
-                    <div className="col">
-                      <span className="text-primary h5">
-                        Monto en Efectivo: {formatNumber(totalEfectivo)}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* <div className="col">
-                    <span className="text-danger h5">
-                      Monto en Salidas: {formatNumber(totalSalidas)}
-                    </span>
-                  </div> */}
-                </section>
               </div>
             )}
           </div>
