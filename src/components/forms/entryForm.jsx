@@ -262,7 +262,7 @@ class EntryForm extends Form {
   
   handleChangeEntryDate = (date) => {
     const data = { ...this.state.data };
-    data.creationDate = date.toISOString();
+    data.created_date = date.toISOString();
     this.setState({ data, entryDate: date });
   };
 
@@ -702,7 +702,7 @@ class EntryForm extends Form {
                       selected={this.state.entryDate}
                       onChange={(date) => this.handleChangeEntryDate(date)}
                       dateFormat="dd/MM/yyyy hh:mm aa"
-                      disabled={true}
+                      // disabled={true}
                     />
                   </div>
                 </div>
