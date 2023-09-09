@@ -255,7 +255,7 @@ class EntryForm extends Form {
       let totalDiezmos = 0;
 
       entryDetail.forEach((item) => {
-        if (item.type === "S" && item.concept.id !== 7)
+        if (item.type === "S")
           totalSalidas += Math.abs(
             Math.round(parseFloat(item.amount) * 100) / 100
           );
