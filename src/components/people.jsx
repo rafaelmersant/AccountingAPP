@@ -6,20 +6,28 @@ import NewButton from "./common/newButton";
 import Loading from "./common/loading";
 import { getPeople, deletePerson, savePerson } from "../services/personService";
 import PeopleTable from "./tables/peopleTable";
+import { getChurches } from "../services/churchService";
+import SearchChurch from "./common/searchChurch";
 
 class People extends Component {
   state = {
     loading: true,
     people: [],
+    churches: [],
     currentPage: 1,
     pageSize: 2000,
     searchQuery: "",
     totalPeople: 0,
     sortColumn: { path: "id", order: "asc" },
+    clearSearchChurch: false,
+    searchChurchText: "",
+    searchChurchTextType: "",
+    selectedChurch: {}
   };
 
   async componentDidMount() {
     this.populatePeople();
+    this.populateChurches();
   }
 
   async populatePeople(_sortColumn, _currentPage, _searchQuery = "") {
@@ -42,6 +50,11 @@ class People extends Component {
       sortColumn: _sortColumn,
       currentPage: _currentPage,
     });
+  }
+
+  async populateChurches() {
+    const { data: churches } = await getChurches();
+    this.setState({ churches: churches.results });
   }
 
   handleDelete = async (person) => {
@@ -111,6 +124,37 @@ class People extends Component {
     await this.populatePeople(sortColumn);
   };
 
+  handleSelectChurch = async (church) => {
+    const handler = (e) => {
+      e.preventDefault();
+    };
+    handler(window.event);
+
+    const filteredPeople = this.state.people.filter(function (person) {
+      return person.church && person.church.id === church.id;
+    });
+
+    this.setState({
+      selectedChurch: church,
+      clearSearchChurch: false,
+      searchChurchText: `${church.global_title}`,
+      people: filteredPeople
+    });
+  };
+
+  handleTypingChurch = (value) => {
+    this.setState({ searchChurchTextType: value });
+  };
+
+  handleSearchChurch = async (value) => {
+    this.setState({ clearSearchChurch: value });
+  };
+
+  handleCleanChurch = async () => {
+    this.populatePeople();
+    this.setState({ searchChurchText: "", selectedChurch: {} });
+  };
+
   render() {
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
     const { user } = this.props;
@@ -128,11 +172,50 @@ class People extends Component {
               <NewButton label="Nuevo Obrero" to="/obrero/new" />
             </div>
 
-            <SearchBox
-              value={searchQuery}
-              onChange={this.handleSearch}
-              placeholder="Buscar..."
-            />
+            <div>
+              <SearchBox
+                value={searchQuery}
+                onChange={this.handleSearch}
+                placeholder="Buscar..."
+              />
+            </div>
+            <div>
+              <div className="row">
+                <div className="col-12 mb-3">
+                  <SearchChurch
+                    onSelect={this.handleSelectChurch}
+                    onTyping={this.handleTypingChurch}
+                    onClearSearchChurch={this.handleSearchChurch}
+                    clearSearchChurch={this.state.clearSearchChurch}
+                    value={this.state.searchChurchText}
+                    data={this.state.churches}
+                  />
+                </div>
+                <div>
+                  {Object.keys(this.state.selectedChurch).length > 0 && (
+                    <div
+                      style={{
+                        marginTop: "36px",
+                      }}
+                    >
+                      <span
+                        className="fa fa-trash text-danger"
+                        style={{
+                          fontSize: "24px",
+                          position: "absolute",
+                          marginLeft: "-39px",
+                          cursor: "pointer",
+                          zIndex: 99,
+                        }}
+                        title="Limpiar filtro de iglesia"
+                        onClick={this.handleCleanChurch}
+                      ></span>
+                    </div>
+                  )}
+                </div>
+
+              </div>
+            </div>
 
             {this.state.loading && (
               <div className="d-flex justify-content-center mb-3">
