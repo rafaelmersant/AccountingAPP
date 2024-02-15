@@ -100,7 +100,7 @@ class PeopleTable extends Component {
 
     this.columns.push(this.attendanceColumn);
 
-    if (user && role === "Owner") this.columns.push(this.deleteColumn);
+    if (user && (role === "Owner" || role === "Admin")) this.columns.push(this.deleteColumn);
   }
 
   render() {
