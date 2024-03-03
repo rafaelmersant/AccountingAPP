@@ -73,32 +73,10 @@ class PeopleTable extends Component {
     ),
   };
 
-  attendanceColumn = {
-    key: "attendance",
-    content: (person) => (
-      <>
-        {!person.attendance && (
-          <div className="text-center">
-            <span
-              onClick={() => this.props.onAttendance(person)}
-              className="fa fa-user text-success cursor-pointer trash-size"
-            ></span>
-          </div>
-        )}
-        {person.attendance && (
-          <span className="fa fa-user text-secondary trash-size"></span>
-        )}
-       
-      </>
-    ),
-  };
-
   constructor() {
     super();
     const user = auth.getCurrentUser().email;
     const role = auth.getCurrentUser().role;
-
-    this.columns.push(this.attendanceColumn);
 
     if (user && (role === "Owner" || role === "Admin")) this.columns.push(this.deleteColumn);
   }

@@ -31,6 +31,7 @@ import Cuadre from "./components/reports/cuadre";
 import Dashboard from "./components/reports/dashboard";
 import ChurchesPayment from "./components/reports/churchesPayment";
 import DetailedByConcept from "./components/reports/detailedByConcept";
+import Attendance from "./components/attendance";
 
 class App extends Component {
   state = {
@@ -70,14 +71,23 @@ class App extends Component {
                 <Switch>
                   <Route path="/login" component={LoginForm} />
                   <Route path="/logout" component={Logout} />
-                  
+
                   <ProtectedRoute path="/cuadre" component={Cuadre} />
                   <ProtectedRoute path="/dashboard" component={Dashboard} />
-                  <ProtectedRoute path="/detallado-por-concepto" component={DetailedByConcept} />
-                  <ProtectedRoute path="/pago-de-iglesias" component={ChurchesPayment} />
+                  <ProtectedRoute
+                    path="/detallado-por-concepto"
+                    component={DetailedByConcept}
+                  />
+                  <ProtectedRoute
+                    path="/pago-de-iglesias"
+                    component={ChurchesPayment}
+                  />
 
                   <ProtectedRoute path="/conceptos" component={Concepts} />
-                  <ProtectedRoute path="/concepto/:id" component={ConceptForm} />
+                  <ProtectedRoute
+                    path="/concepto/:id"
+                    component={ConceptForm}
+                  />
 
                   <ProtectedRoute path="/iglesias" component={Churchs} />
                   <ProtectedRoute path="/iglesia/:id" component={ChurchForm} />
@@ -86,11 +96,10 @@ class App extends Component {
                   <ProtectedRoute path="/registro/:id" component={EntryForm} />
 
                   <ProtectedRoute path="/obreros" component={People} />
-                  <ProtectedRoute
-                    path="/obrero/:id"
-                    component={PersonForm}
-                  />
-                  
+                  <ProtectedRoute path="/obrero/:id" component={PersonForm} />
+
+                  <ProtectedRoute path="/asistencia" component={Attendance} />
+
                   <ProtectedRoute path="/users" component={Users} />
                   <ProtectedRoute path="/user/:id" component={UserForm} />
                   <ProtectedRoute path="/home" component={HomePage} />

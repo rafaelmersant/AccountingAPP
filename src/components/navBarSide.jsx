@@ -85,6 +85,23 @@ const NavBarSide = ({ user }) => {
                 </NavLink>
               </div>
             )}
+
+          {user &&
+            (user.role === "Owner" ||
+              user.username === "katherine" ||
+              user.username === "raisi" ||
+              user.username === "jonathan" ||
+              user.username === "ruben") && (
+              <div>
+                <NavLink
+                  className="list-group-item list-group-item-action border-none"
+                  to="/asistencia"
+                >
+                  <span className="fa fa-users mr-2 color-local" />
+                  Asistencia
+                </NavLink>
+              </div>
+            )}
         </React.Fragment>
 
         {/* {user &&

@@ -737,7 +737,7 @@ class EntryForm extends Form {
                 </div>
               </div>
 
-              <div className="row">
+              <div className="row mt-2">
                 <div className="col-8">
                 <SearchPerson
                     onSelect={this.handleSelectPerson}

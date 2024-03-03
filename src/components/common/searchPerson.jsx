@@ -4,7 +4,6 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 const SearchPerson = ({
   clearSearchPerson,
   onSelect,
-  onTyping,
   onClearSearchPerson,
   data,
   value
@@ -15,12 +14,6 @@ const SearchPerson = ({
   const handleOnSelect = (person) => {
     onSelect(person);
   };
-
-  const handleOnSearch = (string, results) => {
-    onTyping(string);
-    
-    results = results.filter(e => e.full_name.includes(string));
-  }
 
   useEffect(() => {
     if (clearSearchPerson) {
@@ -33,18 +26,27 @@ const SearchPerson = ({
     }
   }, [onClearSearchPerson, clearSearchPerson, value]);
 
+  useEffect(() => {
+    if (personName !== value) {
+      setPersonName(value);
+    }
+  }, [value, personName, data]);
+
   const formatResult = (person) => {
     return (
       <div style={{ cursor: "pointer" }}>
-         <span className="d-block">
-                {person.first_name} {person.last_name}
-              </span>
-              <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
-                {person.church && (
-                  <em>{"Iglesia: " + person.church.global_title}</em>
-                )}
-              </span>
-              <hr style={{margin: "0", padding: "0", marginTop: "5px"}}/>
+        <span className="d-block">
+          {person.first_name} {person.last_name}
+        </span>
+        <span className="text-info mb-0 d-block" style={{ fontSize: ".9em" }}>
+          {person.church && <em>{"Iglesia: " + person.church.global_title}</em>}
+        </span>
+        <span className="text-info mb-0" style={{ fontSize: ".9em" }}>
+          {person.identification && (
+            <em>{"Cédula: " + person.identification}</em>
+          )}
+        </span>
+        <hr style={{ margin: "0", padding: "0", marginTop: "5px" }} />
       </div>
     );
   };
@@ -56,13 +58,12 @@ const SearchPerson = ({
         items={data}
         onSelect={handleOnSelect}
         formatResult={formatResult}
-        onSearch={handleOnSearch}
         inputSearchString={personName}
         placeholder={valueSearch ? valueSearch : "Digitar obrero"}
-        fuseOptions={{ keys: ["full_name"] }} // Search on both fields
+        fuseOptions={{ keys: ["full_name", "identification"] }} // Search on both fields
         resultStringKeyName="full_name" // String to display in the results
         showIcon={false}
-        showNoResultsText="No existe ningún obrero con dicho nombre."
+        showNoResultsText="No existe ningún obrero con este criterio."
         styling={{
           height: "30px",
           borderRadius: "4px",
