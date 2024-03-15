@@ -13,7 +13,7 @@ registerLocale("es", es);
 class ChurchesPayment extends Component {
   state = {
     data: {
-      period_month: new Date().getMonth(),
+      period_month:  `0${new Date().getMonth().toString()}`.substring(-1),
       period_year: new Date().getFullYear(),
     },
     loading: true,
@@ -23,15 +23,15 @@ class ChurchesPayment extends Component {
     sortColumn: { path: "created_date", order: "desc" },
     months: [
       { id: "0", name: "TODOS" },
-      { id: "1", name: "Enero" },
-      { id: "2", name: "Febrero" },
-      { id: "3", name: "Marzo" },
-      { id: "4", name: "Abril" },
-      { id: "5", name: "Mayo" },
-      { id: "6", name: "Junio" },
-      { id: "7", name: "Julio" },
-      { id: "8", name: "Agosto" },
-      { id: "9", name: "Septiembre" },
+      { id: "01", name: "Enero" },
+      { id: "02", name: "Febrero" },
+      { id: "03", name: "Marzo" },
+      { id: "04", name: "Abril" },
+      { id: "05", name: "Mayo" },
+      { id: "06", name: "Junio" },
+      { id: "07", name: "Julio" },
+      { id: "08", name: "Agosto" },
+      { id: "09", name: "Septiembre" },
       { id: "10", name: "Octubre" },
       { id: "11", name: "Noviembre" },
       { id: "12", name: "Diciembre" },
