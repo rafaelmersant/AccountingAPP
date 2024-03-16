@@ -82,16 +82,16 @@ class Cuadre extends Component {
     let result = [];
 
     for (const item of data) {
-      if (item.total_amount > 0)
-        result.push({
-          id: item.id,
-          note: item.note,
-          person: item.person,
-          church: item.church,
-          item_set: item.item_set,
-          created_date: item.created_date,
-          total_amount: item.total_amount,
-        });
+      // if (item.total_amount > 0)
+      result.push({
+        id: item.id,
+        note: item.note,
+        person: item.person,
+        church: item.church,
+        item_set: item.item_set,
+        created_date: item.created_date,
+        total_amount: item.total_amount,
+      });
     }
 
     return result;
