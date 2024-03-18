@@ -129,23 +129,29 @@ class ChurchesPayment extends Component {
       0
     );
 
-    const totalPaid = allEntries.reduce(
-        (acc, item) => parseFloat(acc) + parseFloat(item.paid),
-        0
-      );
+    const totalPaid20Concilio = allEntries.reduce(
+      (acc, item) => parseInt(acc) + (parseInt(item.percent_concilio) > 0 ? 1 : 0),
+      0
+    );
+
+    const totalPaidOfrendaMisionera = allEntries.reduce(
+      (acc, item) => parseInt(acc) + (parseInt(item.ofrenda_misionera) > 0 ? 1 : 0),
+      0
+    );
 
     return {
       totalCount: allEntries.length,
       totalOfrendaMisionera,
       total20Concilio,
       totalAmount,
-      totalPaid
+      totalPaid20Concilio,
+      totalPaidOfrendaMisionera
     };
   };
 
   render() {
     const { entries } = { ...this.state };
-    const { totalAmount, totalOfrendaMisionera, total20Concilio, totalPaid } =
+    const { totalAmount, totalOfrendaMisionera, total20Concilio, totalPaid20Concilio, totalPaidOfrendaMisionera} =
       this.getPagedData();
 
     return (
@@ -233,7 +239,7 @@ class ChurchesPayment extends Component {
                     </tbody>
                     <tfoot className="bg-dark text-warning">
                       <tr>
-                        <td colSpan={2}>Iglesias que han pagado: {totalPaid}</td>
+                        <td colSpan={2}>Total de montos</td>
                         <td className="text-right">
                           {formatNumber(total20Concilio)}
                         </td>
@@ -242,6 +248,19 @@ class ChurchesPayment extends Component {
                         </td>
                         <td className="text-right">
                           {formatNumber(totalAmount)}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colSpan={2}>Iglesias que han pagado:</td>
+                        <td className="text-center">
+                          {totalPaid20Concilio}
+                        </td>
+                        <td className="text-center">
+                          {totalPaidOfrendaMisionera}
+                        </td>
+                        <td className="text-right">
+                           
                         </td>
                       </tr>
                     </tfoot>
