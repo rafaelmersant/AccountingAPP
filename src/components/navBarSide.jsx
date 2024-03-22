@@ -2,11 +2,15 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const NavBarSide = ({ user }) => {
-  const menu = document.getElementById('sidebar-wrapper');
-  menu.style.display = localStorage.getItem('side-menu') === 'show' ? '' : 'none';
+  const displayMenu =
+    localStorage.getItem("side-menu") === "show" ? "" : "none";
 
   return (
-    <div className="border-right" id="sidebar-wrapper">
+    <div
+      className="border-right"
+      id="sidebar-wrapper"
+      style={{ display: displayMenu }}
+    >
       <div className="sidebar-heading text-center mb-3">
         <NavLink className="" to="/home">
           <img
