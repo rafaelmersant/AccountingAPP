@@ -2,6 +2,9 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const NavBarSide = ({ user }) => {
+  const menu = document.getElementById('sidebar-wrapper');
+  menu.style.display = localStorage.getItem('side-menu') === 'show' ? '' : 'none';
+
   return (
     <div className="border-right" id="sidebar-wrapper">
       <div className="sidebar-heading text-center mb-3">
