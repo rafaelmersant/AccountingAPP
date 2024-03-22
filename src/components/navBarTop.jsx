@@ -4,8 +4,8 @@ import { NavLink } from "react-router-dom";
 const NavBarTop = ({ user }) => {
   const handleToggleMenu = (e) => {
     const menu = document.getElementById('sidebar-wrapper');
-    localStorage.setItem('side-menu', localStorage.getItem('side-menu') !== '' ? 'none' : '');
-    menu.style.display = localStorage.getItem('side-menu');
+    localStorage.setItem('side-menu', localStorage.getItem('side-menu') === 'show' ? 'hide' : 'show');
+    menu.style.display = localStorage.getItem('side-menu') === 'show' ? '' : 'none';
   }
 
   return (
