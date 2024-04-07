@@ -107,7 +107,7 @@ class EntryForm extends Form {
     clearSearchChurch: false,
     hideSearchChurch: false,
     searchConceptText: "",
-    searchChurchText: "ALMIRANTE II",
+    searchChurchText: "BRISA DEL ESTE I",
     searchPersonText: "",
     searchPersonTextType: "",
     serializedEntryHeader: {},
@@ -994,7 +994,7 @@ class EntryForm extends Form {
             </button>
           </div>
 
-          <div className="d-flex justify-content-end w-100 pr-3 mb-3">
+          {/* <div className="d-flex justify-content-end w-100 pr-3 mb-3">
             {this.state.data.id > 0 &&
               (role === "Admin" || role === "Owner") && (
                 <ReactToPrint
@@ -1010,7 +1010,7 @@ class EntryForm extends Form {
                   //onBeforePrint={() => this.quotationPrinted()}
                 />
               )}
-          </div>
+          </div> */}
 
           <div hidden="hidden">
             <PrintEntry

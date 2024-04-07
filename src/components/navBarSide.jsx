@@ -15,7 +15,7 @@ const NavBarSide = ({ user }) => {
         <NavLink className="" to="/home">
           <img
             style={{ width: "100px", padding: "5px", margin: "0" }}
-            src={process.env.PUBLIC_URL + "/images/logoEmanuel.jpg"}
+            src={process.env.PUBLIC_URL + "/images/logocepasH50_small.png"}
             alt="CEPAS"
           />
         </NavLink>
