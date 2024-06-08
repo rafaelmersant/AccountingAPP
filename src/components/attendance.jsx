@@ -47,12 +47,13 @@ class Attendance extends Component {
     _currentPage = _currentPage ? _currentPage : currentPage;
 
     const { data: attendances } = await getAttendances();
-    this.setState({ attendances: attendances.results, loading: false });
+    const attendances_filtered = attendances.results.filter(item => item.person);
+    this.setState({ attendances: attendances_filtered, loading: false });
 
     console.log("data:", attendances.results);
     this.setState({
-      attendances: attendances.results,
-      totalAttendances: attendances.count,
+      attendances: attendances_filtered,
+      totalAttendances: attendances_filtered.length,
       loading: false,
       sortColumn: _sortColumn,
       currentPage: _currentPage,
