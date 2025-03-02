@@ -4,6 +4,7 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 const SearchPerson = ({
   clearSearchPerson,
   onSelect,
+  onTyping,
   onClearSearchPerson,
   data,
   value
@@ -14,6 +15,12 @@ const SearchPerson = ({
   const handleOnSelect = (person) => {
     onSelect(person);
   };
+
+  const handleOnSearch = (string, results) => {
+    onTyping(string);
+    
+    results = results.filter(e => e.first_name.includes(string) || e.last_name.includes(string));
+  }
 
   useEffect(() => {
     if (clearSearchPerson) {
@@ -26,11 +33,11 @@ const SearchPerson = ({
     }
   }, [onClearSearchPerson, clearSearchPerson, value]);
 
-  useEffect(() => {
-    if (personName !== value) {
-      setPersonName(value);
-    }
-  }, [value, personName, data]);
+  // useEffect(() => {
+  //   if (personName !== value) {
+  //     setPersonName(value);
+  //   }
+  // }, [value, personName, data]);
 
   const formatResult = (person) => {
     return (
