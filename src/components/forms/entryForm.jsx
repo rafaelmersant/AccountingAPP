@@ -708,38 +708,55 @@ class EntryForm extends Form {
       (item) => item.id === 2
     );
 
-    this.setState({ currentConcept: _veinteporciento[0] });
-    const line = await this.updateLine(_veinteporciento[0]);
+    const lineAlreadyExistForVeinteporciento = details.filter(
+      (d) => d.concept_id === _veinteporciento[0].id
+    );
 
-    line.concept = _veinteporciento[0].description;
-    line.concept_id = _veinteporciento[0].id;
-    line.amount =
-      Math.round(parseFloat(this.state.veinteporciento) * 100) / 100;
-    line.type = "E";
+    if (
+      this.state.veinteporciento > 0 &&
+      lineAlreadyExistForVeinteporciento.length === 0
+    ) {
+      this.setState({ currentConcept: _veinteporciento[0] });
+      const line = await this.updateLine(_veinteporciento[0]);
 
-    if (line.concept_id) details.push(line);
-    this.resetLineValues();
+      line.concept = _veinteporciento[0].description;
+      line.concept_id = _veinteporciento[0].id;
+      line.amount =
+        Math.round(parseFloat(this.state.veinteporciento) * 100) / 100;
+      line.type = "E";
 
-    this.setState({ currentConcept: _ofrendamisionera[0] });
-    const line2 = await this.updateLine(_ofrendamisionera[0]);
+      if (line.concept_id) details.push(line);
+      this.resetLineValues();
+    }
 
-    line2.concept = _ofrendamisionera[0].description;
-    line2.concept_id = _ofrendamisionera[0].id;
-    line2.amount =
-      Math.round(parseFloat(this.state.ofrendamisionera) * 100) / 100;
-    line2.type = "E";
+    const lineAlreadyExistForOfrendamisionera = details.filter(
+      (d) => d.concept_id === _ofrendamisionera[0].id
+    );
 
-    if (line2.concept_id) details.push(line2);
+    if (
+      this.state.ofrendamisionera > 0 &&
+      lineAlreadyExistForOfrendamisionera.length === 0
+    ) {
+      this.setState({ currentConcept: _ofrendamisionera[0] });
+      const line2 = await this.updateLine(_ofrendamisionera[0]);
+
+      line2.concept = _ofrendamisionera[0].description;
+      line2.concept_id = _ofrendamisionera[0].id;
+      line2.amount =
+        Math.round(parseFloat(this.state.ofrendamisionera) * 100) / 100;
+      line2.type = "E";
+
+      if (line2.concept_id) details.push(line2);
+    }
 
     data.veinteporciento = "";
     data.ofrendamisionera = "";
-    console.log("DETAILS:::::::::", details);
 
     this.resetLineValues();
 
     setTimeout(() => {
       this.updateTotals(details);
-    }, 500)
+    }, 500);
 
     this.setState({
       details,
@@ -887,7 +904,6 @@ class EntryForm extends Form {
                     placeholder="Digitar monto"
                     onChange={this.handleChangeOfrendamisionera}
                     required={false}
-
                   />
                 </div>
 
@@ -898,8 +914,8 @@ class EntryForm extends Form {
                     style={{ marginTop: "2.3em", marginLeft: "-5px" }}
                     onClick={this.handleAddDetailFast}
                     disabled={
-                      this.state.veinteporciento <= 0 ||
-                      this.state.ofrendamisionera <= 0
+                      !(this.state.veinteporciento > 0) &&
+                      !(this.state.ofrendamisionera > 0)
                     }
                   >
                     Agregar Detalles
