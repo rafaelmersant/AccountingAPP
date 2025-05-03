@@ -61,6 +61,8 @@ class EntryForm extends Form {
       created_by: getCurrentUser().id,
       created_date: new Date().toISOString(),
     },
+    veinteporciento: "",
+    ofrendamisionera: "",
     loading: true,
     disabledSave: false,
     entryDate: new Date(),
@@ -82,7 +84,7 @@ class EntryForm extends Form {
       period_year: new Date().getFullYear(),
       period_month: new Date().getMonth() + 1,
       created_date: new Date().toISOString(),
-      editing: false
+      editing: false,
     },
     methods: [
       { id: "E", name: "Efectivo" },
@@ -132,6 +134,8 @@ class EntryForm extends Form {
     total_amount: Joi.number(),
     created_by: Joi.number(),
     created_date: Joi.string(),
+    veinteporciento: Joi.optional(),
+    ofrendamisionera: Joi.optional(),
   };
 
   async populateConcepts() {
@@ -177,12 +181,11 @@ class EntryForm extends Form {
     line.concept = concept.description;
     line.type = concept.type;
     line.amount = line.amount !== "" ? parseFloat(line.amount) : "";
-    
+
     let amount = line.amount !== "" ? Math.abs(line.amount) : 0;
-    
-    if (line.type === "S" && amount !== 0) 
-      line.amount = -1 * Math.abs(amount);
-    
+
+    if (line.type === "S" && amount !== 0) line.amount = -1 * Math.abs(amount);
+
     this.setState({ line });
 
     // this.updateTotals();
@@ -239,17 +242,20 @@ class EntryForm extends Form {
 
       this.forceUpdate();
 
-      if (sessionStorage["printEntry"] === "y") {
-        sessionStorage["printEntry"] = "";
-        this.printButton.click();
-      }
-
       if (sessionStorage["newEntry"] === "y") {
         sessionStorage["newEntry"] = null;
+
+        if (
+          sessionStorage["printEntry"] === "y" &&
+          localStorage["printDefault"] === "ON"
+        ) {
+          sessionStorage["printEntry"] = "";
+          this.printButton.click();
+        }
       }
     } catch (ex) {
       sessionStorage["newEntry"] = null;
-
+      sessionStorage["printEntry"] = "";
       try {
         Sentry.captureException(ex);
       } catch (_ex) {
@@ -260,7 +266,7 @@ class EntryForm extends Form {
         return this.props.history.replace("/not-found");
     }
   }
-  
+
   handleChangeEntryDate = (date) => {
     const data = { ...this.state.data };
     data.creationDate = date.toISOString();
@@ -298,14 +304,14 @@ class EntryForm extends Form {
 
     //default Cuota Obrero amount
     const { line } = { ...this.state };
-    const defaultAmount = concept.id === 4 ? 100 : "";
-    
+    const defaultAmount = ""; //concept.id === 4 ? 100 : "";
+
     line.amount = defaultAmount;
     line.period_month = new Date().getMonth() + 1;
 
     this.setState({
       line,
-      currentConcept: concept
+      currentConcept: concept,
     });
 
     this.updateLine(concept);
@@ -345,7 +351,7 @@ class EntryForm extends Form {
 
     this.setState({
       data,
-      searchPersonTextType: person.full_name
+      searchPersonTextType: person.full_name,
     });
   };
 
@@ -366,9 +372,15 @@ class EntryForm extends Form {
       this.state.data.church_id
     );
 
-    const percent_concilio = record.reduce((acc, item) => acc + parseInt(item.percent_concilio), 0);
-    const ofrenda_misionera = record.reduce((acc, item) => acc + parseInt(item.ofrenda_misionera), 0);
-    
+    const percent_concilio = record.reduce(
+      (acc, item) => acc + parseInt(item.percent_concilio),
+      0
+    );
+    const ofrenda_misionera = record.reduce(
+      (acc, item) => acc + parseInt(item.ofrenda_misionera),
+      0
+    );
+
     if (line.concept_id === 1 && record.length && percent_concilio) return true;
     if (line.concept_id === 2 && record.length && ofrenda_misionera)
       return true;
@@ -383,9 +395,9 @@ class EntryForm extends Form {
     handler(window.event);
 
     setTimeout(async () => {
-      const line = await this.updateLine(this.state.currentConcept); 
+      const line = await this.updateLine(this.state.currentConcept);
       const details = [...this.state.details];
-      
+
       const duplicity = await this.validateDuplicity(line);
 
       if (duplicity) {
@@ -401,7 +413,7 @@ class EntryForm extends Form {
         details,
         currentConcept: {},
         searchConceptText: "",
-        clearSearchConcept: true
+        clearSearchConcept: true,
       });
 
       this.updateTotals();
@@ -555,7 +567,7 @@ class EntryForm extends Form {
         );
         return false;
       }
-      
+
       if (this.state.disabledSave) return false;
 
       if (this.state.details.length === 0) {
@@ -566,14 +578,17 @@ class EntryForm extends Form {
       if (!this.validateRelatedConcepts()) return false;
 
       this.setState({ disabledSave: true });
-      
+
       document.getElementsByClassName("btn-Save")[0].classList.add("disabled");
 
       const { data } = { ...this.state };
       data.period_month = this.state.details[0].period_month;
       data.period_year = this.state.details[0].period_year;
 
-      const { data: entryHeader } = await saveEntryHeader(data, this.state.details[0].concept);
+      const { data: entryHeader } = await saveEntryHeader(
+        data,
+        this.state.details[0].concept
+      );
 
       for (const item of this.state.details) {
         const detail = {
@@ -607,13 +622,19 @@ class EntryForm extends Form {
 
       this.setState({ disabledSave: false });
 
-      document.getElementsByClassName("btn-Save")[0].classList.remove("disabled");
+      document
+        .getElementsByClassName("btn-Save")[0]
+        .classList.remove("disabled");
 
       sessionStorage["newEntry"] = "y";
+      sessionStorage["printEntry"] = "y";
+
       window.location = `/registro/${entryHeader.id}`;
     } catch (ex) {
-      document.getElementsByClassName("btn-Save")[0].classList.remove("disabled");
-      
+      document
+        .getElementsByClassName("btn-Save")[0]
+        .classList.remove("disabled");
+
       try {
         Sentry.captureException(ex);
       } catch (_ex) {
@@ -664,6 +685,70 @@ class EntryForm extends Form {
     this.setState({ clearSearchConcept: value });
   };
 
+  handleChangeVeinteporciento = ({ currentTarget: input }) => {
+    this.setState({ veinteporciento: input.value });
+  };
+
+  handleChangeOfrendamisionera = ({ currentTarget: input }) => {
+    this.setState({ ofrendamisionera: input.value });
+  };
+
+  handleAddDetailFast = async () => {
+    const handler = (e) => {
+      e.preventDefault();
+    };
+    handler(window.event);
+    const details = [...this.state.details];
+    const data = { ...this.state.data };
+
+    const _veinteporciento = this.state.concepts.filter(
+      (item) => item.id === 1
+    );
+    const _ofrendamisionera = this.state.concepts.filter(
+      (item) => item.id === 2
+    );
+
+    this.setState({ currentConcept: _veinteporciento[0] });
+    const line = await this.updateLine(_veinteporciento[0]);
+
+    line.concept = _veinteporciento[0].description;
+    line.concept_id = _veinteporciento[0].id;
+    line.amount =
+      Math.round(parseFloat(this.state.veinteporciento) * 100) / 100;
+    line.type = "E";
+
+    if (line.concept_id) details.push(line);
+    this.resetLineValues();
+
+    this.setState({ currentConcept: _ofrendamisionera[0] });
+    const line2 = await this.updateLine(_ofrendamisionera[0]);
+
+    line2.concept = _ofrendamisionera[0].description;
+    line2.concept_id = _ofrendamisionera[0].id;
+    line2.amount =
+      Math.round(parseFloat(this.state.ofrendamisionera) * 100) / 100;
+    line2.type = "E";
+
+    if (line2.concept_id) details.push(line2);
+
+    data.veinteporciento = "";
+    data.ofrendamisionera = "";
+    console.log("DETAILS:::::::::", details);
+
+    this.resetLineValues();
+
+    setTimeout(() => {
+      this.updateTotals(details);
+    }, 500)
+
+    this.setState({
+      details,
+      data,
+      currentConcept: {},
+    });
+
+    document.querySelector("div#divFastDetail input").focus();
+  };
 
   render() {
     const { user } = this.props;
@@ -685,7 +770,7 @@ class EntryForm extends Form {
             <form onSubmit={this.handleSubmit}>
               <div className="row">
                 <div className="col-8">
-                <SearchChurch
+                  <SearchChurch
                     onSelect={this.handleSelectChurch}
                     onTyping={this.handleTypingChurch}
                     onClearSearchChurch={this.handleSearchChurch}
@@ -708,7 +793,7 @@ class EntryForm extends Form {
                           position: "absolute",
                           marginLeft: "-39px",
                           cursor: "pointer",
-                          zIndex: 99
+                          zIndex: 99,
                         }}
                         title="Limpiar filtro de iglesia"
                         onClick={this.handleCleanChurch}
@@ -739,7 +824,7 @@ class EntryForm extends Form {
 
               <div className="row mt-2">
                 <div className="col-8">
-                <SearchPerson
+                  <SearchPerson
                     onSelect={this.handleSelectPerson}
                     onTyping={this.handleTypingPerson}
                     onClearSearchPerson={this.handleSearchPerson}
@@ -762,7 +847,7 @@ class EntryForm extends Form {
                           position: "absolute",
                           marginLeft: "-39px",
                           cursor: "pointer",
-                          zIndex: 99
+                          zIndex: 99,
                         }}
                         title="Limpiar filtro de obrero"
                         onClick={this.handleCleanPerson}
@@ -773,6 +858,52 @@ class EntryForm extends Form {
 
                 <div className="col-4">
                   {this.renderInput("note", "Nota", "text", "", "Opcional")}
+                </div>
+              </div>
+
+              <div
+                className="row bg-secondary text-light mt-2 mb-2 pt-1 pb-1"
+                id="divFastDetail"
+                // style={{display: "none"}}
+              >
+                <div className="col-2 col-md-3 col-sm-3">
+                  <Input
+                    type="text"
+                    name="veinteporciento"
+                    value={this.state.veinteporciento}
+                    label="20%"
+                    placeholder="Digitar monto"
+                    onChange={this.handleChangeVeinteporciento}
+                    required={false}
+                  />
+                </div>
+
+                <div className="col-2 col-md-3 col-sm-3">
+                  <Input
+                    type="text"
+                    name="ofrendamisionera"
+                    value={this.state.ofrendamisionera}
+                    label="Ofrenda Misionera"
+                    placeholder="Digitar monto"
+                    onChange={this.handleChangeOfrendamisionera}
+                    required={false}
+
+                  />
+                </div>
+
+                <div className="col-2 col-md-3 col-sm-3">
+                  <button
+                    type="button"
+                    className="btn btn-light text-black btn-sm"
+                    style={{ marginTop: "2.3em", marginLeft: "-5px" }}
+                    onClick={this.handleAddDetailFast}
+                    disabled={
+                      this.state.veinteporciento <= 0 ||
+                      this.state.ofrendamisionera <= 0
+                    }
+                  >
+                    Agregar Detalles
+                  </button>
                 </div>
               </div>
 
@@ -899,11 +1030,13 @@ class EntryForm extends Form {
               <div className="center-content">
                 {this.isEntryEditable() &&
                   this.renderButton("Guardar", " btn-Save")}
-                {this.state.disabledSave && <span
-                  className="spinner-border text-secondary"
-                  style={{ width: "2rem", height: "2rem" }}
-                  role="status"
-                />}
+                {this.state.disabledSave && (
+                  <span
+                    className="spinner-border text-secondary"
+                    style={{ width: "2rem", height: "2rem" }}
+                    role="status"
+                  />
+                )}
               </div>
             </form>
           </div>

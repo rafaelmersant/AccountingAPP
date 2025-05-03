@@ -25,6 +25,8 @@ class Entries extends Component {
 
   async componentDidMount() {
     await this.populateEntries();
+    if (!localStorage["printDefault"])
+      localStorage["printDefault"] = "OFF";
 
     this.intervalEntryId = setInterval(async () => {
       await this.populateEntries();
@@ -143,6 +145,12 @@ class Entries extends Component {
     this.populateEntries(null, 1);
   };
 
+  setPrintDefault = () => {
+    if (localStorage["printDefault"] === "ON")
+      localStorage["printDefault"] = "OFF";
+    else localStorage["printDefault"] = "ON";
+  }
+  
   render() {
     const { entries, sortColumn, totalEntries, pageSize, currentPage } =
       this.state;
@@ -158,6 +166,19 @@ class Entries extends Component {
                 <h5 className="text-info">Búsqueda</h5>
               </div>
               <div>
+                <button
+                  className={
+                    "btn " +
+                    (localStorage["printDefault"] === "ON"
+                      ? "btn-success"
+                      : "btn-danger") +
+                    " mr-2"
+                  }
+                  onClick={this.setPrintDefault}
+                >
+                  Imprimir Inmediatamente: {localStorage["printDefault"]}
+                </button>
+
                 <NewButton label="Nuevo Registro" to="/registro/new" />
               </div>
             </div>
