@@ -63,6 +63,7 @@ class EntryForm extends Form {
     },
     veinteporciento: "",
     ofrendamisionera: "",
+    cuotaobrero: "",
     loading: true,
     disabledSave: false,
     entryDate: new Date(),
@@ -136,6 +137,7 @@ class EntryForm extends Form {
     created_date: Joi.string(),
     veinteporciento: Joi.optional(),
     ofrendamisionera: Joi.optional(),
+    cuotaobrero: Joi.optional(),
   };
 
   async populateConcepts() {
@@ -693,6 +695,10 @@ class EntryForm extends Form {
     this.setState({ ofrendamisionera: input.value });
   };
 
+  handleChangeCuotaobrero = ({ currentTarget: input }) => {
+    this.setState({ cuotaobrero: input.value });
+  };
+
   handleAddDetailFast = async () => {
     const handler = (e) => {
       e.preventDefault();
@@ -706,6 +712,9 @@ class EntryForm extends Form {
     );
     const _ofrendamisionera = this.state.concepts.filter(
       (item) => item.id === 2
+    );
+    const _cuotaobrero = this.state.concepts.filter(
+      (item) => item.id === 4
     );
 
     const lineAlreadyExistForVeinteporciento = details.filter(
@@ -749,8 +758,30 @@ class EntryForm extends Form {
       if (line2.concept_id) details.push(line2);
     }
 
+    const lineAlreadyExistForCuotaobrero = details.filter(
+      (d) => d.concept_id === _cuotaobrero[0].id
+    );
+
+    if (
+      this.state.cuotaobrero > 0 &&
+      lineAlreadyExistForCuotaobrero.length === 0
+    ) {
+      this.setState({ currentConcept: _cuotaobrero[0] });
+      const line3 = await this.updateLine(_cuotaobrero[0]);
+
+      line3.concept = _cuotaobrero[0].description;
+      line3.concept_id = _cuotaobrero[0].id;
+      line3.amount =
+        Math.round(parseFloat(this.state.cuotaobrero) * 100) / 100;
+      line3.type = "E";
+
+      if (line3.concept_id) details.push(line3);
+      this.resetLineValues();
+    }
+
     data.veinteporciento = "";
     data.ofrendamisionera = "";
+    data.cuotaobrero = "";
 
     this.resetLineValues();
 
@@ -892,6 +923,7 @@ class EntryForm extends Form {
                     placeholder="Digitar monto"
                     onChange={this.handleChangeVeinteporciento}
                     required={false}
+                    autocomplete="off"
                   />
                 </div>
 
@@ -904,6 +936,20 @@ class EntryForm extends Form {
                     placeholder="Digitar monto"
                     onChange={this.handleChangeOfrendamisionera}
                     required={false}
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div className="col-2 col-md-3 col-sm-3">
+                  <Input
+                    type="text"
+                    name="cuotaobrero"
+                    value={this.state.cuotaobrero}
+                    label="Cuota Obreros"
+                    placeholder="Digitar monto"
+                    onChange={this.handleChangeCuotaobrero}
+                    required={false}
+                    autocomplete="off"
                   />
                 </div>
 
@@ -915,7 +961,8 @@ class EntryForm extends Form {
                     onClick={this.handleAddDetailFast}
                     disabled={
                       !(this.state.veinteporciento > 0) &&
-                      !(this.state.ofrendamisionera > 0)
+                      !(this.state.ofrendamisionera > 0) &&
+                      !(this.state.cuotaobrero > 0)
                     }
                   >
                     Agregar Detalles
