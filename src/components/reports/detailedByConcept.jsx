@@ -9,6 +9,7 @@ import { getEntryHeaderByRangeDashboard } from "../../services/entryServices";
 import Select from "../common/select";
 import Input from "../common/input";
 import DetailedByConceptTable from "../tables/detailedByConceptTable";
+import { formatNumber } from "../../utils/custom";
 
 registerLocale("es", es);
 
@@ -280,7 +281,7 @@ class DetailedByConcept extends Component {
                   adelantoConcilio={adelantoConcilio}
                 />
 
-                <p className="mt-2">Total Deposito: {totalDepositos}</p>
+                <p className="mt-2">Total Deposito: {formatNumber{totalDepositos}}</p>
               </section>
             )}
           </div>
