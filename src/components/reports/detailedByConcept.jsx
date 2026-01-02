@@ -27,6 +27,7 @@ class DetailedByConcept extends Component {
     totalOfrendas: 0,
     totalSalidas: 0,
     totalSalidasLimpio: 0,
+    totalDepositos: 0,
     ofrendaMisionera: 0,
     adelantoPastor: 0,
     adelantoCopastor: 0,
@@ -124,6 +125,7 @@ class DetailedByConcept extends Component {
     let totalSalidasLimpio = 0;
     let totalDiezmos = 0;
     let totalOfrendas = 0;
+    let totalDepositos = 0;
     let ofrendaMisionera = 0;
     let adelantoPastor = 0;
     let adelantoCopastor = 0;
@@ -163,6 +165,7 @@ class DetailedByConcept extends Component {
 
           if (item.concept.id === 12) adelantoConcilio += amount;
 
+          if (item.method === "D") totalDepositos += amount;
           console.log(`id: ${entry.id} - Concepto: ${item.concept.description} => ${amount}`);
         }
       }
@@ -189,6 +192,7 @@ class DetailedByConcept extends Component {
       totalSalidas,
       totalSalidasLimpio,
       totalOfrendas,
+      totalDepositos,
       ofrendaMisionera,
       adelantoPastor,
       adelantoCopastor,
@@ -206,6 +210,7 @@ class DetailedByConcept extends Component {
       totalSalidas,
       totalSalidasLimpio,
       totalOfrendas,
+      totalDepositos,
       ofrendaMisionera,
       adelantoPastor,
       adelantoCopastor,
@@ -274,6 +279,8 @@ class DetailedByConcept extends Component {
                   adelantoCopastor={adelantoCopastor}
                   adelantoConcilio={adelantoConcilio}
                 />
+
+                <p className="mt-2">Total Deposito: {totalDepositos}</p>
               </section>
             )}
           </div>
