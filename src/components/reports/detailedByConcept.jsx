@@ -281,7 +281,7 @@ class DetailedByConcept extends Component {
                   adelantoConcilio={adelantoConcilio}
                 />
 
-                <p className="mt-2">Total Deposito: {formatNumber{totalDepositos}}</p>
+                <p className="mt-2">Total Deposito: {formatNumber(totalDepositos)}</p>
               </section>
             )}
           </div>
