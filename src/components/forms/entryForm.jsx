@@ -734,6 +734,15 @@ class EntryForm extends Form {
         Math.round(parseFloat(this.state.veinteporciento) * 100) / 100;
       line.type = "E";
 
+      const duplicity = await this.validateDuplicity(line);
+
+      if (duplicity) {
+        toast.error(
+          "El 20% u Ofrenda Misionera ya fueron digitados para el periodo seleccionado."
+        );
+        return false;
+      }
+
       if (line.concept_id) details.push(line);
       this.resetLineValues();
     }
