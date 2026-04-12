@@ -49,7 +49,9 @@ export function getEntryHeaderByRangeDashboard(period_month, period_year) {
 }
 
 export function getEntryHeaderByRangeChurchesReport(period_month, period_year, church_id = 0) {
-  let request = `${environment.apiUrl}/churchesreport?period_month=${period_month}&period_year=${period_year}`;
+  const paddedMonth = String(period_month).padStart(2, '0');
+
+  let request = `${environment.apiUrl}/churchesreport?period_month=${paddedMonth}&period_year=${period_year}`;
   if (church_id > 0)
     request += `&church_id=${church_id}`;
 
