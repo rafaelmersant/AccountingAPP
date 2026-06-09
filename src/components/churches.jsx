@@ -93,14 +93,14 @@ class Churches extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col">
-            (getCurrentUser().role === "Admin" || getCurrentUser().role === "Owner") && (
+            {(getCurrentUser().role === "Admin" || getCurrentUser().role === "Owner") && (
             <NavLink
               className="mt-2 mb-2 d-block text-danger"
               to="/pago-de-iglesias"
             >
               Pago de 20% y Ofrenda Misionera
-            </NavLink>)
-            
+            </NavLink>)}
+
             <h5 className="pull-left text-info mt-2">Listado de Iglesias</h5>
             <div className="mb-4"></div>
             {getCurrentUser().role === "Owner" && (
