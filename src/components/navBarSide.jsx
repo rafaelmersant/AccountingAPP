@@ -17,8 +17,7 @@ const NavBarSide = ({ user }) => {
         <React.Fragment>
           {user &&
             (user.role === "Admin" ||
-              user.role === "Owner" ||
-              user.role === "Level1") && (
+              user.role === "Owner") && (
               <div>
                 <NavLink
                   className="list-group-item list-group-item-action border-none"
@@ -60,13 +59,6 @@ const NavBarSide = ({ user }) => {
                   Reporte detallado
                 </NavLink>
 
-                <NavLink
-                  className="list-group-item list-group-item-action border-none"
-                  to="/iglesias"
-                >
-                  <span className="fa fa-home mr-2 color-local" />
-                  Iglesias
-                </NavLink>
               </div>
             )}
 
@@ -76,6 +68,14 @@ const NavBarSide = ({ user }) => {
               user.role === "Level1" ||
               user.role === "Obrero") && (
               <div>
+                 <NavLink
+                  className="list-group-item list-group-item-action border-none"
+                  to="/iglesias"
+                >
+                  <span className="fa fa-home mr-2 color-local" />
+                  Iglesias
+                </NavLink>
+
                 <NavLink
                   className="list-group-item list-group-item-action border-none"
                   to="/obreros"
@@ -88,6 +88,7 @@ const NavBarSide = ({ user }) => {
 
           {user &&
             (user.role === "Owner" ||
+              user.role === "Level1" ||
               user.username === "katherine" ||
               user.username === "raisi" ||
               user.username === "jonathan" ||
