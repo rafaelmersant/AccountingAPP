@@ -95,6 +95,11 @@ div[disabled] {
   color: #6082B6 !important;
 }
 
+.bg-customized {
+  background-color: #C8DBEA !important;
+  
+}
+
 .cursor-pointer {
   cursor: pointer;
 }

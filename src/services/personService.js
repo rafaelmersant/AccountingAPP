@@ -47,6 +47,7 @@ export function savePerson(person) {
   if (!person.obrero_licenciado) delete person.obrero_licenciado;
   if (!person.min_licenciado) delete person.min_licenciado;
   if (!person.min_ordenado) delete person.min_ordenado;
+  if (!person.reviewed) delete person.reviewed;
 
   if (person.id) {
     const body = { ...person };

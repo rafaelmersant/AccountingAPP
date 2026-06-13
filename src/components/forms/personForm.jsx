@@ -27,6 +27,7 @@ class PersonForm extends Form {
       church_id: "",
       created_by: getCurrentUser().id,
       created_date: new Date().toISOString(),
+      reviewed: "",
     },
     errors: {},
     action: "Nuevo Obrero",
@@ -47,6 +48,7 @@ class PersonForm extends Form {
     church_id: Joi.optional(),
     created_by: Joi.number(),
     created_date: Joi.optional(),
+    reviewed: Joi.optional(),
   };
 
   async populatePerson() {
@@ -130,8 +132,12 @@ class PersonForm extends Form {
       last_name: person[0].last_name,
       identification: person[0].identification ? person[0].identification : "",
       obrero_inicial: person[0].obrero_inicial ? person[0].obrero_inicial : "",
-      obrero_exhortador: person[0].obrero_exhortador ? person[0].obrero_exhortador : "",
-      obrero_licenciado: person[0].obrero_licenciado ? person[0].obrero_licenciado : "",
+      obrero_exhortador: person[0].obrero_exhortador
+        ? person[0].obrero_exhortador
+        : "",
+      obrero_licenciado: person[0].obrero_licenciado
+        ? person[0].obrero_licenciado
+        : "",
       min_licenciado: person[0].min_licenciado ? person[0].min_licenciado : "",
       min_ordenado: person[0].min_ordenado ? person[0].min_ordenado : "",
       church_id: person[0].church ? person[0].church.id : "",
@@ -139,13 +145,14 @@ class PersonForm extends Form {
         ? person[0].created_by
         : getCurrentUser().id,
       created_date: person[0].created_date,
+      reviewed: person[0].reviewed ? person[0].reviewed : "",
     };
   }
 
   doSubmit = async () => {
     const { data: _person } = await getPersonByFirstLastName(
       this.state.data.first_name.toUpperCase(),
-      this.state.data.last_name.toUpperCase()
+      this.state.data.last_name.toUpperCase(),
     );
 
     if (_person.length > 0 && this.state.data.id === 0) {
@@ -161,6 +168,22 @@ class PersonForm extends Form {
 
     if (!this.props.popUp) this.props.history.push("/obreros");
     else this.props.closeMe(person);
+  };
+
+  updateReviewed = async (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+
+    try {
+      console.log("Reviewed:", new Date().toISOString());
+      const { data } = { ...this.state };
+      data.reviewed = new Date().toISOString();
+      await savePerson(data);
+      toast.success("El obrero fue marcado como Revisado!");
+    } catch (error) {
+      console.log(error);
+      toast.error(error);
+    }
   };
 
   render() {
@@ -242,7 +265,16 @@ class PersonForm extends Form {
               </div>
             </div>
 
-            <div className="mt-3">{this.renderButton("Guardar")}</div>
+            <div className="mt-5 d-flex justify-content-between">
+              {this.renderButton("Guardar")}
+
+              <button
+                className="btn btn-info px-5"
+                onClick={this.updateReviewed}
+              >
+                Revisado
+              </button>
+            </div>
           </form>
         </div>
 
