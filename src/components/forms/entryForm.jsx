@@ -115,6 +115,7 @@ class EntryForm extends Form {
     totalEntradas: 0,
     totalSalidas: 0,
     totalDiezmos: 0,
+    diezmoMethod: "E",
   };
 
   //Schema (Joi)
@@ -447,6 +448,7 @@ class EntryForm extends Form {
     line.concept_id = diezmo[0].id;
     line.amount = Math.round(parseFloat(this.state.data.note) * 100) / 100;
     line.type = "E";
+    line.method = this.state.diezmoMethod;
     line.reference = this.state.searchPersonTextType;
 
     if (line.concept_id) details.push(line);
@@ -460,6 +462,7 @@ class EntryForm extends Form {
       data,
       currentConcept: {},
       clearSearchPerson: true,
+      diezmoMethod: "E",
     });
 
     document.querySelector("div#divDiezmo input").focus();
@@ -790,7 +793,7 @@ class EntryForm extends Form {
                   )}
                 </div>
 
-                <div className="col-2 col-md-3 col-sm-3">
+                <div className="col-2">
                   {this.renderInput(
                     "note",
                     "Monto",
@@ -799,11 +802,28 @@ class EntryForm extends Form {
                     "Monto del Diezmo"
                   )}
                 </div>
-                <div className="col-2 col-md-3 col-sm-3">
+                <div className="col-2">
+                  <div className="form-group">
+                    <label htmlFor="diezmoMethod">Método</label>
+                    <select
+                      id="diezmoMethod"
+                      name="diezmoMethod"
+                      className="form-control form-control-sm"
+                      value={this.state.diezmoMethod}
+                      onChange={({ currentTarget }) =>
+                        this.setState({ diezmoMethod: currentTarget.value })
+                      }
+                    >
+                      <option value="E">Efectivo</option>
+                      <option value="D">Depósito</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="col-2">
                   <button
                     type="button"
                     className="btn btn-light text-black btn-sm"
-                    style={{ marginTop: "2.3em", marginLeft: "-25px" }}
+                    style={{ marginTop: "2.3em" }}
                     onClick={this.handleAddDetailDiezmo}
                     disabled={
                       this.state.searchPersonTextType.length === 0 &&
