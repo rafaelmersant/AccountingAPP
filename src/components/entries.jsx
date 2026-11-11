@@ -30,7 +30,7 @@ class Entries extends Component {
 
     this.intervalEntryId = setInterval(async () => {
       await this.populateEntries();
-    }, 4000);
+    }, 15000);
   }
 
   componentWillUnmount() {

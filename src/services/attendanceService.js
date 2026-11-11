@@ -13,7 +13,7 @@ export function getAttendances(sortColumn, currentPage) {
     sortColumn && sortColumn.path ? sortColumn.path : "created_date";
   const page = currentPage ? currentPage : 1;
 
-  let urlQuery = `${apiEndpoint}/?ordering=${order}${column}&page=${page}`;
+  let urlQuery = `${apiEndpoint}/?ordering=${order}${column}&page=${page}&id__gt=715`;
 
   return http.get(urlQuery);
 }

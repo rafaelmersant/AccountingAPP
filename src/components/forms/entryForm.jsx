@@ -64,6 +64,7 @@ class EntryForm extends Form {
     veinteporciento: "",
     ofrendamisionera: "",
     cuotaobrero: "",
+    fastMethod: "E",
     loading: true,
     disabledSave: false,
     entryDate: new Date(),
@@ -699,11 +700,9 @@ class EntryForm extends Form {
     this.setState({ cuotaobrero: input.value });
   };
 
-  handleAddDetailFast = async () => {
-    const handler = (e) => {
-      e.preventDefault();
-    };
-    handler(window.event);
+  handleAddDetailFast = async (event) => {
+    event.preventDefault();
+    const method = this.state.fastMethod;
     const details = [...this.state.details];
     const data = { ...this.state.data };
 
@@ -734,6 +733,8 @@ class EntryForm extends Form {
         Math.round(parseFloat(this.state.veinteporciento) * 100) / 100;
       line.type = "E";
 
+      line.method = method;
+
       const duplicity = await this.validateDuplicity(line);
 
       if (duplicity) {
@@ -763,6 +764,7 @@ class EntryForm extends Form {
       line2.amount =
         Math.round(parseFloat(this.state.ofrendamisionera) * 100) / 100;
       line2.type = "E";
+      line2.method = method;
 
       if (line2.concept_id) details.push(line2);
     }
@@ -783,6 +785,7 @@ class EntryForm extends Form {
       line3.amount =
         Math.round(parseFloat(this.state.cuotaobrero) * 100) / 100;
       line3.type = "E";
+      line3.method = method;
 
       if (line3.concept_id) details.push(line3);
       this.resetLineValues();
@@ -923,7 +926,7 @@ class EntryForm extends Form {
                 id="divFastDetail"
                 // style={{display: "none"}}
               >
-                <div className="col-2 col-md-3 col-sm-3">
+                <div className="col-12 col-sm-6 col-md-3">
                   <Input
                     type="text"
                     name="veinteporciento"
@@ -936,7 +939,7 @@ class EntryForm extends Form {
                   />
                 </div>
 
-                <div className="col-2 col-md-3 col-sm-3">
+                <div className="col-12 col-sm-6 col-md-3">
                   <Input
                     type="text"
                     name="ofrendamisionera"
@@ -949,7 +952,7 @@ class EntryForm extends Form {
                   />
                 </div>
 
-                <div className="col-2 col-md-3 col-sm-3">
+                <div className="col-12 col-sm-6 col-md-2">
                   <Input
                     type="text"
                     name="cuotaobrero"
@@ -962,7 +965,28 @@ class EntryForm extends Form {
                   />
                 </div>
 
-                <div className="col-2 col-md-3 col-sm-3">
+                <div className="col-12 col-sm-6 col-md-2">
+                  <div className="form-group">
+                    <label htmlFor="fastMethod">Método</label>
+                    <select
+                      id="fastMethod"
+                      name="fastMethod"
+                      className="form-control form-control-sm"
+                      value={this.state.fastMethod}
+                      onChange={({ currentTarget }) =>
+                        this.setState({ fastMethod: currentTarget.value })
+                      }
+                    >
+                      {this.state.methods.map((method) => (
+                        <option key={method.id} value={method.id}>
+                          {method.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="col-12 col-sm-6 col-md-2">
                   <button
                     type="button"
                     className="btn btn-light text-black btn-sm"

@@ -28,7 +28,7 @@ class Attendance extends Component {
 
     this.intervalEntryId = setInterval(async () => {
       await this.populateAttendances();
-    }, 4000);
+    }, 60000);
   }
 
   componentWillUnmount() {
@@ -197,7 +197,7 @@ class Attendance extends Component {
                 clearSearchPerson={this.state.clearSearchPerson}
                 value={this.state.searchPersonText}
                 data={this.state.people}
-                selectedItem={this.state.selectedPerson}
+                // selectedItem={this.state.selectedPerson}
               />
             </div>
             <div>
