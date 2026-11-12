@@ -1,5 +1,11 @@
 import http from "./httpService";
 import { environment } from "../settings";
+import { getCurrentUser } from "./authService";
+
+function auditConfig() {
+  const user = getCurrentUser();
+  return { headers: { "X-Entry-User": user ? user.id : "" } };
+}
 
 const apiEndpointHeader = `${environment.apiUrl}/entries`;
 
@@ -68,6 +74,10 @@ export function getEntryDetail(entryId) {
   return http.get(entryItemsUrl(entryId));
 }
 
+export function getEntryHistory(entryId) {
+  return http.get(`${entryHeaderUrl(entryId)}history/`);
+}
+
 export function saveEntryHeader(entry, note = "") {
   delete entry.church;
   delete entry.person;
@@ -75,32 +85,33 @@ export function saveEntryHeader(entry, note = "") {
   if (!entry.church_id && !entry.person_id && entry.note === "")
     entry.note = note;
 
-  if (!entry.church_id) delete entry.church_id;
-  if (!entry.person_id) delete entry.person_id;
+  entry.church_id = entry.church_id || null;
+  entry.person_id = entry.person_id || null;
 
   if (entry.id) {
     const body = { ...entry };
     delete body.id;
-    return http.put(entryHeaderUrl(entry.id), body);
+    delete body.created_by;
+    return http.put(entryHeaderUrl(entry.id), body, auditConfig());
   }
 
-  return http.post(`${apiEndpointHeader}/`, entry);
+  return http.post(`${apiEndpointHeader}/`, entry, auditConfig());
 }
 
 export function saveEntryDetail(item) {
   if (item.id) {
     const body = { ...item };
     delete body.id;
-    return http.put(entryDetailUrl(item.entry_id, item.id), body);
+    return http.put(entryDetailUrl(item.entry_id, item.id), body, auditConfig());
   }
 
-  return http.post(entryItemsUrl(item.entry_id), item);
+  return http.post(entryItemsUrl(item.entry_id), item, auditConfig());
 }
 
 export function deleteEntryHeader(id) {
-  return http.delete(entryHeaderUrl(id));
+  return http.delete(entryHeaderUrl(id), auditConfig());
 }
 
 export function deleteEntryDetail(entryId, id) {
-  return http.delete(entryDetailUrl(entryId, id));
+  return http.delete(entryDetailUrl(entryId, id), auditConfig());
 }

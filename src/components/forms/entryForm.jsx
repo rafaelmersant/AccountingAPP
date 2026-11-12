@@ -23,6 +23,7 @@ import {
   saveEntryHeader,
   saveEntryDetail,
   getEntryHeader,
+  getEntryHistory,
   getEntryDetail,
   deleteEntryDetail,
   getEntryHeaderByRangeChurchesReport,
@@ -36,6 +37,7 @@ import {
 } from "../mappers/mapEntry";
 import ChurchModal from "../modals/churchModal";
 import PersonModal from "../modals/personModal";
+import EntryHistoryModal from "../modals/entryHistoryModal";
 import ConceptModal from "../modals/conceptModal";
 import { getConcept, getConcepts } from "../../services/conceptService";
 import Select from "../common/select";
@@ -65,6 +67,10 @@ class EntryForm extends Form {
     ofrendamisionera: "",
     cuotaobrero: "",
     fastMethod: "E",
+    hasHistory: false,
+    entryHistory: [],
+    historyLoading: false,
+    historyError: false,
     loading: true,
     disabledSave: false,
     entryDate: new Date(),
@@ -239,6 +245,7 @@ class EntryForm extends Form {
         searchPersonText: searchPersonText,
         action: "Detalle de registro No. ",
         serializedEntryHeader: entryHeader,
+        hasHistory: Boolean(entryHeader.has_history),
         serializedEntryDetail: entryDetail,
         loading: false,
       });
@@ -269,6 +276,16 @@ class EntryForm extends Form {
         return this.props.history.replace("/not-found");
     }
   }
+
+  loadEntryHistory = async () => {
+    this.setState({ historyLoading: true, historyError: false, entryHistory: [] });
+    try {
+      const { data } = await getEntryHistory(this.state.data.id);
+      if (this._isMounted) this.setState({ entryHistory: data, historyLoading: false });
+    } catch (error) {
+      if (this._isMounted) this.setState({ historyLoading: false, historyError: true });
+    }
+  };
 
   handleChangeEntryDate = (date) => {
     const data = { ...this.state.data };
@@ -816,12 +833,27 @@ class EntryForm extends Form {
 
     return (
       <React.Fragment>
+        <EntryHistoryModal
+          entryId={this.state.data.id}
+          history={this.state.entryHistory}
+          loading={this.state.historyLoading}
+          error={this.state.historyError}
+          onRetry={this.loadEntryHistory}
+        />
         <div className="container-fluid">
-          <h4 className="bg-dark text-light pl-2 pr-2 list-header">
+          <h4 className="bg-dark text-light pl-2 pr-2 list-header d-flex justify-content-between align-items-center flex-wrap">
+            <span>
             {this.state.action}
             {this.state.data.id > 0 &&
               !this.state.action.includes("Nuevo") &&
               this.state.data.id}
+            </span>
+          {this.state.data.id > 0 && this.state.hasHistory && (
+            <button type="button" className="btn btn-outline-light btn-sm my-1 ml-auto"
+              data-toggle="modal" data-target="#entryHistoryModal" onClick={this.loadEntryHistory}>
+              <i className="fa fa-history mr-1" aria-hidden="true" /> Histórico
+            </button>
+          )}
           </h4>
           <div
             className="col-12 pb-3 bg-light"
