@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
+import DeploymentUpdate from "./components/common/deploymentUpdate";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap";
 import "bootstrap/dist/js/bootstrap.js";
@@ -28,7 +29,10 @@ Sentry.init({
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <React.Fragment>
+      <DeploymentUpdate />
+      <App />
+    </React.Fragment>
   </BrowserRouter>,
   document.getElementById("root")
 );

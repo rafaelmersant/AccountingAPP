@@ -32,6 +32,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:deployment": "node --test scripts/deploymentUpdate.test.cjs",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

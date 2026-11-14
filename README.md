@@ -1,5 +1,23 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Actualizaciones del frontend
+
+En producción, la aplicación consulta `asset-manifest.json` al abrirse y al
+cambiar de ruta. Si los archivos JS o CSS publicados difieren de los cargados
+en esa pestaña, abre automáticamente la URL de destino con `_appVersion` para
+evitar el HTML almacenado en caché. No requiere cerrar el navegador ni hacer
+hard refresh. La recarga reemplaza el estado en memoria de la página de destino.
+
+Publicar todo el contenido de `build`, incluido `asset-manifest.json`, en cada
+despliegue, preferiblemente de forma atómica. Configurar el hosting/CDN para
+revalidar `index.html` y `asset-manifest.json` (`Cache-Control: no-cache`), y
+respetar los parámetros de consulta en las claves de caché del HTML. Los archivos
+con hash de `static/` pueden conservar caché prolongada. No se registra un
+service worker. Las pestañas que todavía ejecutan una versión anterior a esta
+mejora necesitan una recarga inicial para incorporar el mecanismo.
+
+Verificar este mecanismo con `npm run test:deployment` (Node 18 o superior).
+
 ## Available Scripts
 
 In the project directory, you can run:
